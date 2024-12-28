@@ -7,23 +7,24 @@
     <form @submit.prevent="saveProfile">
       <div class="form-grid">
         <!-- First Name -->
-        <div class="form-group">
+        <div class="form-group" :class="{ 'has-error': errors.fn }">
           <label for="first-name">First Name:</label>
-          <input id="first-name" v-model="profile.fn"/>
+          <input id="first-name" v-model="profile.fn" />
           <small v-if="errors.fn" class="error-message">{{ errors.fn }}</small>
         </div>
 
         <!-- Last Name -->
-        <div class="form-group">
+        <div class="form-group" :class="{ 'has-error': errors.ln }">
           <label for="last-name">Last Name:</label>
-          <input id="last-name" v-model="profile.ln"/>
+          <input id="last-name" v-model="profile.ln" />
           <small v-if="errors.ln" class="error-message">{{ errors.ln }}</small>
         </div>
 
         <!-- Email -->
-        <div class="form-group">
+        <div class="form-group" :class="{ 'has-error': errors.e }">
           <label for="email">Email:</label>
-          <input id="email" v-model="profile.e" type="email" disabled readonly/>
+          <input id="email" v-model="profile.e" type="email" />
+          <small v-if="errors.e" class="error-message">{{ errors.e }}</small>
         </div>
 
         <!-- Username -->
@@ -39,31 +40,34 @@
           <small v-if="errors.b" class="error-message">{{ errors.b }}</small>
         </div>
 
-        <div class="form-group">
+        <!-- Reddit Handle -->
+        <div class="form-group" :class="{ 'has-error': errors.rh }">
           <label for="reddit">Reddit Handle:</label>
           <div class="input-with-icon">
             <i class="fab fa-reddit reddit-icon"></i>
             <input id="reddit" v-model="profile.rh" placeholder="u/************************" />
-            <small v-if="errors.rh" class="error-message">{{ errors.rh }}</small>
           </div>
+            <small v-if="errors.rh" class="error-message">{{ errors.rh }}</small>
         </div>
 
-        <div class="form-group">
+        <!-- Discord Handle -->
+        <div class="form-group" :class="{ 'has-error': errors.dh }">
           <label for="discord">Discord Handle:</label>
           <div class="input-with-icon">
             <i class="fab fa-discord discord-icon"></i>
             <input id="discord" v-model="profile.dh" placeholder="************************#0000" />
-            <small v-if="errors.dh" class="error-message">{{ errors.dh }}</small>
           </div>
+            <small v-if="errors.dh" class="error-message">{{ errors.dh }}</small>
         </div>
 
-        <div class="form-group">
+        <!-- X Handle -->
+        <div class="form-group" :class="{ 'has-error': errors.th }">
           <label for="twitter">X Handle:</label>
           <div class="input-with-icon">
             <i class="fab fa-twitter twitter-icon"></i>
             <input id="twitter" v-model="profile.th" placeholder="@***************" />
-            <small v-if="errors.th" class="error-message">{{ errors.th }}</small>
           </div>
+            <small v-if="errors.th" class="error-message">{{ errors.th }}</small>
         </div>
 
         <!-- Member Since -->
@@ -219,7 +223,7 @@ export default {
 
 <style scoped>
 .profile-container {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px 30px;
   background-color: #f9f9f9;
