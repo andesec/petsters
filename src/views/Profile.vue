@@ -1,19 +1,79 @@
 <template>
-  <div>
+  <!-- Add FontAwesome CDN -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+
+  <div class="profile-container">
     <h1>Profile</h1>
     <form @submit.prevent="saveProfile">
-      <div class="form-group">
-        <label for="name">Name:</label>
-        <input id="name" v-model="profile.name" />
+      <div class="form-grid">
+        <!-- First Name -->
+        <div class="form-group">
+          <label for="first-name">First Name:</label>
+          <input id="first-name" v-model="profile.fn"/>
+          <small v-if="errors.fn" class="error-message">{{ errors.fn }}</small>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group">
+          <label for="last-name">Last Name:</label>
+          <input id="last-name" v-model="profile.ln"/>
+          <small v-if="errors.ln" class="error-message">{{ errors.ln }}</small>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input id="email" v-model="profile.e" type="email" disabled readonly/>
+        </div>
+
+        <!-- Username -->
+        <div class="form-group">
+          <label for="username">Username:</label>
+          <input id="username" v-model="profile.u" disabled readonly/>
+        </div>
+
+        <!-- Bio -->
+        <div class="form-group form-full-width">
+          <label for="bio">Bio:</label>
+          <textarea id="bio" v-model="profile.b"></textarea>
+          <small v-if="errors.b" class="error-message">{{ errors.b }}</small>
+        </div>
+
+        <div class="form-group">
+          <label for="reddit">Reddit Handle:</label>
+          <div class="input-with-icon">
+            <i class="fab fa-reddit reddit-icon"></i>
+            <input id="reddit" v-model="profile.rh" placeholder="u/************************" />
+            <small v-if="errors.rh" class="error-message">{{ errors.rh }}</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="discord">Discord Handle:</label>
+          <div class="input-with-icon">
+            <i class="fab fa-discord discord-icon"></i>
+            <input id="discord" v-model="profile.dh" placeholder="************************#0000" />
+            <small v-if="errors.dh" class="error-message">{{ errors.dh }}</small>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="twitter">X Handle:</label>
+          <div class="input-with-icon">
+            <i class="fab fa-twitter twitter-icon"></i>
+            <input id="twitter" v-model="profile.th" placeholder="@***************" />
+            <small v-if="errors.th" class="error-message">{{ errors.th }}</small>
+          </div>
+        </div>
+
+        <!-- Member Since -->
+        <div class="form-group">
+          <label for="since">Member Since:</label>
+          <input id="since" type="text" :value="memberSinceHumanReadable" disabled/>
+        </div>
       </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input id="email" v-model="profile.email" type="email" />
-      </div>
-      <div class="form-group">
-        <label for="age">Age:</label>
-        <input id="age" v-model="profile.age" type="number" />
-      </div>
+
+      <!-- Submit Button -->
       <button type="submit">Save</button>
     </form>
   </div>
@@ -26,10 +86,17 @@ export default {
   data() {
     return {
       profile: {
-        name: '',
-        email: '',
-        age: '',
+        fn: "",
+        ln: "",
+        e: "",
+        u: "",
+        b: "",
+        rh: null,
+        dh: null,
+        th: null,
+        ms: 0, // Epoch timestamp from API
       },
+      errors: {},
     };
   },
   async mounted() {
@@ -40,13 +107,110 @@ export default {
       console.error('Error fetching profile:', error);
     }
   },
+  computed: {
+    memberSinceHumanReadable() {
+      if (!this.profile.ms || this.profile.ms <= 0) return "N/A";
+
+      const memberSince = new Date(this.profile.ms * 1000); // Assuming timestamp is in seconds
+      const now = new Date();
+
+      let years = now.getFullYear() - memberSince.getFullYear();
+      let months = now.getMonth() - memberSince.getMonth();
+      let days = now.getDate() - memberSince.getDate();
+
+      // Adjust days if negative
+      if (days < 0) {
+        months -= 1;
+        const daysInPrevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        days += daysInPrevMonth;
+      }
+
+      // Adjust months if negative
+      if (months < 0) {
+        years -= 1;
+        months += 12;
+      }
+
+      // Handle edge case: Same day
+      if (years === 0 && months === 0 && days === 0) {
+        return "0 days";
+      }
+
+      // Build the combined string
+      let combinedString = "";
+      if (years > 0) {
+        combinedString += `${years} years, `;
+      }
+      if (months > 0) {
+        combinedString += `${months} months, `;
+      }
+      combinedString += `${days} days`;
+
+      // Trim trailing comma and space if it exists
+      return combinedString.trim().replace(/,$/, "");
+    },
+  },
   methods: {
+    validateProfile() {
+      const errors = {};
+
+      // First Name and Last Name: Required
+      if (!this.profile.fn.trim()) {
+        errors.fn = "First Name is required.";
+      }
+      if (!this.profile.ln.trim()) {
+        errors.ln = "Last Name is required.";
+      }
+
+      // Email: Must be a valid email
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!this.profile.e.trim()) {
+        errors.e = "Email is required.";
+      } else if (!emailRegex.test(this.profile.e)) {
+        errors.e = "Invalid email format.";
+      }
+
+      // Reddit Handle: Must start with "u/" and have characters following it
+      if (this.profile.rh && !/^u\/[a-zA-Z0-9_-]+$/.test(this.profile.rh)) {
+        errors.rh = "Reddit handle must start with 'u/' and contain valid characters.";
+      }
+
+      // Discord Handle: Must be in the format username#1234
+      if (this.profile.dh && !/^[a-zA-Z0-9_-]{2,32}#[0-9]{4}$/.test(this.profile.dh)) {
+        errors.dh = "Discord handle must be in the format 'username#1234'.";
+      }
+
+      // X Handle: Must start with '@' and cannot be empty
+      if (this.profile.th && !/^@[a-zA-Z0-9_-]+$/.test(this.profile.th)) {
+        errors.th = "X (Twitter) handle must start with '@' and contain valid characters.";
+      }
+
+      // Return errors
+      this.errors = errors;
+      return Object.keys(errors).length === 0; // Valid if no errors
+    },
+
     async saveProfile() {
+      // Validate profile before processing
+      if (!this.validateProfile()) {
+        alert("Please fix the validation errors before saving.");
+        return;
+      }
+
+      // Preprocess: Set empty fields to null
+      const processedProfile = { ...this.profile };
+      Object.keys(processedProfile).forEach((key) => {
+        if (processedProfile[key] === "" || processedProfile[key] === undefined) {
+          processedProfile[key] = null;
+        }
+      });
+
+      // Send the processed profile to the API
       try {
-        await ApiService.makeRequest('/profile', 'POST', this.profile);
-        alert('Profile saved successfully!');
+        await ApiService.makeRequest("/profile", "POST", processedProfile);
+        alert("Profile saved successfully!");
       } catch (error) {
-        console.error('Error saving profile:', error);
+        console.error("Error saving profile:", error);
       }
     },
   },
@@ -54,6 +218,34 @@ export default {
 </script>
 
 <style scoped>
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px 30px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  font-size: 16px; /* Slightly larger font size */
+}
+
+h1 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two columns */
+  gap: 30px 40px; /* Increased margin between columns and rows */
+}
+
+.form-full-width {
+  grid-column: span 2; /* Make full width for larger fields like Bio */
+}
+
 .form-group {
   margin-bottom: 15px;
 }
@@ -64,14 +256,87 @@ label {
   font-weight: bold;
 }
 
-input {
+input,
+textarea {
   width: 100%;
   padding: 8px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
 }
 
+textarea {
+  resize: vertical;
+}
+
+.reddit-icon {
+  color: #ef2c0a; /* Reddit orange */
+}
+
+.discord-icon {
+  color: #5865F2; /* Discord blue */
+}
+
+.twitter-icon {
+  color: black; /* X (formerly Twitter) now uses black */
+}
+
+/* Optional: Adjust icon size */
+.input-with-icon i {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.input-with-icon {
+  display: flex;
+  align-items: center;
+}
+
 button {
-  margin-top: 15px;
+  margin-top: 20px;
+  background-color: #3f51b5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #303f9f;
+}
+
+/* General error message styling */
+.error-message {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: block; /* Ensures the error appears below the field */
+}
+
+/* Highlight fields with errors */
+.has-error input {
+  border: 1px solid red;
+  background-color: #ffe6e6; /* Optional: A light red background for better visibility */
+}
+
+/* Style input fields generally */
+input {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #3f51b5; /* Highlight field on focus */
+}
+
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr; /* Single column layout on small screens */
+  }
 }
 </style>

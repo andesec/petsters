@@ -34,6 +34,17 @@ export default {
 </script>
 
 <style scoped>
+.right-sidebar {
+  position: relative;
+  width: 300px;
+  height: calc(100vh - 60px);
+  background-color: #e0e0e0;
+  padding: 15px;
+  box-sizing: border-box;
+  border-radius: 8px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds 3D effect */
+}
+
 .arrow-controls {
   display: flex;
   flex-direction: column;

@@ -15,8 +15,12 @@
 import Header from './components/Header.vue';
 import LeftSidebar from './components/LeftSidebar.vue';
 import RightSidebar from './components/RightSidebar.vue';
+import { VueMaskDirective } from "vue-the-mask";
 
 export default {
+  directives: {
+    mask: VueMaskDirective,
+  },
   components: {
     Header,
     LeftSidebar,
@@ -51,13 +55,18 @@ export default {
   gap: 10px; /* Adds spacing between the sidebar and main content */
   box-sizing: border-box;
 }
+
 .main-content {
   flex: 1;
   padding: 15px; /* Adds inner padding for content */
   margin: 0; /* Avoids additional margin */
   background-color: white;
   border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Adds subtle shadow */
-  overflow: hidden; /* Prevents overflow of content */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: auto;
+}
+
+.right-sidebar {
+  width: 25%;
 }
 </style>
