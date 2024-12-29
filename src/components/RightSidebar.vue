@@ -1,6 +1,6 @@
 <template>
   <div class="right-sidebar">
-    <h2>Updates & Notifications</h2>
+    <h2>Actions</h2>
     <div v-if="$route.name === 'Maps'">
       <p>Map Controls</p>
       <div class="arrow-controls">
@@ -36,7 +36,7 @@ export default {
 <style scoped>
 .right-sidebar {
   position: relative;
-  width: 300px;
+  width: 25%;
   height: calc(100vh - 60px);
   background-color: #e0e0e0;
   padding: 15px;

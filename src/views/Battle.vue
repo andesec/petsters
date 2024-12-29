@@ -5,21 +5,9 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <SelectPetComponent
-          v-if="cs === 'SELECT_PET'"
-          :m="battleData?.m"
-          :pokemonList="battleData?.os"
-          @pokemon-selected="handlePokemonSelection"
-      />
-      <BattleComponent
-          v-else-if="cs === 'IN_BATTLE'"
-          :m="battleData?.m"
-          :cps="battleData?.cps"
-          :ops="battleData?.ops"
-          :availableMoves="battleData?.os"
-          :op="battleData?.op"
-          @move-selected="handleMoveSelection"
-      />
+      <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battleData?.m" :pokemonList="battleData?.os"
+                          @pokemon-selected="handlePokemonSelection"/>
+      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battleData" @action-selected="handleActionSelection" @end-battle="handleEndBattle" />
     </div>
   </div>
 </template>
@@ -62,14 +50,13 @@ export default {
       if (response.ns === 1 || response.ns === 6) {
         this.cs = "SELECT_PET"; // Show SelectPetComponent
       } else if (response.ns === 2 || response.ns === 7) {
-        this.cs = "IN_BATTLE"; // Show BattleComponent
+        this.cs = "SELECT_ACTION"; // Show BattleComponent
       } else if (response.ns === 5 || response.ns === 9) {
         alert("Battle ended");
       } else {
         console.warn("Unexpected battle state:", response.ns);
       }
     },
-
     /**
      * Handles the event when a Pokémon is selected in the SelectPetComponent.
      * @param {Object} pokemon - The selected Pokémon object.
@@ -85,35 +72,35 @@ export default {
         this.loading = false;
       }
     },
-
     /**
-     * Handles the event when a move is selected in the BattleComponent.
-     * @param {Object} move - The selected move object.
+     * Handles the event when a action is selected in the BattleComponent.
+     * @param {Object} action - The selected action object.
      */
-    async handleMoveSelection(move) {
+    async handleActionSelection(action) {
+      console.log("Action selected:", action);
       try {
         this.loading = true;
-        const response = await BattleService.continueBattle({cs: 7, oi: move.i}); // Changed to use BattleService
+        const response = await BattleService.continueBattle({cs: 7, oi: action.item}); // Changed to use BattleService
         this.processBattleResponse(response);
         this.loading = false;
       } catch (error) {
-        console.error("Error selecting move:", error);
+        console.error("Error selecting action:", error);
         this.loading = false;
       }
     },
 
     /**
-     * Handles the event when a move is selected in the BattleComponent.
-     * @param {Object} move - The selected move object.
+     * Handles the event when a action is selected in the BattleComponent.
+     * @param {Object} action - The selected action object.
      */
-    async handleEndBattle(move) {
+    async handleEndBattle(action) {
       try {
         this.loading = true;
         const response = await BattleService.continueBattle({cs: 9}); // Changed to use BattleService
         this.processBattleResponse(response);
         this.loading = false;
       } catch (error) {
-        console.error("Error selecting move:", error);
+        console.error("Error selecting action:", error);
         this.loading = false;
       }
     },

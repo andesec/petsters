@@ -19,7 +19,7 @@ class BattleService {
     /**
      * Continues the battle by sending the next action/state.
      * Calls `/battle/continue/trainer` endpoint.
-     * @param {Object} data - Data for continuing battle, such as selected Pokémon or move.
+     * @param {Object} data - Data for continuing battle, such as selected Pokémon or action.
      * @returns {Promise<Object>} - Response from the API.
      */
     static async continueBattle(data) {

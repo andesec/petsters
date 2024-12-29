@@ -4,16 +4,16 @@
       <!-- Trainer's Pokemon -->
       <div class="trainer-pokemon">
         <div class="pokemon-header">
-          <h3>{{ cps?.n }}</h3>
-          <i class="fa fa-info-circle pokemon-info-icon" @click="showPokemonDetails(cps)"></i>
+          <h3>{{ "Your " + battle.cps?.n }}</h3>
+          <i class="fa fa-info-circle pokemon-info-icon" @click="showPokemonDetails(battle.cps)"></i>
         </div>
-        <img :src="getPokemonImage(cps?.i)" alt="Your Pokemon" class="pokemon-image"/>
+        <img :src="getImage(battle.cps?.o)" alt="Your Pokemon" class="pokemon-image"/>
         <div class="hp-bar-container">
-          <div class="hp-bar" :style="{ width: cps ? (cps.h / cps.th) * 100 + '%' : '0%' }"></div>
-          <span class="hp-text">{{ cps?.h }}/{{ cps?.th }}</span>
+          <div class="hp-bar" :style="{ width: battle.cps ? (battle.cps.h / battle.cps.th) * 100 + '%' : '0%' }"></div>
+          <span class="hp-text">{{ battle.cps?.h }}/{{ battle.cps?.th }}</span>
         </div>
         <div class="type-squares">
-          <div v-for="(type, i) in cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }"
+          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }"
                class="type-square" :title="type"></div>
         </div>
       </div>
@@ -21,43 +21,46 @@
       <!-- Opponent's Pokemon -->
       <div class="opponent-pokemon">
         <div class="pokemon-header">
-          <h3>{{ ops?.n }}</h3>
-          <i class="fa fa-info-circle pokemon-info-icon" @click="showPokemonDetails(ops)"></i>
+          <h3>{{ battle.op + "'s " + battle.ops?.n }}</h3>
+          <i class="fa fa-info-circle pokemon-info-icon" @click="showPokemonDetails(battle.ops)"></i>
         </div>
-        <img :src="getPokemonImage(ops?.i)" alt="Opponent Pokemon" class="pokemon-image"/>
+        <img :src="getImage(battle.ops?.o)" alt="Opponent Pokemon" class="pokemon-image"/>
         <div class="hp-bar-container">
-          <div class="hp-bar" :style="{ width: ops ? (ops.h / ops.th) * 100 + '%' : '0%' }"></div>
-          <span class="hp-text">{{ ops?.h }}/{{ ops?.th }}</span>
+          <div class="hp-bar" :style="{ width: battle.ops ? (battle.ops.h / battle.ops.th) * 100 + '%' : '0%' }"></div>
+          <span class="hp-text">{{ battle.ops?.h }}/{{ battle.ops?.th }}</span>
         </div>
         <div class="type-squares">
-          <div v-for="(type, i) in ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }"
+          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }"
                class="type-square" :title="type"></div>
         </div>
       </div>
     </div>
 
     <!-- Battle m -->
-    <div class="battle-m">{{ m }}</div>
+    <h4 class="battle-m">{{ battle.m }}</h4>
 
-    <!-- Moves Section -->
-    <h3 class="section-title">Available Moves</h3>
-    <div class="moves-list">
-      <div v-for="move in availableMoves" :key="move.i" class="move-item">
-        <input type="radio" :id="move.i" :value="move.i" v-model="selectedMove" :name="move.i" />
-        <label :for="move.i" class="move-label" :style="{ backgroundColor: getTypeColor(move.t) }">
-          <span>{{ move.n }}</span>
-          <i class="fa fa-info-circle info-icon" @click="showMoveDetails(move)"></i>
-        </label>
+    <!-- Actions and Items Section in Two Columns -->
+    <div class="action-selection">
+      <!-- Actions Section -->
+      <div class="actions-list">
+        <p class="section-title">Use a action:</p>
+        <div v-for="action in battle.os" :key="action.i" class="action-item">
+          <input type="radio" :id="action.i" :value="action.i" v-model="selectedAction" :name="action.i" />
+          <label :for="action.i" class="action-label" :style="{ backgroundColor: getTypeColor(action.t) }">
+            <span>{{ action.n }}</span>
+            <i class="fa fa-info-circle info-icon" @click="showActionDetails(action)"></i>
+          </label>
+        </div>
       </div>
-    </div>
 
-    <!-- Medicine Section -->
-    <h3 class="section-title">Available Medicine</h3>
-    <div class="medicine-list">
-      <div v-for="medicine in availableMedicine" :key="medicine.i" class="medicine-item">
-        <input type="radio" :id="'medicine-' + medicine.i" :value="medicine" v-model="selectedMedicine" name="medicine"
-               :disabled="selectedMove"/>
-        <label :for="'medicine-' + medicine.i" class="medicine-label">{{ medicine.n }}</label>
+      <!-- Medicine Section -->
+      <div class="item-list">
+        <p class="section-title">Use an item:</p>
+        <div v-for="item in battle.im" :key="item.i" class="div-item">
+          <input type="radio" :id="'item-input' + item.i" :value="item" v-model="selectedItem"
+                 :disabled="selectedAction" name="item"/>
+          <label :for="'item-input' + item.i" class="item-label">{{ item.n }}</label>
+        </div>
       </div>
     </div>
 
@@ -79,19 +82,25 @@
 </template>
 
 <script>
+import BattleService from "@/services/BattleService.js";
+
 export default {
   props: {
-    m: {type: String, required: true},
-    cps: {type: Object, required: true},
-    ops: {type: Object, required: true},
-    availableMoves: {type: Array, required: true},
-    availableMedicine: {type: Array, required: true},
-    op: {type: String, required: true},
+    battle: {
+      type: Object,
+      required: true
+      // m: {type: String, required: true},
+      // cps: {type: Object, required: true},
+      // ops: {type: Object, required: true},
+      // os: {type: Array, required: true},
+      // im: {type: Array, required: true},
+      // op: {type: String, required: true},
+    }
   },
   data() {
     return {
-      selectedMove: null,
-      selectedMedicine: null,
+      selectedAction: null,
+      selectedItem: null,
       showDetailsOverlay: false,
       detailsForPokemon: null,
       isProcessing: false,
@@ -99,12 +108,12 @@ export default {
   },
   computed: {
     canContinue() {
-      return this.selectedMove || this.selectedMedicine;
+      return this.selectedAction || this.selectedItem;
     },
   },
   methods: {
-    getPokemonImage(id) {
-      return `/assets/pokemon/${id}.png`;
+    getImage(id) {
+      return `/assets/mon/an/${id}.gif`;
     },
     showPokemonDetails(pokemon) {
       this.detailsForPokemon = null; // Reset to show loader
@@ -115,12 +124,12 @@ export default {
         this.detailsForPokemon = {...pokemon, description: "This is a Pokémon with amazing abilities!"};
       }, 1000); // Replace with actual API call
     },
-    showMoveDetails(move) {
+    showActionDetails(action) {
       this.detailsForPokemon = null;
       this.showDetailsOverlay = true;
 
       setTimeout(() => {
-        this.detailsForPokemon = {...move, description: "This move does extra damage when conditions are met."};
+        this.detailsForPokemon = {...action, description: "This action does extra damage when conditions are met."};
       }, 1000);
     },
     closeDetails() {
@@ -130,11 +139,12 @@ export default {
     handleContinue() {
       this.isProcessing = true;
 
-      const selectedAction = this.selectedMove
-          ? {type: "move", item: this.selectedMove}
-          : {type: "medicine", item: this.selectedMedicine};
+      const selectedAction = this.selectedAction
+          ? {type: "action", item: this.selectedAction}
+          : {type: "medicine", item: this.selectedItem};
 
       this.$emit("action-selected", selectedAction);
+      console.log(selectedAction);
 
       setTimeout(() => {
         this.isProcessing = false;
@@ -150,7 +160,7 @@ export default {
         Fighting: "#C03028",
         Poison: "#A040A0",
         Ground: "#7c5e0b",
-        Flying: "#A890F0",
+        Flying: "#b19bef",
         Psychic: "#F85888",
         Bug: "#A8B820",
         Rock: "#ca904e",
@@ -160,8 +170,6 @@ export default {
         Steel: "#d9d9e4",
         Fairy: "#fa8ca6",
       };
-      console.log(type)
-      console.log(typeColors[type])
       return typeColors[type] || "#A8A8A8";
     },
   },
@@ -191,23 +199,40 @@ export default {
   color: #333;
 }
 
-.moves-list, .medicine-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+/* Responsiveness */
+@media (max-width: 1000px) {
+  .action-selection {
+    flex-direction: column;
+  }
+
+  .actions-list, .item-list {
+    width: 100%;
+  }
+}
+
+.action-selection {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
   margin: 20px auto;
 }
 
-.move-item, .medicine-item {
+.actions-list, .item-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.action-item, .div-item {
   position: relative;
-  margin: auto 15%;
+  margin: 10px 15%;
 }
 
 input[type="radio"] {
   display: none;
 }
 
-.move-label, .medicine-label {
+.action-label, .item-label {
   color: whitesmoke;
   display: block;
   padding: 10px 20px;
@@ -219,7 +244,7 @@ input[type="radio"] {
   border: 3px solid transparent;
 }
 
-input[type="radio"]:checked + .move-label {
+input[type="radio"]:checked + .action-label {
   background-color: rgba(0, 0, 0, 0.95);
   border: 3px solid rgba(0, 0, 0, 0.48);
   box-shadow: 0 4px 8px rgba(40, 167, 69, 0.2);
@@ -288,8 +313,8 @@ input[type="radio"]:checked + .move-label {
 }
 
 .pokemon-image {
-  width: 120px;
-  height: auto;
+  width: auto;
+  height: 120px;
   margin-bottom: 10px;
 }
 
@@ -311,10 +336,7 @@ input[type="radio"]:checked + .move-label {
 }
 
 .battle-m {
-  text-align: center;
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 20px;
+  text-align: left;
 }
 
 .details-overlay {
@@ -342,5 +364,9 @@ input[type="radio"]:checked + .move-label {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.section-title {
+  text-align: left;
 }
 </style>

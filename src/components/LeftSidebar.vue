@@ -1,6 +1,6 @@
 <template>
   <div class="left-sidebar">
-    <h1>Left Sidebar</h1>
+    <h1>Information Center</h1>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {};
 
 <style scoped>
 .left-sidebar {
-  width: 250px;
+  width: 20%;
   background-color: #e0e0e0;
   border-radius: 0 8px 8px 0;
   padding: 20px;

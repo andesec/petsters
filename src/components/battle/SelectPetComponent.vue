@@ -3,7 +3,7 @@
     <h2>{{ m }}</h2>
     <div class="pokemon-list">
       <div v-for="pokemon in pokemonList" :key="pokemon.i" class="pokemon-card">
-        <img :src="getPokemonImage(pokemon.i)" :alt="pokemon.n" class="pokemon-image" />
+        <img :src="getPokemonImage(pokemon.o)" :alt="pokemon.n" class="pokemon-image" />
         <p class="pokemon-name">{{ pokemon.n }}</p>
         <button @click="selectPokemon(pokemon)" class="select-button">Select</button>
       </div>
@@ -29,7 +29,7 @@ export default {
     },
     getPokemonImage(id) {
       // Replace with actual logic that retrieves Pokémon images based on ID
-      return `/assets/pokemon/${id}.png`;
+      return `/assets/mon/an/${id}.gif`;
     },
   },
 };
@@ -53,8 +53,8 @@ export default {
   width: 120px;
 }
 .pokemon-image {
-  width: 100px;
-  height: 100px;
+  width: auto;
+  height: 90px;
   object-fit: contain;
 }
 .pokemon-name {
