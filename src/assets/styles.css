@@ -2,7 +2,7 @@ body {
     font-family: 'Arial', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f9;
+    background-color: ghostwhite;
     color: #333;
 }
 
@@ -28,32 +28,6 @@ header nav a {
 
 header nav a:hover {
     text-decoration: underline;
-}
-
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
-}
-
-.container {
-    display: flex;
-    margin: 10px;
-}
-
-.left-sidebar,
-.right-sidebar {
-    background-color: #e0e0e0;
-    border-radius: 10px;
-    padding: 15px;
-}
-
-.left-sidebar {
-    width: 25%;
-    transition: transform 0.3s ease;
-}
-
-.right-sidebar {
-    width: 25%;
 }
 
 button {

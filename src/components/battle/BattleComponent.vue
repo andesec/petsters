@@ -45,7 +45,7 @@
       <div class="actions-list">
         <p class="section-title">Use a action:</p>
         <div v-for="action in battle.os" :key="action.i" class="action-item">
-          <input type="radio" :id="action.i" :value="action.i" v-model="selectedAction" :name="action.i" />
+          <input type="radio" :id="action.i" :value="action.i" v-model="selectedAction" :name="action.i"/>
           <label :for="action.i" class="action-label" :style="{ backgroundColor: getTypeColor(action.t) }">
             <span>{{ action.n }}</span>
             <i class="fa fa-info-circle info-icon" @click="showActionDetails(action)"></i>
@@ -57,8 +57,7 @@
       <div class="item-list">
         <p class="section-title">Use an item:</p>
         <div v-for="item in battle.im" :key="item.i" class="div-item">
-          <input type="radio" :id="'item-input' + item.i" :value="item" v-model="selectedItem"
-                 :disabled="selectedAction" name="item"/>
+          <input type="radio" :id="'item-input' + item.i" :value="item" v-model="selectedItem" :disabled="selectedAction" name="item"/>
           <label :for="'item-input' + item.i" class="item-label">{{ item.n }}</label>
         </div>
       </div>

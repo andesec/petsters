@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-container">
+
     <h1>Profile</h1>
     <form @submit.prevent="saveProfile">
       <div class="form-grid">
@@ -61,7 +61,7 @@
         <div class="form-group" :class="{ 'has-error': errors.th }">
           <label for="twitter">X Handle:</label>
           <div class="input-with-icon">
-            <i class="fab fa-twitter twitter-icon"></i>
+            <i class="fa-brands fa-x-twitter twitter-icon"></i>
             <input id="twitter" v-model="profile.th" placeholder="@***************" />
           </div>
             <small v-if="errors.th" class="error-message">{{ errors.th }}</small>
@@ -77,7 +77,7 @@
       <!-- Submit Button -->
       <button type="submit">Save</button>
     </form>
-  </div>
+
 </template>
 
 <script>
@@ -219,24 +219,6 @@ export default {
 </script>
 
 <style scoped>
-.profile-container {
-  max-width: 100%;
-  margin: 0 auto;
-  padding: 20px 30px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  font-size: 16px; /* Slightly larger font size */
-}
-
-h1 {
-  text-align: center;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns */
@@ -255,15 +237,6 @@ label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-}
-
-input,
-textarea {
-  width: 100%;
-  padding: 8px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
 }
 
 textarea {
@@ -322,13 +295,17 @@ button:hover {
 }
 
 /* Style input fields generally */
-input {
-  width: 100%;
-  padding: 8px;
+input, textarea {
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 5px;
+  width: 95%;
+  padding: 5px;
   transition: border-color 0.2s;
+}
+
+textarea {
+  width: 98%;
 }
 
 input:focus {

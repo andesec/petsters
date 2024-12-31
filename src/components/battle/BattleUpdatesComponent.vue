@@ -1,16 +1,16 @@
 <template>
-    <h2>Battle Updates</h2>
-  <div class="sidebar-backdrop">
-    <ul>
-      <li v-for="(summary, index) in turnSummary" :key="index">
-        {{ summary }}
-      </li>
-    </ul>
-  </div>
+<h2>Battle Updates</h2>
+<div class="sidebar-backdrop">
+<ul>
+  <li v-for="(summary, index) in turnSummary" :key="index" class="update-item">
+    {{ summary }}
+  </li>
+</ul>
+</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted, watch } from 'vue';
+<script>
+import {defineComponent, ref, onMounted, watch} from 'vue';
 import eventBus from '@/eventBus';
 
 export default defineComponent({
@@ -45,35 +45,39 @@ export default defineComponent({
   //   // return { updates };
   // },
   methods: {
-    showBattleUpdates(ts: string[]) {
-      console.log('turnSummary:', this.turnSummary);
-      this.turnSummary = ts;
-      console.log('turnSummary:', this.turnSummary);
+    showBattleUpdates(ts) {
+      this.turnSummary = ts.reverse(); // Reverse to show newest items at the top
+      console.log('turnSummary:', ts);
     }
   }
 });
 </script>
 
 <style scoped>
-.sidebar-backdrop {
-  width: 100%;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
-}
 
-h3 {
-  margin-top: 0;
+h2 {
+  font-size: 18px;
+  color: #333;
 }
 
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
-li {
-  margin-bottom: 8px;
+.update-item {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #e3f2fd;
+  border: 1px solid #90caf9;
+  border-radius: 5px;
   font-size: 14px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.update-item:hover {
+  background-color: #bbdefb;
+  transform: scale(1.02);
 }
 </style>

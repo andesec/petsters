@@ -57,6 +57,7 @@ export default {
       try {
         this.loading = true;
         const response = await BattleService.continueBattle({cs: 6, oi: pokemon.i}); // Changed to use BattleService
+        console.log(response);
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
         this.loading = false;
@@ -69,6 +70,7 @@ export default {
       try {
         this.loading = true;
         const response = await BattleService.continueBattle({cs: 7, oi: action.item}); // Changed to use BattleService
+        console.log(response);
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
         this.loading = false;

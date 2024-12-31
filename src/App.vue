@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <Header />
     <!-- Add FontAwesome CDN -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet"/>
+    <Header />
     <div class="layout">
-      <LeftSidebar :visible="isLeftSidebarVisible" @toggle-sidebar="toggleSidebar" />
-      <div class="main-content">
-        <router-view @send-update="handleMainContentUpdates" />
-      </div>
+      <LeftSidebar/>
+      <MainContent/>
       <RightSidebar @send-update="handleRightSidebarUpdates" />
     </div>
   </div>
@@ -16,6 +14,7 @@
 <script>
 import Header from './components/Header.vue';
 import LeftSidebar from './components/LeftSidebar.vue';
+import MainContent from "@/components/MainContent.vue";
 import RightSidebar from './components/RightSidebar.vue';
 import { VueMaskDirective } from "vue-the-mask";
 
@@ -26,6 +25,7 @@ export default {
   components: {
     Header,
     LeftSidebar,
+    MainContent,
     RightSidebar,
   },
   data() {
@@ -36,9 +36,6 @@ export default {
   methods: {
     toggleSidebar() {
       this.isLeftSidebarVisible = !this.isLeftSidebarVisible;
-    },
-    handleMainContentUpdates(update) {
-      console.log('Update from Main Content:', update);
     },
     handleRightSidebarUpdates(update) {
       console.log('Update from Right Sidebar:', update);
@@ -54,17 +51,6 @@ export default {
   display: flex;
   height: calc(100vh - 60px); /* Adjust height to exclude header */
   padding: 10px; /* Adds consistent padding around the layout */
-  gap: 10px; /* Adds spacing between the sidebar and main content */
-  box-sizing: border-box;
-}
-
-.main-content {
-  flex: 1;
-  padding: 15px; /* Adds inner padding for content */
-  margin: 0; /* Avoids additional margin */
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: auto;
+  gap: 15px; /* Adds spacing between the sidebar and main content */
 }
 </style>
