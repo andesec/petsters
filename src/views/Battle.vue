@@ -22,6 +22,9 @@ export default {
     SelectPetComponent,
     BattleComponent,
   },
+  props: {
+    ci: {type: String, required: true},
+  },
   data() {
     return {
       loading: true,

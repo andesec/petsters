@@ -285,8 +285,7 @@ input[type="radio"]:checked + .action-label {
   margin-bottom: 20px;
 }
 
-.trainer-pokemon,
-.opponent-pokemon {
+.trainer-pokemon, .opponent-pokemon {
   position: relative;
   width: 45%;
   text-align: center;

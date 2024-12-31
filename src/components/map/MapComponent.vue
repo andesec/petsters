@@ -1,6 +1,6 @@
 <template>
+  <p>Use the controls in the right sidebar to interact with the map.</p>
   <div class="map-container">
-    <p>Use the controls in the right sidebar to interact with the map.</p>
     <img src="/assets/map/route_1.png" alt="Map" class="map-image"/>
   </div>
 </template>

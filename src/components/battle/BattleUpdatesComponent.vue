@@ -2,8 +2,13 @@
   <h2>Battle Updates</h2>
   <div class="sidebar-backdrop">
     <transition-group name="fade" tag="ul">
-      <li v-for="(summary, index) in turnSummary" :key="index" :class="getUpdateClass(summary)" class="update-item">
-        {{ summary }}
+      <li v-for="(summary, index) in turnSummaryWithDividers" :key="index" :class="getUpdateClass(summary)" class="update-item">
+        <div v-if="summary.isDivider" class="turn-divider">
+          Turn {{ summary.turn }}
+        </div>
+        <div v-else>
+          {{ summary.text }}
+        </div>
       </li>
     </transition-group>
   </div>
@@ -15,10 +20,9 @@ import eventBus from '@/eventBus';
 
 export default defineComponent({
   name: 'BattleUpdatesComponent',
-  data() {
-    return {
-      turnSummary: []
-    };
+  created() {
+    this.turnSummaryWithDividers = [];
+    this.turnSummary = [];
   },
   mounted() {
     eventBus.on('battle-update', this.showBattleUpdates);
@@ -27,36 +31,58 @@ export default defineComponent({
     eventBus.off('battle-update', this.showBattleUpdates);
   },
   methods: {
-    showBattleUpdates(ts) {
-      this.turnSummary = ts.reverse(); // Reverse to show newest items at the top
-      console.log('turnSummary:', this.turnSummary);
+    showBattleUpdates(newUpdates) {
+      const nextTurn = this.turnSummaryWithDividers.filter((entry) => entry.isDivider).length + 1;
+
+      // Add a divider for the new turn
+      this.turnSummaryWithDividers.push({ isDivider: true, turn: nextTurn });
+
+      // Add the updates
+      newUpdates.forEach((update) => {
+        this.turnSummaryWithDividers.push({ isDivider: false, text: update });
+      });
+
+      console.log('turnSummaryWithDividers:', this.turnSummaryWithDividers);
     },
     getUpdateClass(summary) {
-      if (summary.includes('fainted!')) return 'update-fainted';
-      if (summary.includes('sent out')) return 'update-sent-out';
-      if (summary.includes('used')) return 'update-used';
-      if (summary.includes('is burned')) return 'update-burned';
-      if (summary.includes('is poisoned')) return 'update-poisoned';
-      if (summary.includes('is frozen')) return 'update-frozen';
-      if (summary.includes('is asleep')) return 'update-asleep';
-      if (summary.includes('is paralyzed')) return 'update-paralyzed';
-      if (summary.includes('dodged')) return 'update-dodged';
+      if (summary.isDivider) return '';
+      const text = summary.text || '';
+      if (text.includes('fainted!')) return 'update-fainted';
+      if (text.includes('sent out')) return 'update-sent-out';
+      if (text.includes('used')) return 'update-used';
+      if (text.includes('is burned')) return 'update-burned';
+      if (text.includes('is poisoned')) return 'update-poisoned';
+      if (text.includes('is frozen')) return 'update-frozen';
+      if (text.includes('is asleep')) return 'update-asleep';
+      if (text.includes('is paralyzed')) return 'update-paralyzed';
+      if (text.includes('dodged')) return 'update-dodged';
       return 'update-default';
-    }
-  }
+    },
+  },
+  data() {
+    return {
+      turnSummary: [],
+      turnSummaryWithDividers: [],
+    };
+  },
 });
 </script>
 
 <style scoped>
-h2 {
-  font-size: 18px;
-  color: #333;
-}
 
 ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.turn-divider {
+  text-align: center;
+  font-weight: bold;
+  margin: 10px 0;
+  padding: 5px 0;
+  border-top: 1px solid #ccc;
+  color: #333;
 }
 
 .update-item {
@@ -69,7 +95,7 @@ ul {
 
 /* Hover effect */
 .update-item:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
 /* Specific classes for different types of updates */
