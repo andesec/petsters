@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import MapComponent from '../components/MapComponent.vue';
+import MapComponent from '../components/map/MapComponent.vue';
 import eventBus from '../eventBus';
 
 export default {
