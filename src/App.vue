@@ -63,7 +63,7 @@ export default {
   padding: 15px; /* Adds inner padding for content */
   margin: 0; /* Avoids additional margin */
   background-color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   overflow: auto;
 }

@@ -5,9 +5,8 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battleData?.m" :pokemonList="battleData?.os"
-                          @pokemon-selected="handlePokemonSelection"/>
-      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battleData" @action-selected="handleActionSelection" @end-battle="handleEndBattle" />
+      <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battle?.m" :os="battle?.os" @pokemon-selected="handlePokemonSelection"/>
+      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battle" @action-selected="handleActionSelection" @end-battle="handleEndBattle" />
     </div>
   </div>
 </template>
@@ -16,6 +15,7 @@
 import BattleService from "../services/BattleService"; // Updated to import BattleService
 import SelectPetComponent from "../components/battle/SelectPetComponent.vue"
 import BattleComponent from "../components/battle/BattleComponent.vue"
+import eventBus from "@/eventBus.js";
 
 export default {
   components: {
@@ -26,7 +26,7 @@ export default {
     return {
       loading: true,
       cs: null, // 'SELECT_PET' or 'IN_BATTLE'
-      battleData: null, // Holds the data received from the API
+      battle: null, // Holds the data received from the API
     };
   },
   async created() {
@@ -41,12 +41,8 @@ export default {
     }
   },
   methods: {
-    /**
-     * Processes the battle API response and determines the current state.
-     * @param {Object} response - The API response data.
-     */
     processBattleResponse(response) {
-      this.battleData = response;
+      this.battle = response;
       if (response.ns === 1 || response.ns === 6) {
         this.cs = "SELECT_PET"; // Show SelectPetComponent
       } else if (response.ns === 2 || response.ns === 7) {
@@ -57,14 +53,11 @@ export default {
         console.warn("Unexpected battle state:", response.ns);
       }
     },
-    /**
-     * Handles the event when a Pokémon is selected in the SelectPetComponent.
-     * @param {Object} pokemon - The selected Pokémon object.
-     */
     async handlePokemonSelection(pokemon) {
       try {
         this.loading = true;
         const response = await BattleService.continueBattle({cs: 6, oi: pokemon.i}); // Changed to use BattleService
+        eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
         this.loading = false;
       } catch (error) {
@@ -72,15 +65,11 @@ export default {
         this.loading = false;
       }
     },
-    /**
-     * Handles the event when a action is selected in the BattleComponent.
-     * @param {Object} action - The selected action object.
-     */
     async handleActionSelection(action) {
-      console.log("Action selected:", action);
       try {
         this.loading = true;
         const response = await BattleService.continueBattle({cs: 7, oi: action.item}); // Changed to use BattleService
+        eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
         this.loading = false;
       } catch (error) {
@@ -88,19 +77,15 @@ export default {
         this.loading = false;
       }
     },
-
-    /**
-     * Handles the event when a action is selected in the BattleComponent.
-     * @param {Object} action - The selected action object.
-     */
-    async handleEndBattle(action) {
+    async handleEndBattle() {
       try {
         this.loading = true;
-        const response = await BattleService.continueBattle({cs: 9}); // Changed to use BattleService
+        const response = await BattleService.endBattle({ cs: 9 });
+        eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
         this.loading = false;
       } catch (error) {
-        console.error("Error selecting action:", error);
+        console.error("Error ending battle:", error);
         this.loading = false;
       }
     },

@@ -236,7 +236,7 @@ input[type="radio"] {
   color: whitesmoke;
   display: block;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   text-align: center;
@@ -268,7 +268,7 @@ input[type="radio"]:checked + .action-label {
   padding: 5px 10px;
   background-color: red;
   color: white;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 20px;
 }

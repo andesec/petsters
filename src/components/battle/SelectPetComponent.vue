@@ -2,10 +2,10 @@
   <div class="select-pet-component">
     <h2>{{ m }}</h2>
     <div class="pokemon-list">
-      <div v-for="pokemon in pokemonList" :key="pokemon.i" class="pokemon-card">
-        <img :src="getPokemonImage(pokemon.o)" :alt="pokemon.n" class="pokemon-image" />
-        <p class="pokemon-name">{{ pokemon.n }}</p>
-        <button @click="selectPokemon(pokemon)" class="select-button">Select</button>
+      <div v-for="o in os" :key="o.i" class="pokemon-card">
+        <img :src="getPokemonImage(o.o)" :alt="o.n" class="pokemon-image" />
+        <p class="pokemon-name">{{ o.n }}</p>
+        <button @click="selectPokemon(o)" class="select-button">Select</button>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@ export default {
       type: String,
       required: true,
     },
-    pokemonList: {
+    os: {
       type: Array,
       required: true,
     },
@@ -47,7 +47,7 @@ export default {
 }
 .pokemon-card {
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 10px;
   text-align: center;
   width: 120px;
@@ -66,7 +66,7 @@ export default {
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
 }
 .select-button:hover {

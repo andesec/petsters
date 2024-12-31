@@ -43,7 +43,7 @@ h1 {
 .left-sidebar,
 .right-sidebar {
     background-color: #e0e0e0;
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 15px;
 }
 
@@ -61,7 +61,7 @@ button {
     color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds shadow for 3D effect */
     transition: all 0.2s ease;

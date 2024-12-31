@@ -7,7 +7,7 @@ class BattleService {
      * @param {Object} data - Data to start the battle (e.g., opponentId, team info).
      * @returns {Promise<Object>} - Response from the API.
      */
-    static async initiateBattle(data) {
+     static async initiateBattle(data) {
         try {
             return await ApiService.makeRequest('/battle/initiate/trainer', 'POST', data);
         } catch (error) {

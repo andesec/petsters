@@ -1,6 +1,6 @@
 <template>
   <div class="left-sidebar">
-    <h1>Information Center</h1>
+    <h2>Information Center</h2>
   </div>
 </template>
 
@@ -12,10 +12,8 @@ export default {};
 .left-sidebar {
   width: 20%;
   background-color: #e0e0e0;
-  border-radius: 0 8px 8px 0;
-  padding: 20px;
-  box-sizing: border-box;
-  z-index: 1000;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds a 3D shadow effect */
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds 3D effect */
 }
 </style>

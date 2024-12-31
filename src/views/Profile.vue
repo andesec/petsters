@@ -225,7 +225,7 @@ export default {
   padding: 20px 30px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   font-family: Arial, sans-serif;
   font-size: 16px; /* Slightly larger font size */
@@ -263,7 +263,7 @@ textarea {
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 textarea {
@@ -299,7 +299,7 @@ button {
   color: white;
   border: none;
   padding: 10px 20px;
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -327,7 +327,7 @@ input {
   padding: 8px;
   font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
   transition: border-color 0.2s;
 }
 
