@@ -50,7 +50,7 @@ export default {
 .layout {
   display: flex;
   height: calc(100vh - 60px); /* Adjust height to exclude header */
-  padding: 10px; /* Adds consistent padding around the layout */
-  gap: 15px; /* Adds spacing between the sidebar and main content */
+  padding: 8px; /* Adds consistent padding around the layout */
+  gap: 10px; /* Adds spacing between the sidebar and main content */
 }
 </style>

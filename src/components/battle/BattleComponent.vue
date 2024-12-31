@@ -13,8 +13,7 @@
           <span class="hp-text">{{ battle.cps?.h }}/{{ battle.cps?.th }}</span>
         </div>
         <div class="type-squares">
-          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }"
-               class="type-square" :title="type"></div>
+          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{type}}</div>
         </div>
       </div>
 
@@ -30,8 +29,7 @@
           <span class="hp-text">{{ battle.ops?.h }}/{{ battle.ops?.th }}</span>
         </div>
         <div class="type-squares">
-          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }"
-               class="type-square" :title="type"></div>
+          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{type}}</div>
         </div>
       </div>
     </div>
@@ -329,8 +327,11 @@ input[type="radio"]:checked + .action-label {
 }
 
 .type-square {
-  width: 20px;
-  height: 20px;
+  color: white;
+  font-size: 13px;
+  width: 45px;
+  padding: 5px 10px;
+  border-radius: 7px;
   display: inline-block;
 }
 

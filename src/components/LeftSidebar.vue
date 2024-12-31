@@ -1,6 +1,6 @@
 <template>
   <div class="left-sidebar">
-    <h1>Information Center</h1>
+    <h2>Information Center</h2>
   </div>
 </template>
 

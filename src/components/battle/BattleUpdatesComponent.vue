@@ -1,12 +1,12 @@
 <template>
-<h2>Battle Updates</h2>
-<div class="sidebar-backdrop">
-<ul>
-  <li v-for="(summary, index) in turnSummary" :key="index" class="update-item">
-    {{ summary }}
-  </li>
-</ul>
-</div>
+  <h2>Battle Updates</h2>
+  <div class="sidebar-backdrop">
+    <transition-group name="fade" tag="ul">
+      <li v-for="(summary, index) in turnSummary" :key="index" class="update-item">
+        {{ summary }}
+      </li>
+    </transition-group>
+  </div>
 </template>
 
 <script>
@@ -54,12 +54,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
-h2 {
-  font-size: 18px;
-  color: #333;
-}
-
 ul {
   list-style-type: none;
   padding: 0;
@@ -72,12 +66,25 @@ ul {
   background-color: #e3f2fd;
   border: 1px solid #90caf9;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 15px;
   transition: transform 0.2s, background-color 0.2s;
 }
 
 .update-item:hover {
   background-color: #bbdefb;
   transform: scale(1.02);
+}
+
+/* Transition styles */
+.fade-enter-active, .fade-leave-active {
+  transition: all 0.5s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+.fade-enter-to, .fade-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

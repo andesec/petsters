@@ -1,6 +1,6 @@
 <template>
   <div class="battle-page">
-    <h1>Battle Page</h1>
+    <h2>Battle</h2>
     <div v-if="loading" class="loading">
       <p>Loading...</p>
     </div>
