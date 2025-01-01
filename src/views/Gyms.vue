@@ -2,20 +2,19 @@
   <div class="gyms">
     <h2>Gyms</h2>
     <div class="gym-container">
-      <div
-          v-for="gym in gyms"
-          :key="gym.i"
-          class="gym-card"
-          :class="getGymClass(gym.t)"
-      >
-        <a :href="'/api/battle/initiate/' + gym.gi" class="gym-link">
-          <div class="gym-images">
-            <img :src="gym.badgeImage" :alt="gym.m + ' badge'" class="badge-image" />
-            <img :src="gym.image" :alt="gym.l" class="leader-image" />
-          </div>
-          <div class="gym-details">
-            <h3>{{ gym.city }}</h3>
-            <p>{{ gym.m }} Badge</p>
+      <div v-for="gym in gyms" :key="gym.i" class="gym-card" :class="getGymClass(gym.t)">
+        <a @click="startGymBattle(gym.gi)" class="gym-link">
+          <div class="gym-content">
+            <div class="gym-left">
+              <img :src="getGymMedalImage(gym.m)" :alt="gym.m" class="badge-image"/>
+              <div class="gym-details">
+                <h3>{{ gym.l }}</h3>
+                <p>{{ gym.m }} Badge</p>
+              </div>
+            </div>
+            <div class="gym-right">
+              <img :src="getGymMasterImage(gym.g)" :alt="gym.g" class="leader-image"/>
+            </div>
           </div>
         </a>
       </div>
@@ -25,6 +24,9 @@
 
 <script>
 import ApiService from "@/services/ApiService";
+import UXService from "@/services/UXService.js";
+import ImageService from "@/services/ImageService.js";
+import eventBus from "@/eventBus.js";
 
 export default {
   name: "Gyms",
@@ -57,23 +59,29 @@ export default {
     getGymClass(type) {
       return this.typeStyles[type] || "default-style";
     },
+    getGymMedalImage(name) {
+      return ImageService.getImageURLForGymMedal(name);
+    },
+    getGymMasterImage(name) {
+      return ImageService.getImageURLForGymMaster(name);
+    },
+    startGymBattle(gi) {
+      eventBus.emit("bd", {ci: gi, ai: 8, t: 'trainer'}); //TODO: Set appropriate ai for later
+      this.$router.push({ name: "battle" });
+    }
   },
   async created() {
     try {
       this.gyms = await ApiService.makeRequest("/gym");
       console.log(this.gyms);
     } catch (error) {
-      console.error("Failed to fetch gym data:", error);
+      UXService.notify("an error occurred while fetching gyms.", error);
     }
   },
 };
 </script>
 
 <style scoped>
-.gyms {
-  padding: 10px;
-}
-
 .gym-container {
   margin-top: 15px;
   display: flex;
@@ -96,22 +104,36 @@ export default {
   padding: 10px;
 }
 
-.gym-images {
+.gym-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.badge-image,
-.leader-image {
-  width: 48%;
-  height: 100px;
+.gym-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+}
+
+.gym-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-image {
+  width: 70px;
+  height: 70px;
   object-fit: cover;
-  border-radius: 4px;
+  border-radius: 50%;
+  margin-bottom: 10px;
 }
 
 .gym-details {
-  padding: 8px 0;
   text-align: center;
 }
 
@@ -125,6 +147,18 @@ export default {
   margin: 8px 0 0;
   color: #666;
   font-size: 14px;
+}
+
+.leader-image {
+  width: auto;
+  height: 180px; /* Slightly larger height for Gym Master */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.gym-content .gym-left,
+.gym-content .gym-right {
+  padding: 10px;
 }
 
 /* Type-Specific Styles */

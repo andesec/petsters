@@ -2,7 +2,12 @@
   <h2>Battle Updates</h2>
   <div class="sidebar-backdrop">
     <transition-group name="fade" tag="ul">
-      <li v-for="(summary, index) in turnSummaryWithDividers" :key="index" :class="getUpdateClass(summary)" class="update-item">
+      <li
+          v-for="(summary, index) in turnSummaryWithDividers.slice().reverse()"
+          :key="index"
+          :class="[getUpdateClass(summary), { 'new-update': summary.isNew }]"
+          class="update-item"
+      >
         <div v-if="summary.isDivider" class="turn-divider"></div>
         <div v-else> {{ summary.text }}</div>
       </li>
@@ -11,7 +16,7 @@
 </template>
 
 <script>
-import {defineComponent} from 'vue';
+import { defineComponent } from 'vue';
 import eventBus from '@/eventBus';
 
 export default defineComponent({
@@ -28,12 +33,19 @@ export default defineComponent({
   methods: {
     showBattleUpdates(newUpdates) {
       // Add a divider for the new turn
-      this.turnSummaryWithDividers.push({isDivider: true});
+      this.turnSummaryWithDividers.unshift({ isDivider: true, isNew: true });
 
       // Add the updates
       newUpdates.forEach((update) => {
-        this.turnSummaryWithDividers.push({isDivider: false, text: update});
+        this.turnSummaryWithDividers.unshift({ isDivider: false, text: update, isNew: true });
       });
+
+      // Remove the `isNew` flag after a short delay to stop the animation
+      setTimeout(() => {
+        this.turnSummaryWithDividers.forEach((update) => {
+          if (update.isNew) update.isNew = false;
+        });
+      }, 1000);
 
       console.log('turnSummaryWithDividers:', this.turnSummaryWithDividers);
     },
@@ -61,7 +73,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-
 ul {
   list-style-type: none;
   padding: 0;
@@ -139,6 +150,20 @@ ul {
   border: 1px solid #90caf9;
 }
 
+/* New update animation */
+.new-update {
+  animation: highlight 1s ease-out;
+}
+
+@keyframes highlight {
+  from {
+    background-color: yellow;
+  }
+  to {
+    background-color: inherit;
+  }
+}
+
 /* Transition styles */
 .fade-enter-active, .fade-leave-active {
   transition: all 0.5s ease;
@@ -146,7 +171,7 @@ ul {
 
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(20px);
 }
 
 .fade-enter-to, .fade-leave-from {

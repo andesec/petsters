@@ -5,9 +5,9 @@
       <p>Loading...</p>
     </div>
     <div v-else>
-      <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battle?.m" :os="battle?.os" @pokemon-selected="handlePokemonSelection"/>
-      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battle" @action-selected="handleActionSelection"/>
-      <BattleEndComponent v-else-if="cs === 'END_BATTLE'" :battle="battle" @end-battle="handleEndBattle"/>
+      <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battle?.m" :os="battle?.os" @pokemon-selected="handlePokemonSelected"/>
+      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battle" @action-selected="handleActionSelected"/>
+      <BattleEndComponent v-else-if="cs === 'END_BATTLE'" :battle="battle"/>
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@ import SelectPetComponent from "../components/battle/SelectPetComponent.vue"
 import BattleComponent from "../components/battle/BattleComponent.vue"
 import eventBus from "@/eventBus.js";
 import BattleEndComponent from "@/components/battle/BattleEndComponent.vue";
+import UXService from "@/services/UXService.js";
 
 export default {
   components: {
@@ -27,6 +28,8 @@ export default {
   },
   props: {
     ci: {type: String, required: true},
+    ai: {type: Number, required: true},
+    t: {type: String, required: true},
   },
   data() {
     return {
@@ -36,17 +39,27 @@ export default {
     };
   },
   async created() {
-    try {
-      // Fetch initial battle data from API and process state
-      const response = await BattleService.initiateBattle({cs: null, ci: 'WHn9T', ai: 8}); // Changed to use BattleService
-      this.processBattleResponse(response);
-      this.loading = false;
-    } catch (error) {
-      console.error("Error loading battle data:", error);
-      this.loading = false;
-    }
+    // Fetch which Petster to battle
+    eventBus.on('bd', (bd) => {
+      this.ci = bd.ci;
+      this.ai = bd.ai;
+      this.t = bd.t;
+      this.initiateBattle();
+    });
+
   },
   methods: {
+    async initiateBattle() {
+      try {
+        // Fetch initial battle data from API and process state
+        const response = await BattleService.initiateBattle(this.t,{cs: null, ci: this.ci, ai: this.ai}); // Changed to use BattleService
+        this.processBattleResponse(response);
+      } catch (error) {
+        UXService.notify("an error occurred while starting the battle.", error)
+      } finally {
+        this.loading = false;
+      }
+    },
     processBattleResponse(response) {
       this.battle = response;
       if (response.ns === 1 || response.ns === 6) {
@@ -57,44 +70,32 @@ export default {
         alert("Battle ended");
         this.cs = "END_BATTLE"; // Show BattleEndComponent
       } else {
-        console.warn("Unexpected battle state:", response.ns);
+        UXService.warn("Unexpected battle state: " + response.ns);
       }
     },
-    async handlePokemonSelection(pokemon) {
+    async handlePokemonSelected(pokemon) {
       try {
         this.loading = true;
-        const response = await BattleService.continueBattle({cs: 6, oi: pokemon.i}); // Changed to use BattleService
+        const response = await BattleService.continueBattle(this.t, {cs: 6, oi: pokemon.i}); // Changed to use BattleService
         console.log(response);
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
-        this.loading = false;
       } catch (error) {
-        console.error("Error selecting Pokémon:", error);
+        UXService.notify("an error occurred while selecting the pokemon.", error)
+      } finally {
         this.loading = false;
       }
     },
-    async handleActionSelection(action) {
+    async handleActionSelected(action) {
       try {
         this.loading = true;
-        const response = await BattleService.continueBattle({cs: 7, oi: action.item}); // Changed to use BattleService
+        const response = await BattleService.continueBattle(this.t, {cs: 7, oi: action.item}); // Changed to use BattleService
         console.log(response);
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
-        this.loading = false;
       } catch (error) {
-        console.error("Error selecting action:", error);
-        this.loading = false;
-      }
-    },
-    async handleEndBattle() {
-      try {
-        this.loading = true;
-        const response = await BattleService.endBattle({cs: 9});
-        eventBus.emit('battle-update', response.ts);
-        this.processBattleResponse(response);
-        this.loading = false;
-      } catch (error) {
-        console.error("Error ending battle:", error);
+        UXService.notify("an error occurred while performing the action.", error)
+      } finally {
         this.loading = false;
       }
     },

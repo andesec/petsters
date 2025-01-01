@@ -6,19 +6,12 @@
 </template>
 
 <script>
-import eventBus from '../eventBus';
 import BattleUpdatesComponent from "@/components/battle/BattleUpdatesComponent.vue";
 import JoystickComponent from "@/components/map/JoystickComponent.vue";
 
 export default {
   components: {JoystickComponent, BattleUpdatesComponent},
   methods: {
-    sendUpdate() {
-      eventBus.emit('update-from-right', { message: 'New update from Right Sidebar' });
-    },
-    receiveUpdate(update) {
-      console.log(update);
-    }
   },
 };
 </script>
@@ -33,5 +26,4 @@ export default {
   padding: 10px;
   overflow-y: auto; /* Enable scrolling if there are too many updates */
 }
-
 </style>

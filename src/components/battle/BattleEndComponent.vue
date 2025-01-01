@@ -1,6 +1,7 @@
 <template>
   <h4>{{ battle.m }}</h4>
-
+  <p v-for="t in finalData.ts" :key="t.id">{{ t }}</p>
+  <button @click="goBackToMap">Back to Map</button>
 </template>
 
 <style scoped>
@@ -8,6 +9,8 @@
 </style>
 
 <script>
+import battleService from "@/services/BattleService.js";
+
 export default {
   props: {
     battle: {
@@ -15,14 +18,19 @@ export default {
       required: true,
     },
   },
+  async mounted() {
+    const finalData = await battleService.continueBattle({cs: 9})
+
+  },
   methods: {
-    selectPokemon(pokemon) {
-      this.$emit('pokemon-selected', pokemon);
+    goBackToMap() {
+      this.$router.push({ name: 'Maps' });
     },
-    getPokemonImage(id) {
-      // Replace with actual logic that retrieves Pokémon images based on ID
-      return `/assets/mon/nor/${id}.svg`;
-    },
+  },
+  data() {
+    return {
+      finalData: {},
+    }
   },
 };
 </script>

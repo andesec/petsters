@@ -3,13 +3,15 @@ import ApiService from './ApiService';
 class BattleService {
     /**
      * Initiates a battle with the trainer.
-     * Calls `/battle/initiate/trainer` endpoint.
+     * Calls `/battle/initiate/<type>` endpoint.
+     * @param type battle type
      * @param {Object} data - Data to start the battle (e.g., opponentId, team info).
      * @returns {Promise<Object>} - Response from the API.
      */
-     static async initiateBattle(data) {
+     static async initiateBattle(type, data) {
         try {
-            return await ApiService.makeRequest('/battle/initiate/trainer', 'POST', data);
+            console.log('Initiating battle with trainer...');
+            return await ApiService.makeRequest('/battle/initiate/' + type, 'POST', data);
         } catch (error) {
             console.error('Error initiating battle:', error);
             throw error;
@@ -18,13 +20,16 @@ class BattleService {
 
     /**
      * Continues the battle by sending the next action/state.
-     * Calls `/battle/continue/trainer` endpoint.
+     * Calls `/battle/continue/<type>` endpoint.
+     * @param type battle type
      * @param {Object} data - Data for continuing battle, such as selected Pokémon or action.
      * @returns {Promise<Object>} - Response from the API.
      */
-    static async continueBattle(data) {
+    static async continueBattle(type, data) {
         try {
-            return await ApiService.makeRequest('/battle/continue/trainer', 'POST', data);
+            console.log('Continuing battle...');
+            console.log(data);
+            return await ApiService.makeRequest('/battle/continue/' + type, 'POST', data);
         } catch (error) {
             console.error('Error continuing battle:', error);
             throw error;

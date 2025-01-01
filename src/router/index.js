@@ -14,7 +14,7 @@ const routes = [
         redirect: '/battle',
         meta: { requiresAuth: true },
         children: [
-            { path: 'battle', name: 'Battle', component: Battle },
+            { path: 'battle', name: 'Battle', component: Battle, },
             { path: 'maps', name: 'Maps', component: Maps },
             { path: 'profile', name: 'Profile', component: Profile },
             { path: 'gyms', name: 'Gyms', component: Gyms },

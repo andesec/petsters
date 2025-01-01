@@ -1,19 +1,12 @@
 <template>
   <div class="main-content">
-    <router-view @send-update="handleMainContentUpdates" />
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
   methods: {
-    handleMainContentUpdates(update) {
-      console.log('Update from Main Content:', update);
-    },
-    sendUpdate() {
-      const update = { message: 'New update from Main Content' };
-      this.$emit('event-from-center', update);
-    },
   },
 };
 </script>

@@ -4,7 +4,7 @@
     <br>
     <div class="pokemon-list">
       <div v-for="o in os" :key="o.i" class="pokemon-card">
-        <img :src="getPokemonImage(o.o)" :alt="o.n" class="pokemon-image" />
+        <img :src="imageService.getImageURLForPokemon(o.o)" :alt="o.n" class="pokemon-image" />
         <p class="pokemon-name">{{ o.n }}</p>
         <button @click="selectPokemon(o)" class="select-button">Select</button>
       </div>
@@ -13,7 +13,14 @@
 </template>
 
 <script>
+import imageService from "@/services/ImageService.js";
+
 export default {
+  computed: {
+    imageService() {
+      return imageService
+    },
+  },
   props: {
     m: {
       type: String,
@@ -27,10 +34,6 @@ export default {
   methods: {
     selectPokemon(pokemon) {
       this.$emit('pokemon-selected', pokemon);
-    },
-    getPokemonImage(id) {
-      // Replace with actual logic that retrieves Pokémon images based on ID
-      return `/assets/mon/nor/${id}.svg`;
     },
   },
 };

@@ -82,6 +82,7 @@
 
 <script>
 import ApiService from '../services/ApiService';
+import UXService from "@/services/UXService.js";
 
 export default {
   data() {
@@ -105,7 +106,7 @@ export default {
       const response = await ApiService.makeRequest('/profile', 'GET');
       this.profile = response;
     } catch (error) {
-      console.error('Error fetching profile:', error);
+      UXService.notify("an error occurred while fetching profile", error);
     }
   },
   computed: {
@@ -211,7 +212,7 @@ export default {
         await ApiService.makeRequest("/profile", "POST", processedProfile);
         alert("Profile saved successfully!");
       } catch (error) {
-        console.error("Error saving profile:", error);
+        UXService.notify("an error occurred while saving profile", error);
       }
     },
   },

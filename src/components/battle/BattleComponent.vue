@@ -7,7 +7,7 @@
           <h3>{{ "Your " + battle.cps?.n }}</h3>
           <i class="fa fa-info-circle pokemon-info-icon" @click="showPokemonDetails(battle.cps)"></i>
         </div>
-        <img :src="getImage(battle.cps?.o)" alt="Your Pokemon" class="pokemon-image"/>
+        <img :src="ImageService.getImageURLForPokemon(battle.cps?.o)" alt="Your Pokemon" class="pokemon-image"/>
         <div class="hp-bar-container">
           <div class="hp-bar" :style="{ width: battle.cps ? (battle.cps.h / battle.cps.th) * 100 + '%' : '0%' }"></div>
           <span class="hp-text">{{ battle.cps?.h }}/{{ battle.cps?.th }}</span>
@@ -23,7 +23,7 @@
           <h3>{{ battle.op + "'s " + battle.ops?.n }}</h3>
           <i class="fa fa-info-circle pokemon-info-icon" @click="showPokemonDetails(battle.ops)"></i>
         </div>
-        <img :src="getImage(battle.ops?.o)" alt="Opponent Pokemon" class="pokemon-image"/>
+        <img :src="ImageService.getImageURLForPokemon(battle.ops?.o)" alt="Opponent Pokemon" class="pokemon-image"/>
         <div class="hp-bar-container">
           <div class="hp-bar" :style="{ width: battle.ops ? (battle.ops.h / battle.ops.th) * 100 + '%' : '0%' }"></div>
           <span class="hp-text">{{ battle.ops?.h }}/{{ battle.ops?.th }}</span>
@@ -79,19 +79,13 @@
 </template>
 
 <script>
-import BattleService from "@/services/BattleService.js";
+import ImageService from "@/services/ImageService.js";
 
 export default {
   props: {
     battle: {
       type: Object,
       required: true
-      // m: {type: String, required: true},
-      // cps: {type: Object, required: true},
-      // ops: {type: Object, required: true},
-      // os: {type: Array, required: true},
-      // im: {type: Array, required: true},
-      // op: {type: String, required: true},
     }
   },
   data() {
@@ -104,14 +98,14 @@ export default {
     };
   },
   computed: {
+    ImageService() {
+      return ImageService
+    },
     canContinue() {
       return this.selectedAction || this.selectedItem;
     },
   },
   methods: {
-    getImage(id) {
-      return `/assets/mon/nor/${id}.svg`;
-    },
     handleContinue() {
       this.isProcessing = true;
 
