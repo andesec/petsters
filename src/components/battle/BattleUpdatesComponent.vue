@@ -1,13 +1,10 @@
 <template>
   <h2>Battle Updates</h2>
+  <br/>
   <div class="sidebar-backdrop">
     <transition-group name="fade" tag="ul">
-      <li
-          v-for="(summary, index) in turnSummaryWithDividers.slice().reverse()"
-          :key="index"
-          :class="[getUpdateClass(summary), { 'new-update': summary.isNew }]"
-          class="update-item"
-      >
+      <li v-for="(summary, index) in turnSummary" :key="index" :class="[getUpdateClass(summary), { 'new-update': summary.isNew }]"
+          class="update-item">
         <div v-if="summary.isDivider" class="turn-divider"></div>
         <div v-else> {{ summary.text }}</div>
       </li>
@@ -16,13 +13,13 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import {defineComponent} from 'vue';
 import eventBus from '@/eventBus';
 
 export default defineComponent({
   name: 'BattleUpdatesComponent',
   created() {
-    this.turnSummaryWithDividers = [];
+    this.turnSummary = [];
   },
   mounted() {
     eventBus.on('battle-update', this.showBattleUpdates);
@@ -33,21 +30,21 @@ export default defineComponent({
   methods: {
     showBattleUpdates(newUpdates) {
       // Add a divider for the new turn
-      this.turnSummaryWithDividers.unshift({ isDivider: true, isNew: true });
+      this.turnSummary.unshift({isDivider: true, isNew: true});
 
       // Add the updates
       newUpdates.forEach((update) => {
-        this.turnSummaryWithDividers.unshift({ isDivider: false, text: update, isNew: true });
+        this.turnSummary.unshift({isDivider: false, text: update, isNew: true});
       });
 
       // Remove the `isNew` flag after a short delay to stop the animation
       setTimeout(() => {
-        this.turnSummaryWithDividers.forEach((update) => {
+        this.turnSummary.forEach((update) => {
           if (update.isNew) update.isNew = false;
         });
       }, 1000);
 
-      console.log('turnSummaryWithDividers:', this.turnSummaryWithDividers);
+      console.log('turnSummaryWithDividers:', this.turnSummary);
     },
     getUpdateClass(summary) {
       if (summary.isDivider) return '';
@@ -66,7 +63,7 @@ export default defineComponent({
   },
   data() {
     return {
-      turnSummaryWithDividers: [],
+      turnSummary: [],
     };
   },
 });

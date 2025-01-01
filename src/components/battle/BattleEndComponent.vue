@@ -1,6 +1,8 @@
 <template>
   <h4>{{ battle.m }}</h4>
+  <br>
   <p v-for="t in finalData.ts" :key="t.id">{{ t }}</p>
+  <br>
   <button @click="goBackToMap">Back to Map</button>
 </template>
 
@@ -17,9 +19,13 @@ export default {
       type: Object,
       required: true,
     },
+    t: {
+      type: String,
+      required: true,}
   },
   async mounted() {
-    const finalData = await battleService.continueBattle({cs: 9})
+    console.log("ending battle now")
+    this.finalData = await battleService.continueBattle(this.t, {cs: 9})
 
   },
   methods: {

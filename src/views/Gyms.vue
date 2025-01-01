@@ -66,8 +66,13 @@ export default {
       return ImageService.getImageURLForGymMaster(name);
     },
     startGymBattle(gi) {
-      eventBus.emit("bd", {ci: gi, ai: 8, t: 'trainer'}); //TODO: Set appropriate ai for later
-      this.$router.push({ name: "battle" });
+      console.log('startGymBattle called with:', gi); // Debugging
+      setTimeout(() => {
+        console.log("emitting")
+        eventBus.emit("bd", {ci: gi, ai: 8, t: 'trainer'}); //TODO: Set appropriate ai for later
+      }, 1000);
+
+      this.$router.push({ name: "Battle" });
     }
   },
   async created() {

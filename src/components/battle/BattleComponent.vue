@@ -12,6 +12,7 @@
           <div class="hp-bar" :style="{ width: battle.cps ? (battle.cps.h / battle.cps.th) * 100 + '%' : '0%' }"></div>
           <span class="hp-text">{{ battle.cps?.h }}/{{ battle.cps?.th }}</span>
         </div>
+        <p>Level {{battle.cps?.l}}</p>
         <div class="type-squares">
           <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{type}}</div>
         </div>
@@ -28,6 +29,7 @@
           <div class="hp-bar" :style="{ width: battle.ops ? (battle.ops.h / battle.ops.th) * 100 + '%' : '0%' }"></div>
           <span class="hp-text">{{ battle.ops?.h }}/{{ battle.ops?.th }}</span>
         </div>
+        <p>Level {{battle.ops?.l}}</p>
         <div class="type-squares">
           <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{type}}</div>
         </div>

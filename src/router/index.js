@@ -8,6 +8,7 @@ import config from '../config';
 
 const routes = [
     { path: '/login', name: 'Login', component: Login },
+    { path: '/battle', name: 'Battle', component: Battle },
     {
         path: '/',
         name: 'Home',

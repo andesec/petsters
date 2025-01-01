@@ -7,7 +7,7 @@
     <div v-else>
       <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battle?.m" :os="battle?.os" @pokemon-selected="handlePokemonSelected"/>
       <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battle" @action-selected="handleActionSelected"/>
-      <BattleEndComponent v-else-if="cs === 'END_BATTLE'" :battle="battle"/>
+      <BattleEndComponent v-else-if="cs === 'END_BATTLE'" :battle="battle" :t="t"/>
     </div>
   </div>
 </template>
@@ -26,30 +26,32 @@ export default {
     SelectPetComponent,
     BattleComponent,
   },
-  props: {
-    ci: {type: String, required: true},
-    ai: {type: Number, required: true},
-    t: {type: String, required: true},
-  },
   data() {
     return {
       loading: true,
       cs: null, // 'SELECT_PET' or 'IN_BATTLE'
       battle: null, // Holds the data received from the API
+      ci: null,
+      ai: null,
+      t: null,
     };
   },
-  async created() {
+  async mounted() {
+    console.log("Battle created");
     // Fetch which Petster to battle
-    eventBus.on('bd', (bd) => {
+    eventBus.on('bd', this.initiateBattle);
+  },
+  beforeUnmount() {
+    eventBus.off('bd', this.initiateBattle);
+  },
+  methods: {
+    async initiateBattle(bd) {
       this.ci = bd.ci;
       this.ai = bd.ai;
       this.t = bd.t;
-      this.initiateBattle();
-    });
+      this.loading = true;
+      console.log("Initiating battle");
 
-  },
-  methods: {
-    async initiateBattle() {
       try {
         // Fetch initial battle data from API and process state
         const response = await BattleService.initiateBattle(this.t,{cs: null, ci: this.ci, ai: this.ai}); // Changed to use BattleService
@@ -67,7 +69,6 @@ export default {
       } else if (response.ns === 2 || response.ns === 7) {
         this.cs = "SELECT_ACTION"; // Show BattleComponent
       } else if (response.ns === 5 || response.ns === 9) {
-        alert("Battle ended");
         this.cs = "END_BATTLE"; // Show BattleEndComponent
       } else {
         UXService.warn("Unexpected battle state: " + response.ns);
