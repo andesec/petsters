@@ -1,12 +1,13 @@
 <template>
+  <h2>Battle</h2>
   <div class="battle-page">
-    <h2>Battle</h2>
     <div v-if="loading" class="loading">
       <p>Loading...</p>
     </div>
     <div v-else>
       <SelectPetComponent v-if="cs === 'SELECT_PET'" :m="battle?.m" :os="battle?.os" @pokemon-selected="handlePokemonSelection"/>
-      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battle" @action-selected="handleActionSelection" @end-battle="handleEndBattle" />
+      <BattleComponent v-else-if="cs === 'SELECT_ACTION'" :battle="battle" @action-selected="handleActionSelection"/>
+      <BattleEndComponent v-else-if="cs === 'END_BATTLE'" :battle="battle" @end-battle="handleEndBattle"/>
     </div>
   </div>
 </template>
@@ -16,9 +17,11 @@ import BattleService from "../services/BattleService"; // Updated to import Batt
 import SelectPetComponent from "../components/battle/SelectPetComponent.vue"
 import BattleComponent from "../components/battle/BattleComponent.vue"
 import eventBus from "@/eventBus.js";
+import BattleEndComponent from "@/components/battle/BattleEndComponent.vue";
 
 export default {
   components: {
+    BattleEndComponent,
     SelectPetComponent,
     BattleComponent,
   },
@@ -52,6 +55,7 @@ export default {
         this.cs = "SELECT_ACTION"; // Show BattleComponent
       } else if (response.ns === 5 || response.ns === 9) {
         alert("Battle ended");
+        this.cs = "END_BATTLE"; // Show BattleEndComponent
       } else {
         console.warn("Unexpected battle state:", response.ns);
       }
@@ -85,7 +89,7 @@ export default {
     async handleEndBattle() {
       try {
         this.loading = true;
-        const response = await BattleService.endBattle({ cs: 9 });
+        const response = await BattleService.endBattle({cs: 9});
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
         this.loading = false;
@@ -100,7 +104,6 @@ export default {
 
 <style scoped>
 .battle-page {
-  text-align: center;
   margin: 20px;
 }
 

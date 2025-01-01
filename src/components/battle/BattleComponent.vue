@@ -110,28 +110,7 @@ export default {
   },
   methods: {
     getImage(id) {
-      return `/assets/mon/an/${id}.gif`;
-    },
-    showPokemonDetails(pokemon) {
-      this.detailsForPokemon = null; // Reset to show loader
-      this.showDetailsOverlay = true;
-
-      setTimeout(() => {
-        // Simulate API call
-        this.detailsForPokemon = {...pokemon, description: "This is a Pokémon with amazing abilities!"};
-      }, 1000); // Replace with actual API call
-    },
-    showActionDetails(action) {
-      this.detailsForPokemon = null;
-      this.showDetailsOverlay = true;
-
-      setTimeout(() => {
-        this.detailsForPokemon = {...action, description: "This action does extra damage when conditions are met."};
-      }, 1000);
-    },
-    closeDetails() {
-      this.detailsForPokemon = null;
-      this.showDetailsOverlay = false;
+      return `/assets/mon/nor/${id}.svg`;
     },
     handleContinue() {
       this.isProcessing = true;

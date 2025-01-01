@@ -1,6 +1,7 @@
 <template>
   <div class="select-pet-component">
-    <h2>{{ m }}</h2>
+    <h4>{{ m }}</h4>
+    <br>
     <div class="pokemon-list">
       <div v-for="o in os" :key="o.i" class="pokemon-card">
         <img :src="getPokemonImage(o.o)" :alt="o.n" class="pokemon-image" />
@@ -29,7 +30,7 @@ export default {
     },
     getPokemonImage(id) {
       // Replace with actual logic that retrieves Pokémon images based on ID
-      return `/assets/mon/an/${id}.gif`;
+      return `/assets/mon/nor/${id}.svg`;
     },
   },
 };

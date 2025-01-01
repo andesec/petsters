@@ -30,6 +30,8 @@ class BattleService {
             throw error;
         }
     }
+
+
 }
 
 export default BattleService;

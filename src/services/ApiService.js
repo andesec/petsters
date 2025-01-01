@@ -25,17 +25,6 @@ class ApiService {
         return await response.json();
     }
 
-    async initiateBattle(battleType, data) {
-        return this.makeRequest(`/initiate/${battleType}`, 'POST', data);
-    }
-
-    async continueBattle(battleType, data) {
-        return this.makeRequest(`/continue/${battleType}`, 'POST', data);
-    }
-
-    async testConnection() {
-        return this.makeRequest('/test');
-    }
 }
 
 export default new ApiService(config.apiBaseUrl);
