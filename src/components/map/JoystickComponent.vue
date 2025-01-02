@@ -24,8 +24,8 @@ export default {
   data() {
     return {
       dragging: false,
-      knobPosition: { x: 60, y: 57 }, // Start at center
-      center: { x: 60, y: 57 }, // Initial center in percentage
+      knobPosition: { x: 50, y: 50 }, // Start at center
+      center: { x: 50, y: 50 }, // Initial center in percentage
       radius: 50, // Radius in percentage
       lastDirection: '', // To prevent redundant emits
     };
@@ -47,15 +47,12 @@ export default {
   },
   methods: {
     emitDirection(x, y) {
-      const threshold = 10; // Minimum displacement to consider movement
       let direction = '';
 
-      if (Math.abs(y) > threshold) {
-        direction = y > 0 ? 'down' : 'up';
-      }
-      if (Math.abs(x) > threshold) {
-        direction = x > 0 ? 'right' : 'left';
-      }
+      if (y > 0) direction = 'down';
+      else if (y < 0) direction = 'up';
+      if (x > 0) direction = 'right';
+      else if (x < 0) direction = 'left';
 
       if (direction && direction !== this.lastDirection) {
         this.lastDirection = direction;
@@ -64,23 +61,27 @@ export default {
       }
     },
     handleKeyPress(event) {
-      const step = 10; // Movement step in pixels
       const directions = {
-        ArrowUp: { x: 0, y: -step },
-        ArrowDown: { x: 0, y: step },
-        ArrowLeft: { x: -step, y: 0 },
-        ArrowRight: { x: step, y: 0 },
+        ArrowUp: { x: 50, y: 0 },    // Top center
+        ArrowDown: { x: 50, y: 100 }, // Bottom center
+        ArrowLeft: { x: 0, y: 50 },  // Center left
+        ArrowRight: { x: 100, y: 50 }, // Center right
       };
 
       if (event.key in directions) {
         const { x, y } = directions[event.key];
 
-        // Update knob position
-        this.knobPosition.x = Math.min(Math.max(this.knobPosition.x + x, 0), 100);
-        this.knobPosition.y = Math.min(Math.max(this.knobPosition.y + y, 0), 100);
+        // Update knob position to edge based on key pressed
+        this.knobPosition.x = x;
+        this.knobPosition.y = y;
 
         // Emit direction
-        this.emitDirectionThrottled(x, y);
+        this.emitDirection(x - 50, y - 50); // Normalize to [-50, 50]
+
+        // Reset knob position to center after a short delay
+        setTimeout(() => {
+          this.knobPosition = { x: 50, y: 50 };
+        }, 200); // Adjust delay as needed
       }
     },
     startDrag(event) {
@@ -143,8 +144,8 @@ export default {
 
 .joystick {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
 }
 
 .joystick-base {
