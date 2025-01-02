@@ -15,13 +15,6 @@ export default {};
 </script>
 
 <style scoped>
-@media (max-width: 450px) {
-  nav {
-    display: none;
-
-  }
-}
-
 .header {
   display: flex;
   align-items: center; /* Vertically align items */
@@ -47,5 +40,16 @@ export default {};
 
 .header nav a:hover {
   text-decoration: underline;
+}
+
+@media (max-width: 450px) {
+  .header {
+    position: relative;
+    z-index: 1200;
+  }
+
+  nav {
+    display: none;
+  }
 }
 </style>
