@@ -24,23 +24,30 @@ export default {
   data() {
     return {
       dragging: false,
-      knobPosition: { x: 50, y: 50 }, // Start at center
-      center: { x: 50, y: 50 }, // Initial center in percentage
+      knobPosition: { x: 60, y: 57 }, // Start at center
+      center: { x: 60, y: 57 }, // Initial center in percentage
       radius: 50, // Radius in percentage
       lastDirection: '', // To prevent redundant emits
     };
   },
   mounted() {
-    const base = this.$refs.joystickBase;
-    const rect = base.getBoundingClientRect();
+    // Calculate joystick center
+    const rect = this.$refs.joystickBase.getBoundingClientRect();
     this.center = { x: rect.width / 2, y: rect.height / 2 };
 
-    // Set focus for keyboard handling
-    this.$refs.joystick.focus();
+    // Add global keyboard listener
+    document.addEventListener('keydown', this.handleKeyPress);
+
+    // Throttle direction emission
+    this.emitDirectionThrottled = throttle(this.emitDirection, 200);
+  },
+  beforeUnmount() {
+    // Clean up keyboard listener
+    document.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
     emitDirection(x, y) {
-      const threshold = 10;
+      const threshold = 10; // Minimum displacement to consider movement
       let direction = '';
 
       if (Math.abs(y) > threshold) {
@@ -52,6 +59,7 @@ export default {
 
       if (direction && direction !== this.lastDirection) {
         this.lastDirection = direction;
+        console.log(`Direction: ${direction}`); // Debugging
         eventBus.emit('map-move', { direction });
       }
     },
@@ -77,7 +85,7 @@ export default {
         this.knobPosition.y = this.center.y + y;
       }
 
-      this.emitDirectionThrottled(this.knobPosition.x, this.knobPosition.y);
+      this.emitDirectionThrottled(this.knobPosition.x - this.center.x, this.knobPosition.y - this.center.y);
     },
     endDrag() {
       this.dragging = false;
@@ -86,13 +94,13 @@ export default {
     },
     handleKeyPress(event) {
       const directions = {
-        ArrowUp: { x: 0, y: -10 },
-        ArrowDown: { x: 0, y: 10 },
-        ArrowLeft: { x: -10, y: 0 },
-        ArrowRight: { x: 10, y: 0 },
+        ArrowUp: { x: 0, y: -1 },
+        ArrowDown: { x: 0, y: 1 },
+        ArrowLeft: { x: -1, y: 0 },
+        ArrowRight: { x: 1, y: 0 },
       };
 
-      if (directions[event.key]) {
+      if (event.key in directions) {
         const { x, y } = directions[event.key];
         this.emitDirection(x, y);
       }
@@ -108,9 +116,6 @@ export default {
     handleTouchEnd() {
       this.endDrag();
     },
-  },
-  created() {
-    this.emitDirectionThrottled = throttle(this.emitDirection, 200);
   },
 };
 </script>
