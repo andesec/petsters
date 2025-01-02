@@ -1,5 +1,6 @@
-<template>
+<template xmlns="http://www.w3.org/1999/html">
   <p>Use the controls in the right sidebar to interact with the map.</p>
+  <br/>
   <div class="map-container">
     <img src="/assets/map/route_1.png" alt="Map" class="map-image"/>
   </div>
