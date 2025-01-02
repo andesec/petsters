@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import eventBus from '../../eventBus';
-import { throttle } from 'lodash'; // Add lodash for throttling
+import { throttle } from 'lodash';
+import eventBus from "@/eventBus.js";
 
 export default {
   data() {
@@ -35,15 +35,15 @@ export default {
     const rect = this.$refs.joystickBase.getBoundingClientRect();
     this.center = { x: rect.width / 2, y: rect.height / 2 };
 
-    // Add global keyboard listener
-    document.addEventListener('keydown', this.handleKeyPress);
+    // Attach global keydown listener
+    window.addEventListener('keydown', this.handleKeyPress);
 
     // Throttle direction emission
     this.emitDirectionThrottled = throttle(this.emitDirection, 200);
   },
   beforeUnmount() {
-    // Clean up keyboard listener
-    document.removeEventListener('keydown', this.handleKeyPress);
+    // Clean up keydown listener
+    window.removeEventListener('keydown', this.handleKeyPress);
   },
   methods: {
     emitDirection(x, y) {
@@ -61,6 +61,26 @@ export default {
         this.lastDirection = direction;
         console.log(`Direction: ${direction}`); // Debugging
         eventBus.emit('map-move', { direction });
+      }
+    },
+    handleKeyPress(event) {
+      const step = 10; // Movement step in pixels
+      const directions = {
+        ArrowUp: { x: 0, y: -step },
+        ArrowDown: { x: 0, y: step },
+        ArrowLeft: { x: -step, y: 0 },
+        ArrowRight: { x: step, y: 0 },
+      };
+
+      if (event.key in directions) {
+        const { x, y } = directions[event.key];
+
+        // Update knob position
+        this.knobPosition.x = Math.min(Math.max(this.knobPosition.x + x, 0), 100);
+        this.knobPosition.y = Math.min(Math.max(this.knobPosition.y + y, 0), 100);
+
+        // Emit direction
+        this.emitDirectionThrottled(x, y);
       }
     },
     startDrag(event) {
@@ -91,19 +111,6 @@ export default {
       this.dragging = false;
       this.knobPosition = { x: 50, y: 50 }; // Reset to center
       this.lastDirection = '';
-    },
-    handleKeyPress(event) {
-      const directions = {
-        ArrowUp: { x: 0, y: -1 },
-        ArrowDown: { x: 0, y: 1 },
-        ArrowLeft: { x: -1, y: 0 },
-        ArrowRight: { x: 1, y: 0 },
-      };
-
-      if (event.key in directions) {
-        const { x, y } = directions[event.key];
-        this.emitDirection(x, y);
-      }
     },
     handleTouchStart(event) {
       const touch = event.touches[0];
