@@ -53,4 +53,14 @@ export default {
   padding: 8px; /* Adds consistent padding around the layout */
   gap: 10px; /* Adds spacing between the sidebar and main content */
 }
+
+@media (max-width: 450px) {
+  .layout {
+    flex-direction: column;
+    height: 100vh;
+    padding: 0;
+    gap: 8px;
+    margin: 8px;
+  }
+}
 </style>

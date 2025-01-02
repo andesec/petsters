@@ -87,6 +87,12 @@ export default {
 </script>
 
 <style scoped>
+@media (max-width: 450px) {
+  .gym-container {
+    flex-direction: column;
+  }
+}
+
 .gym-container {
   margin-top: 15px;
   display: flex;

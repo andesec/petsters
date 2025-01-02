@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     goBackToMap() {
-      this.$router.push({ name: 'Maps' });
+      this.$router.push({ name: 'Map' });
     },
   },
   data() {

@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Battle from '../views/Battle.vue';
-import Maps from '../views/Maps.vue';
+import Maps from '../views/Map.vue';
 import Profile from '../views/Profile.vue';
 import Gyms from '../views/Gyms.vue';
 import Login from '../views/Login.vue';
@@ -16,7 +16,7 @@ const routes = [
         meta: { requiresAuth: true },
         children: [
             { path: 'battle', name: 'Battle', component: Battle, },
-            { path: 'maps', name: 'Maps', component: Maps },
+            { path: 'map', name: 'Map', component: Maps },
             { path: 'profile', name: 'Profile', component: Profile },
             { path: 'gyms', name: 'Gyms', component: Gyms },
         ],

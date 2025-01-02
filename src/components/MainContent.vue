@@ -21,4 +21,11 @@ export default {
   padding: 15px;
   overflow-y: auto; /* Enable scrolling if there are too many updates */
 }
+
+@media (max-width: 450px) {
+  .main-content {
+    width: auto;
+    overflow-y: visible;
+  }
+}
 </style>

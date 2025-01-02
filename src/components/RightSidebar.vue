@@ -1,6 +1,6 @@
 <template>
   <div class="right-sidebar">
-    <JoystickComponent v-if="$route.name === 'Maps'"/>
+    <JoystickComponent v-if="$route.name === 'Map'"/>
     <BattleUpdatesComponent v-if="$route.name === 'Battle'" />
   </div>
 </template>
@@ -25,5 +25,13 @@ export default {
   border-radius: 10px;
   padding: 10px;
   overflow-y: auto; /* Enable scrolling if there are too many updates */
+}
+
+@media (max-width: 450px) {
+  .right-sidebar {
+    width: auto;
+    height: 30%;
+    overflow-y: visible;
+  }
 }
 </style>

@@ -12,9 +12,9 @@
           <div class="hp-bar" :style="{ width: battle.cps ? (battle.cps.h / battle.cps.th) * 100 + '%' : '0%' }"></div>
           <span class="hp-text">{{ battle.cps?.h }}/{{ battle.cps?.th }}</span>
         </div>
-        <p>Level {{battle.cps?.l}}</p>
+        <p>Level {{ battle.cps?.l }}</p>
         <div class="type-squares">
-          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{type}}</div>
+          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
         </div>
       </div>
 
@@ -29,9 +29,9 @@
           <div class="hp-bar" :style="{ width: battle.ops ? (battle.ops.h / battle.ops.th) * 100 + '%' : '0%' }"></div>
           <span class="hp-text">{{ battle.ops?.h }}/{{ battle.ops?.th }}</span>
         </div>
-        <p>Level {{battle.ops?.l}}</p>
+        <p>Level {{ battle.ops?.l }}</p>
         <div class="type-squares">
-          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{type}}</div>
+          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
         </div>
       </div>
     </div>
@@ -65,18 +65,6 @@
 
     <!-- Continue Button -->
     <button :disabled="!canContinue || isProcessing" @click="handleContinue" class="continue-button">Continue</button>
-
-    <!-- Pokémon Details Cloud -->
-    <div v-if="showDetailsOverlay" class="details-overlay" @click="closeDetails">
-      <div class="details-content" @click.stop>
-        <div class="cloud-header">
-          <h4>{{ detailsForPokemon?.n }}</h4>
-          <button class="close-button" @click="closeDetails">x</button>
-        </div>
-        <p v-if="!detailsForPokemon">Loading...</p>
-        <p v-else>{{ detailsForPokemon?.description }}</p>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -94,8 +82,6 @@ export default {
     return {
       selectedAction: null,
       selectedItem: null,
-      showDetailsOverlay: false,
-      detailsForPokemon: null,
       isProcessing: false,
     };
   },
@@ -164,6 +150,7 @@ export default {
   background-color: #28a745;
   height: 15px;
   border-radius: 5px;
+  transition: width 0.5s ease-in-out; /* Smooth transition for the width */
 }
 
 .hp-text {

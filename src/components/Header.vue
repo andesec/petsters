@@ -1,9 +1,9 @@
 <template>
   <header class="header">
-    <h1>Petsters Game</h1>
+    <h1>Petsters</h1>
       <nav>
-        <router-link to="/maps">Maps</router-link>
-        <router-link to="/battle">Battle</router-link>
+        <router-link to="/map">Map</router-link>
+<!--        <router-link to="/battle">Battle</router-link>-->
         <router-link to="/profile">Profile</router-link>
         <router-link to="/gyms">Gyms</router-link>
       </nav>
@@ -15,6 +15,13 @@ export default {};
 </script>
 
 <style scoped>
+@media (max-width: 450px) {
+  nav {
+    display: none;
+
+  }
+}
+
 .header {
   display: flex;
   align-items: center; /* Vertically align items */

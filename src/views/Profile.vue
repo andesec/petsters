@@ -1,82 +1,81 @@
 <template>
-
-    <h1>Profile</h1>
-    <form @submit.prevent="saveProfile">
-      <div class="form-grid">
-        <!-- First Name -->
-        <div class="form-group" :class="{ 'has-error': errors.fn }">
-          <label for="first-name">First Name:</label>
-          <input id="first-name" v-model="profile.fn" />
-          <small v-if="errors.fn" class="error-message">{{ errors.fn }}</small>
-        </div>
-
-        <!-- Last Name -->
-        <div class="form-group" :class="{ 'has-error': errors.ln }">
-          <label for="last-name">Last Name:</label>
-          <input id="last-name" v-model="profile.ln" />
-          <small v-if="errors.ln" class="error-message">{{ errors.ln }}</small>
-        </div>
-
-        <!-- Email -->
-        <div class="form-group" :class="{ 'has-error': errors.e }">
-          <label for="email">Email:</label>
-          <input id="email" v-model="profile.e" type="email" />
-          <small v-if="errors.e" class="error-message">{{ errors.e }}</small>
-        </div>
-
-        <!-- Username -->
-        <div class="form-group">
-          <label for="username">Username:</label>
-          <input id="username" v-model="profile.u" disabled readonly/>
-        </div>
-
-        <!-- Bio -->
-        <div class="form-group form-full-width">
-          <label for="bio">Bio:</label>
-          <textarea id="bio" v-model="profile.b"></textarea>
-          <small v-if="errors.b" class="error-message">{{ errors.b }}</small>
-        </div>
-
-        <!-- Reddit Handle -->
-        <div class="form-group" :class="{ 'has-error': errors.rh }">
-          <label for="reddit">Reddit Handle:</label>
-          <div class="input-with-icon">
-            <i class="fab fa-reddit reddit-icon"></i>
-            <input id="reddit" v-model="profile.rh" placeholder="u/************************" />
-          </div>
-            <small v-if="errors.rh" class="error-message">{{ errors.rh }}</small>
-        </div>
-
-        <!-- Discord Handle -->
-        <div class="form-group" :class="{ 'has-error': errors.dh }">
-          <label for="discord">Discord Handle:</label>
-          <div class="input-with-icon">
-            <i class="fab fa-discord discord-icon"></i>
-            <input id="discord" v-model="profile.dh" placeholder="************************#0000" />
-          </div>
-            <small v-if="errors.dh" class="error-message">{{ errors.dh }}</small>
-        </div>
-
-        <!-- X Handle -->
-        <div class="form-group" :class="{ 'has-error': errors.th }">
-          <label for="twitter">X Handle:</label>
-          <div class="input-with-icon">
-            <i class="fa-brands fa-x-twitter twitter-icon"></i>
-            <input id="twitter" v-model="profile.th" placeholder="@***************" />
-          </div>
-            <small v-if="errors.th" class="error-message">{{ errors.th }}</small>
-        </div>
-
-        <!-- Member Since -->
-        <div class="form-group">
-          <label for="since">Member Since:</label>
-          <input id="since" type="text" :value="memberSinceHumanReadable" disabled/>
-        </div>
+  <h2>Profile</h2>
+  <form @submit.prevent="saveProfile">
+    <div class="form-grid">
+      <!-- First Name -->
+      <div class="form-group" :class="{ 'has-error': errors.fn }">
+        <label for="first-name">First Name:</label>
+        <input id="first-name" v-model="profile.fn"/>
+        <small v-if="errors.fn" class="error-message">{{ errors.fn }}</small>
       </div>
 
-      <!-- Submit Button -->
-      <button type="submit">Save</button>
-    </form>
+      <!-- Last Name -->
+      <div class="form-group" :class="{ 'has-error': errors.ln }">
+        <label for="last-name">Last Name:</label>
+        <input id="last-name" v-model="profile.ln"/>
+        <small v-if="errors.ln" class="error-message">{{ errors.ln }}</small>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group" :class="{ 'has-error': errors.e }">
+        <label for="email">Email:</label>
+        <input id="email" v-model="profile.e" type="email"/>
+        <small v-if="errors.e" class="error-message">{{ errors.e }}</small>
+      </div>
+
+      <!-- Username -->
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input id="username" v-model="profile.u" disabled readonly/>
+      </div>
+
+      <!-- Bio -->
+      <div class="form-group form-full-width">
+        <label for="bio">Bio:</label>
+        <textarea id="bio" v-model="profile.b"></textarea>
+        <small v-if="errors.b" class="error-message">{{ errors.b }}</small>
+      </div>
+
+      <!-- Reddit Handle -->
+      <div class="form-group" :class="{ 'has-error': errors.rh }">
+        <label for="reddit">Reddit Handle:</label>
+        <div class="input-with-icon">
+          <i class="fab fa-reddit reddit-icon"></i>
+          <input id="reddit" v-model="profile.rh" placeholder="u/************************"/>
+        </div>
+        <small v-if="errors.rh" class="error-message">{{ errors.rh }}</small>
+      </div>
+
+      <!-- Discord Handle -->
+      <div class="form-group" :class="{ 'has-error': errors.dh }">
+        <label for="discord">Discord Handle:</label>
+        <div class="input-with-icon">
+          <i class="fab fa-discord discord-icon"></i>
+          <input id="discord" v-model="profile.dh" placeholder="************************#0000"/>
+        </div>
+        <small v-if="errors.dh" class="error-message">{{ errors.dh }}</small>
+      </div>
+
+      <!-- X Handle -->
+      <div class="form-group" :class="{ 'has-error': errors.th }">
+        <label for="twitter">X Handle:</label>
+        <div class="input-with-icon">
+          <i class="fa-brands fa-x-twitter twitter-icon"></i>
+          <input id="twitter" v-model="profile.th" placeholder="@***************"/>
+        </div>
+        <small v-if="errors.th" class="error-message">{{ errors.th }}</small>
+      </div>
+
+      <!-- Member Since -->
+      <div class="form-group">
+        <label for="since">Member Since:</label>
+        <input id="since" type="text" :value="memberSinceHumanReadable" disabled/>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit">Save</button>
+  </form>
 
 </template>
 
@@ -200,7 +199,7 @@ export default {
       }
 
       // Preprocess: Set empty fields to null
-      const processedProfile = { ...this.profile };
+      const processedProfile = {...this.profile};
       Object.keys(processedProfile).forEach((key) => {
         if (processedProfile[key] === "" || processedProfile[key] === undefined) {
           processedProfile[key] = null;
@@ -220,10 +219,17 @@ export default {
 </script>
 
 <style scoped>
+
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr); /* Two columns */
   gap: 30px 40px; /* Increased margin between columns and rows */
+}
+
+@media (max-width: 450px) {
+  .form-grid {
+    display: inline;
+  }
 }
 
 .form-full-width {

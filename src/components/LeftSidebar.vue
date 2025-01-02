@@ -18,4 +18,11 @@ export default {};
   padding: 10px;
   overflow-y: auto; /* Enable scrolling if there are too many updates */
 }
+
+@media (max-width: 450px) {
+  .left-sidebar {
+    width: auto;
+    overflow-y: visible;
+  }
+}
 </style>
