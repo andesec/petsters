@@ -1,7 +1,8 @@
 <template>
+  <h2>Map Controls</h2>
+  <p class="instructions">Use the arrow keys, touch, or drag the joystick to move the map.</p>
+  <br/>
   <div class="joystick-container" @keydown="handleKeyPress" @touchstart="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd" tabindex="0" ref="joystick">
-    <h2>Map Controls</h2>
-    <p class="instructions">Use the arrow keys, touch, or drag the joystick to move the map.</p>
     <div class="joystick">
       <div class="joystick-base" ref="joystickBase">
         <div
@@ -28,22 +29,23 @@ export default {
       center: { x: 50, y: 50 }, // Initial center in percentage
       radius: 50, // Radius in percentage
       lastDirection: '', // To prevent redundant emits
+      fireEventInterval: null, // Interval for continuous firing
     };
   },
   mounted() {
-    // Calculate joystick center
     const rect = this.$refs.joystickBase.getBoundingClientRect();
     this.center = { x: rect.width / 2, y: rect.height / 2 };
 
-    // Attach global keydown listener
+    // Attach global keydown and keyup listeners
     window.addEventListener('keydown', this.handleKeyPress);
+    window.addEventListener('keyup', this.stopContinuousEvents);
 
     // Throttle direction emission
     this.emitDirectionThrottled = throttle(this.emitDirection, 200);
   },
   beforeUnmount() {
-    // Clean up keydown listener
     window.removeEventListener('keydown', this.handleKeyPress);
+    window.removeEventListener('keyup', this.stopContinuousEvents);
   },
   methods: {
     emitDirection(x, y) {
@@ -56,7 +58,6 @@ export default {
 
       if (direction && direction !== this.lastDirection) {
         this.lastDirection = direction;
-        console.log(`Direction: ${direction}`); // Debugging
         eventBus.emit('map-move', { direction });
       }
     },
@@ -68,26 +69,45 @@ export default {
         ArrowRight: { x: 100, y: 50 }, // Center right
       };
 
-      if (event.key in directions) {
+      if (event.key in directions && !this.fireEventInterval) {
         const { x, y } = directions[event.key];
 
         // Update knob position to edge based on key pressed
         this.knobPosition.x = x;
         this.knobPosition.y = y;
 
-        // Emit direction
-        this.emitDirection(x - 50, y - 50); // Normalize to [-50, 50]
-
-        // Reset knob position to center after a short delay
-        setTimeout(() => {
-          this.knobPosition = { x: 50, y: 50 };
-        }, 200); // Adjust delay as needed
+        // Start continuous event firing
+        this.startContinuousEvents(x - 50, y - 50);
       }
+    },
+    startContinuousEvents(x, y) {
+      // Emit the direction immediately
+      this.emitDirection(x, y);
+
+      // Start interval for continuous events
+      this.fireEventInterval = setInterval(() => {
+        this.emitDirection(x, y);
+      }, 200); // Adjust interval as needed
+    },
+    stopContinuousEvents() {
+      // Clear the interval and reset knob position
+      clearInterval(this.fireEventInterval);
+      this.fireEventInterval = null;
+
+      // Reset knob to center
+      this.knobPosition = { x: 50, y: 50 };
+      this.lastDirection = '';
     },
     startDrag(event) {
       this.dragging = true;
       const rect = this.$refs.joystickBase.getBoundingClientRect();
       this.center = { x: rect.width / 2, y: rect.height / 2 };
+
+      const x = event.clientX - rect.left - this.center.x;
+      const y = event.clientY - rect.top - this.center.y;
+
+      // Emit events while dragging
+      this.startContinuousEvents(x, y);
     },
     drag(event) {
       if (!this.dragging) return;
@@ -110,8 +130,7 @@ export default {
     },
     endDrag() {
       this.dragging = false;
-      this.knobPosition = { x: 50, y: 50 }; // Reset to center
-      this.lastDirection = '';
+      this.stopContinuousEvents();
     },
     handleTouchStart(event) {
       const touch = event.touches[0];

@@ -1,33 +1,37 @@
-<template xmlns="http://www.w3.org/1999/html">
-  <p>Use the controls in the right sidebar to interact with the map.</p>
-  <br/>
+<template>
   <div class="map-container">
-    <img src="/assets/map/route_1.png" alt="Map" class="map-image"/>
+    <img ref="map" src="/assets/map/route_1.png" alt="Map" class="map-image"/>
   </div>
 </template>
 
 <script>
 import eventBus from "@/eventBus.js";
+import MapService from '@/services/MapService.js';
 
 export default {
+  data() {
+    return {
+      mapService: null
+    };
+  },
   mounted() {
-    eventBus.on('map-move', this.move);
-    eventBus.on('map-right', this.updateFromRight);
-  },
-  beforeUnmount() {
-    eventBus.off('map-move', this.move);
-    eventBus.off('map-right', this.updateFromRight);
-  },
-  methods: {
-    // move(update) {
-    //   if (update.direction) {
-    //     this.$refs.map.move(update.direction);
-    //   }
-    // },
-    move(direction) {
-      console.log(`Moving on the map: ${direction}`);
-    },
-  },
+    this.mapService = new MapService(
+        'MapComponent',
+        '/assets/avatar/blue-hair.png',
+        '/assets/map/image.png',
+        '/api/getUninhabitableAreas',
+        '/api/getPreviousLocation',
+        '/api/saveLocation'
+    );
+
+    // Subscribe to joystick or movement events
+    this.$eventBus.on('joystick-move', direction => {
+      this.mapService.move(direction);
+    });
+
+    // Save location on navigation
+    window.addEventListener('beforeunload', () => this.mapService.saveCurrentLocation());
+  }
 };
 </script>
 
