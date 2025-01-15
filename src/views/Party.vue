@@ -30,14 +30,14 @@
             </div>
           </div>
         </div>
+        <div class="pet-remove" @click="removePet(index)">X</div>
       </div>
     </draggable>
   </div>
-    <button class="button" @click="saveSequence"> Save Sequence</button>
+    <button class="button" @click="saveParty"> Save Sequence</button>
 </template>
 
 <script>
-import ApiService from "@/services/ApiService";
 import ImageService from "@/services/ImageService";
 import TypeService from "@/services/TypeService";
 import UXService from "@/services/UXService";
@@ -70,11 +70,15 @@ export default defineComponent({
     },
     currentSequence() {
       const cu =  this.pets.map(pet => pet.i)
+      console.log("Current sequence1: ", cu);
+      console.log("Current sequence2: ", cu.length);
 
       // Pad the array so it's always six. Fewer computations for server code this way.
-      for (let i = 0; i < 6 - cu.length; i++) {
-        cu.push(cu[i])
+      for (let i = cu.length + 1; i <= 6; i++) {
+        cu.push(null)
       }
+
+      console.log("Current sequence3: ", cu);
 
       return cu;
     }
@@ -87,13 +91,18 @@ export default defineComponent({
     };
   },
   methods: {
-    async saveSequence() {
+    async saveParty() {
       if (!this.sequenceChanged) {
         alert("No changes to save!");
         return;
       }
 
+      console.log("Saving sequence: ", this.currentSequence);
+
       await PetsterService.saveCurrentParty(this.currentSequence)
+    },
+    removePet(index) {
+      this.pets.splice(index, 1);
     },
   },
   async mounted() {
@@ -131,6 +140,20 @@ export default defineComponent({
   border-radius: 5px 0px 0px 5px;
   font-size: 18px;
   padding: 10px;
+}
+
+.pet-remove {
+  display: flex;
+  width: 5%;
+  justify-content: center;
+  align-items: center;
+  background-color: #ea3b3b;
+  height: 120px;
+  border-radius: 0px 5px 5px 0px;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  cursor: pointer;
 }
 
 .pet-card-contents {
