@@ -82,7 +82,7 @@ export default {
       this.gyms = await ApiService.makeRequest("/gym");
       console.log(this.gyms);
     } catch (error) {
-      UXService.notify("an error occurred while fetching gyms.", error);
+      UXService.error("an error occurred while fetching gyms.", error);
     }
   },
 };

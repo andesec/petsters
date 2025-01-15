@@ -57,7 +57,7 @@ export default {
         const response = await BattleService.initiateBattle(this.t,{cs: null, ci: this.ci, ai: this.ai}); // Changed to use BattleService
         this.processBattleResponse(response);
       } catch (error) {
-        UXService.notify("an error occurred while starting the battle.", error)
+        UXService.error("an error occurred while starting the battle.", error)
       } finally {
         this.loading = false;
       }
@@ -82,7 +82,7 @@ export default {
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
       } catch (error) {
-        UXService.notify("an error occurred while selecting the pokemon.", error)
+        UXService.error("an error occurred while selecting the pokemon.", error)
       } finally {
         this.loading = false;
       }
@@ -95,7 +95,7 @@ export default {
         eventBus.emit('battle-update', response.ts);
         this.processBattleResponse(response);
       } catch (error) {
-        UXService.notify("an error occurred while performing the action.", error)
+        UXService.error("an error occurred while performing the action.", error)
       } finally {
         this.loading = false;
       }

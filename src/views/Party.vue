@@ -1,8 +1,10 @@
 <template>
   <h2>Your Current Party</h2>
   <br>
+  <p>You can drag the cards to reorder your party.</p>
+  <br>
   <div class="party-container">
-    <draggable :list="pets" class="draggable-list" @change="log">
+    <draggable :list="pets" class="draggable-list" >
       <div v-for="(p, index) in pets" :key="p.i" class="pet-card">
         <div class="pet-index">{{ index + 1 }}</div>
         <div class="pet-card-contents">
@@ -21,29 +23,25 @@
             </div>
           </div>
           <div class="pet-actions">
-          <div v-for="action in p.a" :key="action.i" class="pet-action">
-            {{ action.a }}
+            <h4>Learned Moves:</h4>
+            <br>
+            <div v-for="action in p.a" :key="action.i" class="pet-action">
+              {{ action.a }}
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </draggable>
-
-    <button
-        v-if="sequenceChanged"
-        class="save-button"
-        @click="saveSequence"
-    >
-      Save Sequence
-    </button>
   </div>
+    <button class="button" @click="saveSequence"> Save Sequence</button>
 </template>
 
 <script>
 import ApiService from "@/services/ApiService";
-import ImageService from "@/services/ImageService.js";
-import TypeService from "@/services/TypeService.js";
-import UXService from "@/services/UXService.js";
+import ImageService from "@/services/ImageService";
+import TypeService from "@/services/TypeService";
+import UXService from "@/services/UXService";
+import PetsterService from "@/services/PetsterService";
 import {defineComponent} from 'vue'
 import {VueDraggableNext} from 'vue-draggable-next'
 
@@ -60,41 +58,47 @@ export default defineComponent({
     },
     ImageService() {
       return ImageService
+    },
+    sequenceChanged() {
+      // Runs 6 times, each time comparing the value in both the array at same index and if at any time found a difference it returns true:
+      for (let i = 0; i < 6; i++) {
+        if (this.currentSequence[i] !== this.originalSequence[i]) {
+          return true;
+        }
+      }
+      return false;
+    },
+    currentSequence() {
+      const cu =  this.pets.map(pet => pet.i)
+
+      // Pad the array so it's always six. Fewer computations for server code this way.
+      for (let i = 0; i < 6 - cu.length; i++) {
+        cu.push(cu[i])
+      }
+
+      return cu;
     }
   },
   data() {
     return {
       pets: [],
-      sequenceChanged: false,
+      originalSequence: [],
       dragging: false,
     };
   },
   methods: {
-    log(event) {
-      console.log(event)
-    },
-    async fetchParty() {
-      try {
-        const response = await ApiService.makeRequest("/party");
-        this.pets = response.p;
-      } catch (error) {
-        console.error("Error fetching party:", error);
+    async saveSequence() {
+      if (!this.sequenceChanged) {
+        alert("No changes to save!");
+        return;
       }
-    },
-    saveSequence() {
-      const updatedSequence = this.pets.map(pet => pet.i);
-      ApiService.makeRequest("/party/update-sequence", "POST", updatedSequence)
-          .then(() => {
-            this.sequenceChanged = false;
-            alert("Sequence saved successfully!");
-          })
-          .catch(error => {
-            console.error("Error saving sequence:", error);
-          });
+
+      await PetsterService.saveCurrentParty(this.currentSequence)
     },
   },
-  mounted() {
-    this.fetchParty();
+  async mounted() {
+    this.pets = await PetsterService.fetchCurrentParty();
+    this.originalSequence = this.pets.map(pet => pet.i);
   },
 });
 </script>
@@ -131,30 +135,28 @@ export default defineComponent({
 
 .pet-card-contents {
   display: flex;
-  margin-left: 15%;
   flex-direction: row;
+  justify-content: space-evenly; /* Distribute elements evenly with equal space */
+  align-items: center; /* Align items vertically at the center */
+  width: 100%; /* Ensure it spans the entire card width */
 }
 
 .pet-image {
   width: 100px;
   height: auto;
-  display: flex;
-  gap: 10px;
 }
 
 .pet-details {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  //margin-right: 150px;
 }
 
 .pet-actions {
   display: flex;
   flex-direction: column;
-  margin-right: 50px;
-  gap: 8px;
-  //width: 150px;
+  align-items: center; /* Center align the actions */
+  text-align: center;
+  margin-left: 30%;
 }
 
 .hp-bar-container {
@@ -196,5 +198,24 @@ export default defineComponent({
 .save-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+}
+
+@media (max-width: 1100px) {
+  .pet-actions {
+    margin-left: 10%;
+  }
+}
+
+@media (max-width: 950px) {
+  .pet-actions {
+    display: none;
+  }
+}
+
+@media (max-width: 450px) {
+  .pet-actions {
+    display: none;
+  }
+
 }
 </style>

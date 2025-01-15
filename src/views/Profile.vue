@@ -105,7 +105,7 @@ export default {
       const response = await ApiService.makeRequest('/profile', 'GET');
       this.profile = response;
     } catch (error) {
-      UXService.notify("an error occurred while fetching profile", error);
+      UXService.error("an error occurred while fetching profile", error);
     }
   },
   computed: {
@@ -209,9 +209,9 @@ export default {
       // Send the processed profile to the API
       try {
         await ApiService.makeRequest("/profile", "POST", processedProfile);
-        alert("Profile saved successfully!");
+        UXService.notify("Profile saved successfully!");
       } catch (error) {
-        UXService.notify("an error occurred while saving profile", error);
+        UXService.error("an error occurred while saving profile", error);
       }
     },
   },
