@@ -39,6 +39,23 @@ class UXService {
     static warn(message) {
         console.warn(message)
     }
+    
+    static getHPBarClass(current, total) {
+        const hp = Math.floor((current / total) * 100);
+        return {
+            'hp-bar': true,
+            'hp-critical': hp <= 25,
+            'hp-warn': hp > 25 && hp <= 50,
+            'hp-sufficient': hp > 50 && hp > 50
+        }
+    }
+
+    static getHPBarStyle(current, total) {
+        const hp = Math.floor((current / total) * 100);
+        return {
+            width: `${hp}%`,
+        }
+    }
 }
 
 export default UXService;

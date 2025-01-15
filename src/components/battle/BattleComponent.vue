@@ -14,7 +14,7 @@
         </div>
         <p>Level {{ battle.cps?.l }}</p>
         <div class="type-squares">
-          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
+          <div v-for="(type, i) in battle.cps?.ty" :key="i" :style="{ backgroundColor: TypeService.getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
         </div>
       </div>
 
@@ -31,7 +31,7 @@
         </div>
         <p>Level {{ battle.ops?.l }}</p>
         <div class="type-squares">
-          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
+          <div v-for="(type, i) in battle.ops?.ty" :key="i" :style="{ backgroundColor: TypeService.getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
         </div>
       </div>
     </div>
@@ -46,7 +46,7 @@
         <p class="section-title">Use a action:</p>
         <div v-for="action in battle.os" :key="action.i" class="action-item">
           <input type="radio" :id="action.i" :value="action.i" v-model="selectedAction" :name="action.i"/>
-          <label :for="action.i" class="action-label" :style="{ backgroundColor: getTypeColor(action.t) }">
+          <label :for="action.i" class="action-label" :style="{ backgroundColor: TypeService.getTypeColor(action.t) }">
             <span>{{ action.n }}</span>
             <i class="fa fa-info-circle info-icon" @click="showActionDetails(action)"></i>
           </label>
@@ -70,6 +70,7 @@
 
 <script>
 import ImageService from "@/services/ImageService.js";
+import TypeService from "@/services/TypeService.js";
 
 export default {
   props: {
@@ -89,6 +90,9 @@ export default {
     ImageService() {
       return ImageService
     },
+    TypeService() {
+      return TypeService
+    },
     canContinue() {
       return this.selectedAction || this.selectedItem;
     },
@@ -107,28 +111,6 @@ export default {
       setTimeout(() => {
         this.isProcessing = false;
       }, 2000);
-    },
-    getTypeColor(type) {
-      const typeColors = {
-        Fire: "#e15115",
-        Water: "#2260f6",
-        Grass: "#48c309",
-        Electric: "#F8D030",
-        Ice: "#98D8D8",
-        Fighting: "#C03028",
-        Poison: "#A040A0",
-        Ground: "#7c5e0b",
-        Flying: "#b19bef",
-        Psychic: "#F85888",
-        Bug: "#A8B820",
-        Rock: "#ca904e",
-        Ghost: "#705898",
-        Dragon: "#7038F8",
-        Dark: "#35302d",
-        Steel: "#d9d9e4",
-        Fairy: "#fa8ca6",
-      };
-      return typeColors[type] || "#A8A8A8";
     },
   },
 };
@@ -222,20 +204,6 @@ input[type="radio"]:checked + .action-label {
   color: #96989a;
 }
 
-.close-button {
-  margin: 0;
-  padding: 5px 10px;
-  background-color: red;
-  color: white;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-.close-button:hover {
-  background-color: #a30303;
-}
-
 .battle-component {
   font-family: Arial, sans-serif;
   padding: 20px;
@@ -280,51 +248,8 @@ input[type="radio"]:checked + .action-label {
   font-size: 12px;
 }
 
-.type-squares {
-  display: flex;
-  justify-content: center;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.type-square {
-  color: white;
-  font-size: 13px;
-  width: 45px;
-  padding: 5px 10px;
-  border-radius: 7px;
-  display: inline-block;
-}
-
 .battle-m {
   text-align: left;
-}
-
-.details-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.details-content {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 500px;
-  text-align: center;
-}
-
-.cloud-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .section-title {
