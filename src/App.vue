@@ -17,6 +17,7 @@ import LeftSidebar from './components/LeftSidebar.vue';
 import MainContent from "@/components/MainContent.vue";
 import RightSidebar from './components/RightSidebar.vue';
 import { VueMaskDirective } from "vue-the-mask";
+import EventBus from "@/eventBus.js";
 
 export default {
   directives: {

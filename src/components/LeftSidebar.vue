@@ -3,6 +3,8 @@
   <div :class="['left-sidebar', { collapsed: !isSidebarVisible }]">
     <!-- Sidebar Content -->
     <h2>Information Center</h2>
+    <br/>
+    <PetInfoComponent v-if="currentView === 'pe'" :id="dataId" />
   </div>
 
   <!-- Toggle Button -->
@@ -17,11 +19,25 @@
 </template>
 
 <script>
+import PetInfoComponent from "@/components/info/PetInfoComponent.vue";
+import EventBus from "@/eventBus.js";
+
 export default {
+  components: {PetInfoComponent},
+  created() {
+    // Listen for events on the EventBus
+    EventBus.on("show-info", this.updateView);
+  },
+  beforeDestroy() {
+    // Clean up the event listener
+    EventBus.off("show-info", this.updateView);
+  },
   data() {
     return {
       isSidebarVisible: false, // Initial sidebar state
       errorMessage: null,      // To display expansion errors
+      currentView: null,
+      dataId: null,
     };
   },
   methods: {
@@ -48,6 +64,13 @@ export default {
       // Dummy logic for condition
       return false; // Allow expansion
     },
+    updateView(data) {
+      if (!this.isSidebarVisible) {
+        this.toggleSidebar()
+      }
+      this.dataId = data.i;
+      this.currentView = data.v;
+    }
   },
 };
 </script>

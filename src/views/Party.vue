@@ -8,9 +8,9 @@
       <div v-for="(p, index) in pets" :key="p.i" class="pet-card">
         <div class="pet-index">{{ index + 1 }}</div>
         <div class="pet-card-contents">
-          <img :src="ImageService.getImageURLForPokemon(p.o)" :alt="p.n" class="pet-image"/>
+          <img :src="ImageService.getImageURLForPokemon(p.o)" :alt="p.n" class="pet-image clickable-text"/>
           <div class="pet-details">
-            <h3 class="pet-name">{{ p.n }}</h3>
+            <h3 class="pet-name clickable-text" @click="UXService.showInfo('pe', p.i)">{{ p.n }}</h3>
             <p class="pet-level">Level: {{ p.l }}</p>
             <div class="type-squares">
               <div v-for="(type, i) in p.ty" :key="i" :style="{ backgroundColor: TypeService.getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
@@ -25,7 +25,7 @@
           <div class="pet-actions">
             <h4>Learned Moves:</h4>
             <br>
-            <div v-for="action in p.a" :key="action.i" class="pet-action">
+            <div v-for="action in p.a" :key="action.i" class="pet-action clickable-text">
               {{ action.a }}
             </div>
           </div>

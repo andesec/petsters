@@ -1,3 +1,5 @@
+import EventBus from "@/eventBus.js";
+
 class UXService {
     static createNotification() {
         // Create a div element for the notification
@@ -88,6 +90,11 @@ class UXService {
         return {
             width: `${hp}%`,
         }
+    }
+
+    static showInfo(v, i) {
+        console.log("showing info" + {v: v, i:i})
+        EventBus.emit("show-info", {v: v, i:i});
     }
 }
 
