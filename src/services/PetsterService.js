@@ -21,10 +21,10 @@ export default class PetsterService {
 
     static async saveCurrentParty(updatedSequence) {
         try {
-            const response = await ApiService.makeRequest("/party", "POST", updatedSequence);
+            const response = await ApiService.makeRequest("/party", "POST", {p: updatedSequence});
             UXService.notify(response.message)
         } catch (error) {
-            UXService.error("Error saving party.", error)
+            UXService.error("An error occurred while saving your party.", error)
         }
     }
 

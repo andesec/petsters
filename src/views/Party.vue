@@ -30,7 +30,7 @@
             </div>
           </div>
         </div>
-        <div class="pet-remove" @click="removePet(index)">X</div>
+        <div class="pet-remove" @click="removePet(index)" title="Remove from Party and send to box."><i class="fa-solid fa-xmark"></i></div>
       </div>
     </draggable>
   </div>
@@ -96,18 +96,22 @@ export default defineComponent({
         alert("No changes to save!");
         return;
       }
-
-      console.log("Saving sequence: ", this.currentSequence);
-
       await PetsterService.saveCurrentParty(this.currentSequence)
     },
     removePet(index) {
       this.pets.splice(index, 1);
     },
+    saveOriginalSequence() {
+      this.originalSequence = this.pets.map(pet => pet.i);
+      // Pad the array so it's always six. Fewer computations for server code this way.
+      for (let i = this.originalSequence.length + 1; i <= 6; i++) {
+        this.originalSequence.push(null)
+      }
+    }
   },
   async mounted() {
     this.pets = await PetsterService.fetchCurrentParty();
-    this.originalSequence = this.pets.map(pet => pet.i);
+    this.saveOriginalSequence()
   },
 });
 </script>
@@ -140,6 +144,7 @@ export default defineComponent({
   border-radius: 5px 0px 0px 5px;
   font-size: 18px;
   padding: 10px;
+  cursor: pointer;
 }
 
 .pet-remove {
