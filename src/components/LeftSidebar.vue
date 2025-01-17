@@ -5,6 +5,7 @@
     <h2>Information Center</h2>
     <br/>
     <PetInfoComponent v-if="currentView === 'pe'" :id="dataId" />
+    <PokemonInfoComponent v-if="currentView === 'pk'" :id="dataId" />
   </div>
 
   <!-- Toggle Button -->
@@ -19,11 +20,12 @@
 </template>
 
 <script>
-import PetInfoComponent from "@/components/info/PetInfoComponent.vue";
 import EventBus from "@/eventBus.js";
+import PetInfoComponent from "@/components/info/PetInfoComponent.vue";
+import PokemonInfoComponent from "@/components/info/PokemonInfoComponent.vue";
 
 export default {
-  components: {PetInfoComponent},
+  components: {PokemonInfoComponent, PetInfoComponent},
   created() {
     // Listen for events on the EventBus
     EventBus.on("show-info", this.updateView);
@@ -146,6 +148,16 @@ export default {
   .toggle-sidebar-button i {
     font-size: 1.2rem;
   }
+}
+
+.info-center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info-center-content > * {
+  margin-bottom: 20px; /* Adjust the value as needed */
 }
 
 /* Adjust styles for smaller screens */

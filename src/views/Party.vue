@@ -8,7 +8,7 @@
       <div v-for="(p, index) in pets" :key="p.i" class="pet-card">
         <div class="pet-index">{{ index + 1 }}</div>
         <div class="pet-card-contents">
-          <img :src="ImageService.getImageURLForPokemon(p.o)" :alt="p.n" class="pet-image clickable-text"/>
+          <img :src="ImageService.getImageURLForPokemon(p.o)" :alt="p.n" class="pet-image clickable-text" @click="UXService.showInfo('pk', p.o)"/>
           <div class="pet-details">
             <h3 class="pet-name clickable-text" @click="UXService.showInfo('pe', p.i)">{{ p.n }}</h3>
             <p class="pet-level">Level: {{ p.l }}</p>

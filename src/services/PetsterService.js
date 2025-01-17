@@ -28,5 +28,14 @@ export default class PetsterService {
         }
     }
 
+    static async loadPetInfo(petId) {
+        try {
+            const response = await ApiService.makeRequest("/pet/" + petId);
+            UXService.notify(response.message)
+        } catch (error) {
+            UXService.error("An error occurred while saving your party.", error)
+        }
+    }
+
 
 }

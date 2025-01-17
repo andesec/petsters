@@ -93,7 +93,6 @@ class UXService {
     }
 
     static showInfo(v, i) {
-        console.log("showing info" + {v: v, i:i})
         EventBus.emit("show-info", {v: v, i:i});
     }
 }
