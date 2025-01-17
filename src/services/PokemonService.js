@@ -5,9 +5,7 @@ export default class PokemonService {
 
     static async loadPokemonInfo(pokemonId) {
         try {
-            const response = await ApiService.makeRequest("/pokemon/" + pokemonId);
-            UXService.notify(response.message)
-            return response;
+            return await ApiService.makeRequest("/pokemon/" + pokemonId);
         } catch (error) {
             UXService.error("An error occurred while saving your party.", error)
         }

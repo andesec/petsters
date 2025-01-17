@@ -18,6 +18,7 @@ class ApiService {
         }
 
         const response = await fetch(`${this.baseUrl}${endpoint}`, config);
+
         if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
         }

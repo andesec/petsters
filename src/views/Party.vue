@@ -4,7 +4,7 @@
   <p>You can drag the cards to reorder your party.</p>
   <br>
   <div class="party-container">
-    <draggable :list="pets" class="draggable-list" >
+    <draggable :list="pets" class="draggable-list">
       <div v-for="(p, index) in pets" :key="p.i" class="pet-card">
         <div class="pet-index">{{ index + 1 }}</div>
         <div class="pet-card-contents">
@@ -12,6 +12,7 @@
           <div class="pet-details">
             <h3 class="pet-name clickable-text" @click="UXService.showInfo('pe', p.i)">{{ p.n }}</h3>
             <p class="pet-level">Level: {{ p.l }}</p>
+<!--            <TypePreset :types="p.ty" />-->
             <div class="type-squares">
               <div v-for="(type, i) in p.ty" :key="i" :style="{ backgroundColor: TypeService.getTypeColor(type) }" class="type-square" :title="type">{{ type }}</div>
             </div>
@@ -34,85 +35,68 @@
       </div>
     </draggable>
   </div>
-    <button class="button" @click="saveParty"> Save Sequence</button>
+  <button class="button" @click="saveParty">Save Party</button>
 </template>
 
-<script>
+<script setup>
+import {ref, computed, onMounted} from "vue";
+import {VueDraggableNext} from "vue-draggable-next";
 import ImageService from "@/services/ImageService";
 import TypeService from "@/services/TypeService";
 import UXService from "@/services/UXService";
 import PetsterService from "@/services/PetsterService";
-import {defineComponent} from 'vue'
-import {VueDraggableNext} from 'vue-draggable-next'
+import TypePreset from "@/components/presets/TypePreset.vue";
 
-export default defineComponent({
-  components: {
-    draggable: VueDraggableNext,
-  },
-  computed: {
-    UXService() {
-      return UXService
-    },
-    TypeService() {
-      return TypeService
-    },
-    ImageService() {
-      return ImageService
-    },
-    sequenceChanged() {
-      // Runs 6 times, each time comparing the value in both the array at same index and if at any time found a difference it returns true:
-      for (let i = 0; i < 6; i++) {
-        if (this.currentSequence[i] !== this.originalSequence[i]) {
-          return true;
-        }
-      }
-      return false;
-    },
-    currentSequence() {
-      const cu =  this.pets.map(pet => pet.i)
-      console.log("Current sequence1: ", cu);
-      console.log("Current sequence2: ", cu.length);
+// Components
+const draggable = VueDraggableNext;
 
-      // Pad the array so it's always six. Fewer computations for server code this way.
-      for (let i = cu.length + 1; i <= 6; i++) {
-        cu.push(null)
-      }
+// Reactive states
+const pets = ref([]);
+const originalSequence = ref([]);
 
-      console.log("Current sequence3: ", cu);
+// Computed properties
+const currentSequence = computed(() => {
+  const sequence = pets.value.map((pet) => pet.i);
+  for (let i = sequence.length + 1; i <= 6; i++) {
+    sequence.push(null);
+  }
+  return sequence;
+});
 
-      return cu;
+const sequenceChanged = computed(() => {
+  for (let i = 0; i < 6; i++) {
+    if (currentSequence.value[i] !== originalSequence.value[i]) {
+      return true;
     }
-  },
-  data() {
-    return {
-      pets: [],
-      originalSequence: [],
-      dragging: false,
-    };
-  },
-  methods: {
-    async saveParty() {
-      if (!this.sequenceChanged) {
-        alert("No changes to save!");
-        return;
-      }
-      await PetsterService.saveCurrentParty(this.currentSequence)
-    },
-    removePet(index) {
-      this.pets.splice(index, 1);
-    },
-    saveOriginalSequence() {
-      this.originalSequence = this.pets.map(pet => pet.i);
-      // Pad the array so it's always six. Fewer computations for server code this way.
-      for (let i = this.originalSequence.length + 1; i <= 6; i++) {
-        this.originalSequence.push(null)
-      }
-    }
-  },
-  async mounted() {
-    this.pets = await PetsterService.fetchCurrentParty();
-    this.saveOriginalSequence()
-  },
+  }
+  return false;
+});
+
+// Methods
+const saveOriginalSequence = () => {
+  const sequence = pets.value.map((pet) => pet.i);
+  for (let i = sequence.length + 1; i <= 6; i++) {
+    sequence.push(null);
+  }
+  originalSequence.value = sequence;
+};
+
+const saveParty = async () => {
+  if (!sequenceChanged.value) {
+    alert("No changes to save!");
+    return;
+  }
+  await PetsterService.saveCurrentParty(currentSequence.value);
+};
+
+const removePet = (index) => {
+  pets.value.splice(index, 1);
+};
+
+// Lifecycle hook
+onMounted(async () => {
+  pets.value = await PetsterService.fetchCurrentParty();
+  saveOriginalSequence();
 });
 </script>
 
@@ -212,20 +196,6 @@ export default defineComponent({
   color: #333;
   text-align: center;
   width: 60px;
-}
-
-.save-button {
-  padding: 8px 16px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.save-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
 }
 
 @media (max-width: 1100px) {

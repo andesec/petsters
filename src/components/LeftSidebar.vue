@@ -4,19 +4,24 @@
     <!-- Sidebar Content -->
     <h2>Information Center</h2>
     <br/>
-    <PetInfoComponent v-if="currentView === 'pe'" :id="dataId" />
-    <PokemonInfoComponent v-if="currentView === 'pk'" :id="dataId" />
+    <div class="info-center-content">
+      <input type="text" placeholder="Search" />
+      <div class="button-row">
+        <button class="button">Search Pokemon</button>
+        <button class="button">Search Move</button>
+      </div>
+    </div>
+    <div v-if="dataId !== null" class="sidebar-backdrop">
+      <i class="fas fa-times" @click="resetViewAndCloseSidebar" style="cursor: pointer; color: red; display: flex; justify-content: right;" title="Close"></i>
+      <PetInfoComponent v-if="currentView === 'pe'" :id="dataId" />
+      <PokemonInfoComponent v-if="currentView === 'pk'" :id="dataId" />
+    </div>
   </div>
 
   <!-- Toggle Button -->
   <button class="toggle-sidebar-button" @click="toggleSidebar">
     <i :class="isSidebarVisible ? 'fas fa-caret-up' : 'fas fa-caret-down'"></i>
   </button>
-
-  <!-- Error Message -->
-  <div v-if="errorMessage" class="error-message">
-    {{ errorMessage }}
-  </div>
 </template>
 
 <script>
@@ -37,7 +42,6 @@ export default {
   data() {
     return {
       isSidebarVisible: false, // Initial sidebar state
-      errorMessage: null,      // To display expansion errors
       currentView: null,
       dataId: null,
     };
@@ -45,26 +49,7 @@ export default {
   methods: {
     toggleSidebar() {
       // Toggle sidebar visibility
-      try {
-        if (!this.isSidebarVisible) {
-          this.expandSidebar();
-        } else {
-          this.isSidebarVisible = false;
-        }
-      } catch (error) {
-        this.errorMessage = error.message;
-      }
-    },
-    expandSidebar() {
-      if (this.someConditionFails()) {
-        throw new Error('Failed to expand sidebar. Please try again later.');
-      }
-      this.isSidebarVisible = true;
-      this.errorMessage = null;
-    },
-    someConditionFails() {
-      // Dummy logic for condition
-      return false; // Allow expansion
+      this.isSidebarVisible = !this.isSidebarVisible;
     },
     updateView(data) {
       if (!this.isSidebarVisible) {
@@ -72,7 +57,12 @@ export default {
       }
       this.dataId = data.i;
       this.currentView = data.v;
-    }
+    },
+    resetViewAndCloseSidebar() {
+      this.dataId = null;
+      this.currentView = null;
+      this.toggleSidebar();
+    },
   },
 };
 </script>
@@ -91,6 +81,18 @@ export default {
 
 .toggle-sidebar-button {
   display: none;
+}
+
+.button-row button {
+  width: 100%
+}
+
+.info-center-content input {
+  padding: 5px;
+  border: 1px solid lightslategray;
+  border-radius: 5px;
+  height: 25px;
+  font-size: 1em;
 }
 
 /* Adjust styles for smaller screens */

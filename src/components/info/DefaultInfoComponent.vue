@@ -14,33 +14,41 @@
 
 </template>
 
-<script setup>
+<script>
 import PokemonService from "@/services/PokemonService.js";
 import ImageService from "@/services/ImageService.js";
 import TypeService from "@/services/TypeService.js";
 import {reactive, watchEffect} from "vue";
 
-// Props
-const props = defineProps({
-  id: {
-    type: Number,
-    required: true
-  }
-});
+export default {
+  name: "PokemonInfoComponent",
+  props: {
+    id: {
+      type: Number,
+      required: true
+    }
+  },
+  setup(props) {
+    const p = reactive({}); // Reactive state for Pokemon data
 
-// Reactive state for Pokémon data
-const p = reactive({});
+    // Fetch Pokemon info whenever `props.id` changes
+    watchEffect(async () => {
+      try {
+        const data = await PokemonService.loadPokemonInfo(props.id);
+        Object.assign(p, data); // Update the reactive object with the fetched data
+        console.log(p);
+      } catch (error) {
+        console.error("Error loading Pokemon info:", error);
+      }
+    });
 
-// Fetch Pokemon info whenever `props.id` changes
-watchEffect(async () => {
-  try {
-    const data = await PokemonService.loadPokemonInfo(props.id);
-    Object.assign(p, data); // Update the reactive object with the fetched data
-    console.log(p);
-  } catch (error) {
-    console.error("Error loading Pokemon info:", error);
-  }
-});
+    return {
+      p,
+      TypeService,
+      ImageService,
+    };
+  },
+}
 </script>
 
 <style scoped>
