@@ -5,7 +5,7 @@
     <div class="pokemon-list">
       <div v-for="o in os" :key="o.i" class="pokemon-card">
         <img :src="imageService.getImageURLForPokemon(o.o)" :alt="o.n" class="pokemon-image" />
-        <p class="pokemon-name">{{ o.n }}</p>
+        <p class="pokemon-name clickable-text" @click="UXService.showInfo('pk', o.o)">{{ o.n }}</p>
         <button @click="selectPokemon(o)" class="select-button">Select</button>
       </div>
     </div>
@@ -14,9 +14,13 @@
 
 <script>
 import imageService from "@/services/ImageService.js";
+import UXService from "@/services/UXService.js";
 
 export default {
   computed: {
+    UXService() {
+      return UXService
+    },
     imageService() {
       return imageService
     },

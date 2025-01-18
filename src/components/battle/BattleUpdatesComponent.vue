@@ -1,7 +1,7 @@
 <template>
   <h2>Battle Updates</h2>
   <br/>
-  <div class="sidebar-backdrop">
+  <div v-if="turnSummary.length > 0" class="sidebar-backdrop">
     <transition-group name="fade" tag="ul">
       <li v-for="(summary, index) in turnSummary" :key="index" :class="[getUpdateClass(summary), { 'new-update': summary.isNew }]"
           class="update-item">

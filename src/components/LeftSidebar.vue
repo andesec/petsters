@@ -127,6 +127,8 @@ export default {
     margin: 0px 8px;
     width: 90.6%; /* Full width remains consistent */
     z-index: 1000;
+    max-height: 90vh; /* Sidebar takes 70% of the vertical height */
+    overflow-y: auto; /* Ensure scrolling when content overflows */
     transform: translateY(-100%); /* Hidden by default (collapsed) */
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }
@@ -194,6 +196,8 @@ export default {
     margin: 0px 8px;
     width: 90.6%; /* Full width remains consistent */
     z-index: 1000;
+    max-height: 90vh; /* Sidebar takes 70% of the vertical height */
+    overflow-y: auto; /* Ensure scrolling when content overflows */
     transform: translateY(-100%); /* Hidden by default (collapsed) */
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
   }

@@ -71,6 +71,7 @@
 <script>
 import ImageService from "@/services/ImageService.js";
 import TypeService from "@/services/TypeService.js";
+import UXService from "@/services/UXService.js";
 
 export default {
   props: {
@@ -87,6 +88,9 @@ export default {
     };
   },
   computed: {
+    UXService() {
+      return UXService
+    },
     ImageService() {
       return ImageService
     },
