@@ -31,7 +31,6 @@ button:hover {
     flex-direction: row;
     justify-content: space-between;
     gap: 10px;
-
 }
 
 .clickable-text {
@@ -57,8 +56,6 @@ button:hover {
 .type-squares {
     display: flex;
     gap: 5px;
-    margin-top: 10px;
-    /*justify-content: center;*/
 }
 
 .type-square {
