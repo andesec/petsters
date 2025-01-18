@@ -11,7 +11,7 @@
     <h3>Abilities:</h3>
     <div class="abilities-list">
       <div v-for="(ability, index) in p.a" :key="index" class="ability-item">
-        <p style="cursor: pointer" :title="ability.d">- {{ ability.t }}</p>
+        <p style="cursor: pointer" :title="ability.d" class="clickable-text" @click="UXService.showInfo('a',ability.i)">- {{ ability.t }}</p>
       </div>
     </div>
 
@@ -27,7 +27,7 @@
       </thead>
       <tbody>
       <tr v-for="(action, index) in p.ac" :key="index" :title="'Type: ' + action.t" :style="{ backgroundColor: TypeService.getTypeColor(action.t), color: 'white' }">
-        <td>{{ action.a }}</td>
+        <td class="clickable-text" @click="UXService.showInfo('m',action.i)">{{ action.a }}</td>
         <td>{{ action.l }}</td>
         <td>{{ action.p }}</td>
       </tr>
@@ -41,17 +41,14 @@ import PokemonService from "@/services/PokemonService.js";
 import ImageService from "@/services/ImageService.js";
 import TypeService from "@/services/TypeService.js";
 import {reactive, watchEffect} from "vue";
+import UXService from "@/services/UXService.js";
 
 // Props
 const props = defineProps({
   id: {
-    type: Number,
+    type: String,
     required: true
   },
-  pokemon: {
-    type: Object,
-    required: false
-  }
 });
 
 // Reactive state for Pokémon data
@@ -63,7 +60,7 @@ const expandedAbilities = reactive([]);
 // Fetch Pokemon info whenever `props.id` changes
 watchEffect(async () => {
   try {
-    const data = (props.pokemon !== undefined) ? props.pokemon : await PokemonService.loadPokemonInfo(props.id);
+    const data = await PokemonService.loadPokemonInfo(props.id);
     Object.assign(p, data); // Update the reactive object with the fetched data
 
     // Initialize expandedAbilities to track abilities toggle state
@@ -72,11 +69,6 @@ watchEffect(async () => {
     console.error("Error loading Pokemon info:", error);
   }
 });
-
-// Method to toggle ability descriptions
-function toggleAbility(index) {
-  expandedAbilities.value[index] = !expandedAbilities.value[index];
-}
 </script>
 
 <style scoped>

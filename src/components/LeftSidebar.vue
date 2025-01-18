@@ -7,14 +7,22 @@
     <div class="info-center-content">
       <input ref="searchBar" id="search-bar" type="text" placeholder="Search" />
       <div class="button-row">
-        <button class="button" @click="searchPokemon">Search Pokemon</button>
-        <button class="button">Search Move</button>
+        <select ref="searchTypeDropdown" id="search-dropdown" class="dropdown">
+          <option value="a">Ability</option>
+          <option value="i">Item</option>
+          <option value="l">Location</option>
+          <option value="m">Move</option>
+          <option value="n">NPC</option>
+          <option value="p" selected>Pokemon</option>
+        </select>
+        <button class="button" @click="search">Search</button>
       </div>
     </div>
-    <div v-if="dataId !== undefined" class="sidebar-backdrop">
+    <div v-if="(currentView !== undefined && currentView !== null)" class="sidebar-backdrop">
       <i class="fas fa-times" @click="resetViewAndCloseSidebar" style="cursor: pointer; color: red; display: flex; justify-content: right;" title="Close"></i>
-      <PetInfoComponent v-if="currentView === 'pe'" :id="dataId" />
-      <PokemonInfoComponent v-if="currentView === 'pk'" :id="dataId" :pokemon="searchData" />
+      <SearchResultsControl id="search-results" v-if="currentView === 'r' && searchResults.r.length > 0" :searchResults="searchResults"/>
+      <PetInfoComponent v-if="currentView === 'e'" :id="dataId" />
+      <PokemonInfoComponent v-if="currentView === 'p'" :id="dataId"/>
     </div>
   </div>
 
@@ -28,19 +36,23 @@
 import EventBus from "@/eventBus.js";
 import PetInfoComponent from "@/components/info/PetInfoComponent.vue";
 import PokemonInfoComponent from "@/components/info/PokemonInfoComponent.vue";
-import PokemonService from "@/services/PokemonService.js";
-import {ref} from "vue";
+import SearchService from "@/services/SearchService.js";
+import SearchResultsControl from "@/components/info/SearchResultsControl.vue";
 
 export default {
   name: "LeftSidebar",
-  components: {PokemonInfoComponent, PetInfoComponent},
+  components: {SearchResultsControl, PokemonInfoComponent, PetInfoComponent},
   created() {
     // Listen for events on the EventBus
     EventBus.on("show-info", this.updateView);
   },
+  mounted() {
+    this.$refs.searchBar.addEventListener("keydown", this.searchOnEnter);
+  },
   beforeDestroy() {
     // Clean up the event listener
     EventBus.off("show-info", this.updateView);
+    this.$refs.searchBar.removeEventListener("keydown", this.searchOnEnter);
   },
   data() {
     return {
@@ -48,7 +60,8 @@ export default {
       currentView: undefined,
       dataId: undefined,
       searchData: undefined,
-      // searchBar: ref(undefined),
+      searchResults: {},
+      selectedSearchType: 'p',
     };
   },
   methods: {
@@ -62,7 +75,6 @@ export default {
       }
       this.dataId = data.i;
       this.currentView = data.v;
-      this.searchData = data.d;
     },
     resetViewAndCloseSidebar() {
       this.searchData = undefined;
@@ -70,21 +82,31 @@ export default {
       this.currentView = undefined;
       this.toggleSidebar();
     },
-    async searchPokemon() {
+    async search() {
+      this.selectedSearchType = this.$refs.searchTypeDropdown.value;
       let searchText = this.$refs.searchBar.value;
-      if (searchText === '') {
-        alert('Please enter a pokemon name in search box.')
+
+      if (searchText.length < 3) {
+        alert(`Please enter a search keyword. Keyword should be at least 3 characters long.`);
         return;
       }
 
-      let result = await PokemonService.searchPokemonInfo(searchText)
+      let result = await SearchService.searchKeyword(this.selectedSearchType, searchText);
+      console.log(result);
 
       if (result.error !== undefined) {
         alert(result.error);
         return;
       }
 
-      this.updateView({i: result.i, v: 'pk', d:result})
+      this.currentView = 'r';
+      this.searchResults = result;
+      console.log(this.searchResults);
+    }
+  },
+  searchOnEnter(event) {
+    if (event.key === 'Enter') {
+      this.search();
     }
   },
 };
@@ -96,6 +118,7 @@ export default {
   width: 20%;
   background-color: white;
   border: 1px solid lightslategray;
+  margin-bottom: 20px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 10px;
@@ -106,16 +129,29 @@ export default {
   display: none;
 }
 
-.button-row button {
-  width: 100%
+.info-center-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info-center-content > * {
+  margin-bottom: 10px; /* Adjust the value as needed */
+}
+
+.info-center-content .dropdown, .info-center-content input, .info-center-content button {
+  border: 1px solid lightslategray;
+  font-size: 1em;
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  box-shadow: none;
 }
 
 .info-center-content input {
-  padding: 5px;
-  border: 1px solid lightslategray;
-  border-radius: 5px;
-  height: 25px;
-  font-size: 1em;
+  padding: 5px 10px;
+  width: auto;
+  height: 30px;
 }
 
 /* Adjust styles for smaller screens */
@@ -127,7 +163,7 @@ export default {
     margin: 0px 8px;
     width: 90.6%; /* Full width remains consistent */
     z-index: 1000;
-    max-height: 90vh; /* Sidebar takes 70% of the vertical height */
+    max-height: 90vh; /* Sidebar takes 90% of the vertical height */
     overflow-y: auto; /* Ensure scrolling when content overflows */
     transform: translateY(-100%); /* Hidden by default (collapsed) */
     transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
@@ -141,14 +177,6 @@ export default {
   .left-sidebar:not(.collapsed) {
     transform: translateY(0); /* Slide in when expanded */
     opacity: 1;
-  }
-
-  .error-message {
-    position: fixed;
-    top: 80px;
-    left: 10px;
-    color: red;
-    font-size: 0.9em;
   }
 
   /* Toggle button styles */
@@ -175,16 +203,6 @@ export default {
   .toggle-sidebar-button i {
     font-size: 1.2rem;
   }
-}
-
-.info-center-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.info-center-content > * {
-  margin-bottom: 20px; /* Adjust the value as needed */
 }
 
 /* Adjust styles for smaller screens */
