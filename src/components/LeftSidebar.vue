@@ -5,16 +5,16 @@
     <h2>Information Center</h2>
     <br/>
     <div class="info-center-content">
-      <input type="text" placeholder="Search" />
+      <input ref="searchBar" id="search-bar" type="text" placeholder="Search" />
       <div class="button-row">
-        <button class="button">Search Pokemon</button>
+        <button class="button" @click="searchPokemon">Search Pokemon</button>
         <button class="button">Search Move</button>
       </div>
     </div>
-    <div v-if="dataId !== null" class="sidebar-backdrop">
+    <div v-if="dataId !== undefined" class="sidebar-backdrop">
       <i class="fas fa-times" @click="resetViewAndCloseSidebar" style="cursor: pointer; color: red; display: flex; justify-content: right;" title="Close"></i>
       <PetInfoComponent v-if="currentView === 'pe'" :id="dataId" />
-      <PokemonInfoComponent v-if="currentView === 'pk'" :id="dataId" />
+      <PokemonInfoComponent v-if="currentView === 'pk'" :id="dataId" :pokemon="searchData" />
     </div>
   </div>
 
@@ -28,8 +28,11 @@
 import EventBus from "@/eventBus.js";
 import PetInfoComponent from "@/components/info/PetInfoComponent.vue";
 import PokemonInfoComponent from "@/components/info/PokemonInfoComponent.vue";
+import PokemonService from "@/services/PokemonService.js";
+import {ref} from "vue";
 
 export default {
+  name: "LeftSidebar",
   components: {PokemonInfoComponent, PetInfoComponent},
   created() {
     // Listen for events on the EventBus
@@ -42,8 +45,10 @@ export default {
   data() {
     return {
       isSidebarVisible: false, // Initial sidebar state
-      currentView: null,
-      dataId: null,
+      currentView: undefined,
+      dataId: undefined,
+      searchData: undefined,
+      // searchBar: ref(undefined),
     };
   },
   methods: {
@@ -57,12 +62,30 @@ export default {
       }
       this.dataId = data.i;
       this.currentView = data.v;
+      this.searchData = data.d;
     },
     resetViewAndCloseSidebar() {
-      this.dataId = null;
-      this.currentView = null;
+      this.searchData = undefined;
+      this.dataId = undefined;
+      this.currentView = undefined;
       this.toggleSidebar();
     },
+    async searchPokemon() {
+      let searchText = this.$refs.searchBar.value;
+      if (searchText === '') {
+        alert('Please enter a pokemon name in search box.')
+        return;
+      }
+
+      let result = await PokemonService.searchPokemonInfo(searchText)
+
+      if (result.error !== undefined) {
+        alert(result.error);
+        return;
+      }
+
+      this.updateView({i: result.i, v: 'pk', d:result})
+    }
   },
 };
 </script>

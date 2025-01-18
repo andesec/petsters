@@ -1,19 +1,19 @@
 import ApiService from './ApiService';
 import UXService from "@/services/UXService.js";
 
-export default class PokemonService {
+export default class ActionService {
 
-    static async loadPokemonInfo(pokemonId) {
+    static async loadActionInfo(actionId) {
         try {
-            return await ApiService.makeRequest("/pokemon/" + pokemonId);
+            return await ApiService.makeRequest("/action/" + actionId);
         } catch (error) {
             UXService.error("An error occurred while loading data.", error)
         }
     }
 
-    static async searchPokemonInfo(pokemon) {
+    static async searchActionInfo(action) {
         try {
-            return await ApiService.makeRequestWithoutThrowingError("/pokemon/search/" + pokemon);
+            return await ApiService.makeRequest("/action/search/" + action);
         } catch (error) {
             UXService.error("An error occurred while searching.", error)
         }

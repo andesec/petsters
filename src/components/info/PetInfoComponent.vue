@@ -1,6 +1,6 @@
 <template>
   <h3>Details of {{id}}</h3>
-  <h3>{{pet.n}}</h3>
+  <h3>{{ p.n }}</h3>
   <br>
 
 
@@ -17,18 +17,21 @@ const props = defineProps({
   id: {
     type: Number,
     required: true
+  },
+  pet: {
+    type: Object,
+    required: false
   }
 });
 
 // Reactive state for Pokémon data
-const pet = reactive({});
+const p = reactive({});
 
 // Fetch Pokemon info whenever `props.id` changes
 watchEffect(async () => {
   try {
-    const data = await PetsterService.loadPetInfo(props.id);
-    Object.assign(pet, data); // Update the reactive object with the fetched data
-    console.log(pet);
+    const data = (props.pet !== undefined) ? props.pet : await PetsterService.loadPetInfo(props.id);
+    Object.assign(p, data); // Update the reactive object with the fetched data
   } catch (error) {
     console.error("Error loading Pokemon info:", error);
   }
