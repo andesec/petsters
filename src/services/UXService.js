@@ -93,7 +93,7 @@ class UXService {
     }
 
     static showInfo(v, i) {
-        EventBus.emit("show-info", {v: v, i:i, d:undefined});
+        EventBus.emit("show-info", {v: v, i:i.toString()});
     }
 }
 
