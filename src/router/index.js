@@ -1,10 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router';
+
+import Login from '../views/Login.vue';
+import config from '../config';
+
 import Battle from '../views/Battle.vue';
 import Maps from '../views/Map.vue';
 import Profile from '../views/Profile.vue';
 import Gyms from '../views/Gyms.vue';
-import Login from '../views/Login.vue';
-import config from '../config';
+import Party from "@/views/Party.vue";
 
 const routes = [
     { path: '/login', name: 'Login', component: Login },
@@ -12,13 +15,14 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        redirect: '/battle',
+        redirect: '/profile',
         meta: { requiresAuth: true },
         children: [
             { path: 'battle', name: 'Battle', component: Battle, },
             { path: 'map', name: 'Map', component: Maps },
             { path: 'profile', name: 'Profile', component: Profile },
             { path: 'gyms', name: 'Gyms', component: Gyms },
+            { path: 'party', name: 'Party', component: Party },
         ],
     },
 ];

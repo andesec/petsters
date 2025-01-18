@@ -6,6 +6,7 @@
 <!--        <router-link to="/battle">Battle</router-link>-->
         <router-link to="/profile">Profile</router-link>
         <router-link to="/gyms">Gyms</router-link>
+        <router-link to="/Party">Party</router-link>
       </nav>
   </header>
 </template>

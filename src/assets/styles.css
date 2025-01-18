@@ -16,6 +16,7 @@ button {
     padding: 10px 20px;
     border-radius: 10px;
     cursor: pointer;
+    font-size: 15px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Adds shadow for 3D effect */
     transition: all 0.2s ease;
 }
@@ -24,3 +25,64 @@ button:hover {
     background-color: #303f9f;
     box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3); /* Enhanced shadow on hover */
 }
+
+.button-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 10px;
+
+}
+
+.clickable-text {
+    cursor: pointer;
+}
+
+.clickable-text:hover {
+    color: #3e3ee3;
+    text-decoration: underline;
+}
+
+.sidebar-backdrop {
+    padding: 10px;
+    background-color: #eaecec;
+    border: 1px solid #cbcdcd;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Type Styling */
+.type-squares {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+    /*justify-content: center;*/
+}
+
+.type-square {
+    color: white;
+    font-size: 13px;
+    width: 45px;
+    padding: 5px 9px;
+    border-radius: 8px;
+    display: inline-block;
+    text-align: center;
+}
+/* Type Styling */
+
+/* HP Indications */
+.hp-critical {
+    background-color: #da0707;
+}
+
+.hp-warn {
+    background-color: #dcdc00;
+}
+
+.hp-sufficient {
+    background-color: #00a800;
+}
+
+/* HP Indications */

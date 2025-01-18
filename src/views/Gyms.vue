@@ -8,8 +8,10 @@
             <div class="gym-left">
               <img :src="getGymMedalImage(gym.m)" :alt="gym.m" class="badge-image"/>
               <div class="gym-details">
-                <h3>{{ gym.l }}</h3>
-                <p>{{ gym.m }} Badge</p>
+                <h3>{{ gym.m }} Badge</h3>
+                <br>
+                <h4>{{ gym.l }}</h4>
+                <h5>{{ gym.g }}</h5>
               </div>
             </div>
             <div class="gym-right">
@@ -80,7 +82,7 @@ export default {
       this.gyms = await ApiService.makeRequest("/gym");
       console.log(this.gyms);
     } catch (error) {
-      UXService.notify("an error occurred while fetching gyms.", error);
+      UXService.error("an error occurred while fetching gyms.", error);
     }
   },
 };

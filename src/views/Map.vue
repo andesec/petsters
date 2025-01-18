@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Map</h2>
+    <h2>Map</h2> <br/>
     <MapComponent ref="map"/>
   </div>
 </template>
