@@ -13,7 +13,7 @@
           <option value="l">Location</option>
           <option value="m">Move</option>
           <option value="n">NPC</option>
-          <option value="p" selected>Pokemon</option>
+          <option value="p" selected>Pokémon</option>
         </select>
         <button class="button" @click="search">Search</button>
       </div>

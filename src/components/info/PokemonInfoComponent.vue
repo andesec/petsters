@@ -81,7 +81,6 @@ watchEffect(async () => {
 .moves-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
 }
 
 .moves-table th,

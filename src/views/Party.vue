@@ -154,8 +154,10 @@ onMounted(async () => {
 }
 
 .pet-image {
-  width: 100px;
-  height: auto;
+  display: flex;
+  margin: 10px;
+  max-width: 100px;
+  max-height: 100px;
 }
 
 .pet-details {
@@ -163,12 +165,15 @@ onMounted(async () => {
   flex-direction: column;
 }
 
+.pet-details > .type-squares {
+  margin: 5px 0px;
+}
+
 .pet-actions {
   display: flex;
   flex-direction: column;
   align-items: center; /* Center align the actions */
   text-align: center;
-  margin-left: 30%;
 }
 
 .hp-bar-container {
@@ -198,15 +203,34 @@ onMounted(async () => {
   width: 60px;
 }
 
-@media (max-width: 1100px) {
+@media (min-width: 1101px) {
   .pet-actions {
     margin-left: 10%;
+  }
+}
+
+@media (max-width: 1150px) {
+  .pet-actions {
+    margin: 0;
   }
 }
 
 @media (max-width: 950px) {
   .pet-actions {
     display: none;
+  }
+
+  .hp-bar-container {
+    width: 100%;
+  }
+
+  .hp-bar-capsule {
+    width: 100px;
+  }
+
+  .hp-text {
+    font-size: 12px;
+    width: 50px;
   }
 }
 
