@@ -99,15 +99,21 @@ export default {
         return;
       }
 
+      if (result.r.length === 1) {
+        this.dataId = result.r[0].i;
+        this.currentView = result.t;
+        return;
+      }
+
       this.currentView = 'r';
       this.searchResults = result;
-      console.log(this.searchResults);
-    }
-  },
-  searchOnEnter(event) {
-    if (event.key === 'Enter') {
-      this.search();
-    }
+    },
+    searchOnEnter(event) {
+      console.log("Key pressed:", event.key); // Debugging log
+      if (event.key === 'Enter') {
+        this.search();
+      }
+    },
   },
 };
 </script>
@@ -118,7 +124,6 @@ export default {
   width: 20%;
   background-color: white;
   border: 1px solid lightslategray;
-  margin-bottom: 20px;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   padding: 10px;
