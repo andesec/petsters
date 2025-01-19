@@ -1,44 +1,31 @@
 <template>
-  <div class="map-container">
-    <img ref="map" src="/assets/map/route_1.png" alt="Map" class="map-image"/>
+  <div class="map-container" id="map-container">
   </div>
+<!--    <img ref="map" src="/assets/map/output.png" alt="Map" class="map-image"/>-->
 </template>
 
 <script setup>
 import eventBus from "@/eventBus.js";
-import VirtualWorld from '@/services/VirtualWorld.js';
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
+import World from "@/services/World.js";
 
-const props = defineProps({});
+// const props = defineProps({});
+// let world = ref({})
 
 // Lifecycle Events
 onMounted(async () => {
-  world = new VirtualWorld(
-      'MapComponent',
-      '/assets/avatar/blue-hair.png',
-      '/assets/map/image.png',
-      '/api/getUninhabitableAreas',
-      '/api/getPreviousLocation',
-      '/api/saveLocation'
-  );
-
-  // Subscribe to joystick or movement events
-  eventBus.on('joystick-move', direction => {
-    mapService.move(direction);
-  });
+  World.initTest('map-container', '/assets/map/output.png'); //, '/assets/avatar/blue-hair.png')
 
   // Save location on navigation
-  window.addEventListener('beforeunload', () => this.mapService.saveCurrentLocation());
+  // window.addEventListener('beforeunload', () => this.mapService.saveCurrentLocation());
 });
 </script>
 
 <style scoped>
 .map-container {
-  display: block;
-  align-items: center;
-  padding: 5px; /* Adds consistent inner spacing */
-  background-color: #cc8b71;
-  border-radius: 10px;
+  border-radius: 10px !important;
+  width: 100%; /* Fits the width of the container */
+  height: auto; /* Adjusts height proportionally */
 }
 
 .map-image {
