@@ -15,11 +15,9 @@ export default {
   },
   mounted() {
     eventBus.on('map-move', this.handleSidebarUpdate);
-    eventBus.on('map-right', this.updateFromRight);
   },
   beforeUnmount() {
     eventBus.off('map-move', this.handleSidebarUpdate);
-    eventBus.off('map-right', this.updateFromRight);
   },
   methods: {
     handleSidebarUpdate(update) {
@@ -27,10 +25,6 @@ export default {
         this.$refs.map.move(update.direction);
       }
     },
-    updateFromRight(message) {
-      console.log(123);
-      console.log(message);
-    }
   },
 };
 </script>
