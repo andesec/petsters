@@ -1,23 +1,44 @@
 <template>
-  <div class="map-container" id="map-container">
-  </div>
+  <div class="map-container" id="map-container"></div>
 <!--    <img ref="map" src="/assets/map/output.png" alt="Map" class="map-image"/>-->
 </template>
 
 <script setup>
 import eventBus from "@/eventBus.js";
-import {onMounted, ref} from "vue";
-import World from "@/services/World.js";
+import {onMounted, onUnmounted, ref} from "vue";
+import World from "@/sprites/World.js";
+import Player from "@/sprites/Player.js";
 
-// const props = defineProps({});
-// let world = ref({})
+const props = defineProps({
+  scale: {
+    type: Number,
+    default: 1
+  }
+});
+
+let world = ref({});
+let player = ref({});
+
+// Methods
+function handleJoystickMovement(data) {
+  world.movePlayer(data.direction)
+}
 
 // Lifecycle Events
 onMounted(async () => {
-  World.initTest('map-container', '/assets/map/output.png'); //, '/assets/avatar/blue-hair.png')
+  world = new World('map-container', '/assets/map/route_1.png', {x:0, y:0});
+  await world.init();
 
-  // Save location on navigation
-  // window.addEventListener('beforeunload', () => this.mapService.saveCurrentLocation());
+  player = new Player('/assets/avatar/blue-hair.png')
+  await world.addPlayer(player);
+
+  eventBus.on('joystick-move', handleJoystickMovement);
+});
+
+onUnmounted(() => {
+  eventBus.off('joystick-move', handleJoystickMovement);
+  world.destroy();
+  // window.removeEventListener('beforeunload', () => this.mapService.saveCurrentLocation());
 });
 </script>
 

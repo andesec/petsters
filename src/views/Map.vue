@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2>Map</h2> <br/>
-    <MapComponent ref="map"/>
+    <MapComponent ref="map" :scale="2.2"/>
   </div>
 </template>
 
@@ -14,17 +14,17 @@ export default {
     MapComponent,
   },
   mounted() {
-    eventBus.on('map-move', this.handleSidebarUpdate);
+    // eventBus.on('map-move', this.handleSidebarUpdate);
   },
   beforeUnmount() {
-    eventBus.off('map-move', this.handleSidebarUpdate);
+    // eventBus.off('map-move', this.handleSidebarUpdate);
   },
-  methods: {
-    handleSidebarUpdate(update) {
-      if (update.direction) {
-        this.$refs.map.move(update.direction);
-      }
-    },
-  },
+  // methods: {
+  //   handleSidebarUpdate(update) {
+  //     if (update.direction) {
+  //       this.$refs.map.move(update.direction);
+  //     }
+  //   },
+  // },
 };
 </script>

@@ -18,11 +18,7 @@ export default class VirtualWorld {
      */
     async init() {
         this.app = new PIXI.Application();
-        await this.app.init({
-            width: 800,
-            height: 600,
-            backgroundColor: 0x1099bb,
-        });
+        await this.app.init();
 
         const container = document.getElementById(this.containerId);
         if (!container) {

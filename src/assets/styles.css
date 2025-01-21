@@ -83,3 +83,7 @@ button:hover {
 }
 
 /* HP Indications */
+
+canvas {
+    border-radius: 10px;
+}

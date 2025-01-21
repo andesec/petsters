@@ -56,9 +56,9 @@ export default {
       if (x > 0) direction = 'right';
       else if (x < 0) direction = 'left';
 
-      if (direction && direction !== this.lastDirection) {
+      if (direction) {
         this.lastDirection = direction;
-        eventBus.emit('map-move', { direction });
+        eventBus.emit('joystick-move', { direction });
       }
     },
     handleKeyPress(event) {
