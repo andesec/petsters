@@ -21,7 +21,6 @@ class Player extends Character {
     }
 
     setPosition(x, y) {
-        console.log(this.worldSpace);
         if (x < 0 || x >= this.worldSpace.width || y < 0 || y >= this.worldSpace.height) {
             throw new OutOfWorldSpaceError("Player is attempting to move out {" + x + ", " + y + "} of world space ");
         }
@@ -40,7 +39,6 @@ class Player extends Character {
     }
 
     setWorldSpace(worldSpace) {
-        console.log(worldSpace);
         this.worldSpace = worldSpace;
     }
 }

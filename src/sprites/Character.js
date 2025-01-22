@@ -1,4 +1,5 @@
-import {AnimatedSprite, Assets, Rectangle, Sprite, Texture} from "pixi.js";
+import {AnimatedSprite, Assets, Rectangle, RenderTexture, Sprite, Texture} from "pixi.js";
+import {WorldConfig} from "@/sprites/WorldConfig.js";
 
 class Character {
     // Define the animated frames here
@@ -27,12 +28,10 @@ class Character {
         // });
 
         // Directly create the texture for the idle frame
-        const idleUpRectangle = new Rectangle(0, 0, 32, 32);
-        const idleUpTexture = new Texture(await Assets.load('player'), 'idleUp', idleUpRectangle);
-        this.sprite = new Sprite(idleUpTexture);
-        // this.sprite.anchor.set(0.5);
-        // this.sprite.animationSpeed = 0.5;
-        // this.sprite.play();
+        const idleUpRectangle = new Rectangle(64, 32, 32, 32);
+        this.spriteSheet.frame = idleUpRectangle;
+        this.spriteSheet.updateUvs();
+        this.sprite = new Sprite(this.spriteSheet);
     }
 
 

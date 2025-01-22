@@ -6,10 +6,8 @@ import {gsap} from "gsap";
 class World {
     containerElement;
     app = new Application();
-    scale = 1;
     map;
     player;
-    npcs = [];
     currentViewPoints = {
         x: 0,
         y: 0
@@ -18,6 +16,7 @@ class World {
         x: 0,
         y: 0
     }
+    worldContainer = new Container({isRenderGroup: true});
 
     constructor(containerId, mapSprite, currentViewPoints) {
         this.containerElement = document.getElementById(containerId);
@@ -31,7 +30,7 @@ class World {
     }
 
     async init() {
-        await this.app.init({resizeTo: this.containerElement});
+        await this.app.init({ background: 'white', resizeTo: this.containerElement});
         this.containerElement.appendChild(this.app.canvas);
 
         const texture = await Assets.load('map');
@@ -40,8 +39,9 @@ class World {
         this.map.anchor.set(0, 0);
         this.map.scale.set(WorldConfig.WORLD_SCALE);
         this.map.position.set(this.currentViewPoints.x, this.currentViewPoints.y);
+        this.worldContainer.addChild(this.map);
 
-        this.app.stage.addChild(this.map);
+        this.app.stage.addChild(this.worldContainer);
     }
 
     async addPlayer(player) {
@@ -50,80 +50,78 @@ class World {
         this.player.setWorldSpace({width:this.map.width, height:this.map.height});
         this.player.sprite.scale.set(WorldConfig.PLAYER_SCALE);
         this.player.sprite.position = this.playerStartingPoint;
-        this.app.stage.addChild(player.getSprite());
-    }
-
-    addNPC(npc) {
-        this.npcs.append(npc)
+        this.worldContainer.addChild(player.getSprite());
     }
 
     destroy() {
         this.app.destroy(true, true);
     }
 
-    moveCamera(direction) {
-        const cameraMovementSpeed = WorldConfig.CAMERA_MOVEMENT_SPEED;
-        const cameraMovementSpace = WorldConfig.CAMERA_MOVEMENT_SPACE;
-        const mapCurrentPosition = this.map.position;
-        const mapNextPosition = {x: 0, y: 0};
+    moveCamera() {
+        const cameraViewportWidth = this.containerElement.clientWidth;
+        const cameraViewportHeight = this.containerElement.clientHeight;
 
-        switch (direction) {
-            case 'up':
-                mapNextPosition.x = mapCurrentPosition.x;
-                mapNextPosition.y = mapCurrentPosition.y + cameraMovementSpace;
-                break;
-            case 'down':
-                mapNextPosition.x = mapCurrentPosition.x;
-                mapNextPosition.y = mapCurrentPosition.y - cameraMovementSpace;
-                break;
-            case 'left':
-                mapNextPosition.x = mapCurrentPosition.x + cameraMovementSpace;
-                mapNextPosition.y = mapCurrentPosition.y;
-                break;
-            case 'right':
-                mapNextPosition.x = mapCurrentPosition.x - cameraMovementSpace;
-                mapNextPosition.y = mapCurrentPosition.y;
-                break;
-            default:
-                throw new Error("Unknown direction: " + direction);
-        }
+        // Get player's current position
+        const playerPosition = this.player.getSprite().position;
 
-        gsap.to(this.map.position, {
-            x: mapNextPosition.x,
-            y: mapNextPosition.y,
+        // Calculate the camera's target position (centered on the player)
+        const targetCameraPosition = {
+            x: -(playerPosition.x - cameraViewportWidth / 2),
+            y: -(playerPosition.y - cameraViewportHeight / 2)
+        };
+
+        // Clamp the camera's position to the bounds of the map
+        const maxX = 0; // left edge
+        const maxY = 0; // top edge
+        const minX = -(this.map.width - cameraViewportWidth); // right edge
+        const minY = -(this.map.height - cameraViewportHeight); // bottom edge
+
+        targetCameraPosition.x = Math.min(maxX, Math.max(minX, targetCameraPosition.x));
+        targetCameraPosition.y = Math.min(maxY, Math.max(minY, targetCameraPosition.y));
+
+        // Smoothly move the world container to the target position
+        gsap.to(this.worldContainer.position, {
+            x: targetCameraPosition.x,
+            y: targetCameraPosition.y,
             duration: WorldConfig.CAMERA_MOVEMENT_SPEED,
             ease: "power1.out"
         });
     }
 
     movePlayer(direction) {
-        console.log(direction);
         const playerCurrentPosition = this.player.getSprite().position;
-        let nextPosition = {x: 0, y: 0};
+        const stepSize = WorldConfig.TILE_SIZE * WorldConfig.WORLD_SCALE; // Size of each step
+        const playerWidth = this.player.getSprite().width;
+        const playerHeight = this.player.getSprite().height;
+        let nextPosition = { x: playerCurrentPosition.x, y: playerCurrentPosition.y };
 
+        // Calculate the next position of the player based on the direction
         switch (direction) {
             case 'up':
-                nextPosition.x = playerCurrentPosition;
-                nextPosition.y = playerCurrentPosition.y - 32
+                nextPosition.y -= stepSize;
                 break;
             case 'down':
-                nextPosition.x = playerCurrentPosition.x;
-                nextPosition.y = playerCurrentPosition.y + 32;
+                nextPosition.y += stepSize;
                 break;
             case 'left':
-                nextPosition.x = playerCurrentPosition.x - 32;
-                nextPosition.y = playerCurrentPosition.y;
+                nextPosition.x -= stepSize;
                 break;
             case 'right':
-                nextPosition.x = playerCurrentPosition.x + 32;
-                nextPosition.y = playerCurrentPosition.y
+                nextPosition.x += stepSize;
                 break;
             default:
                 throw new Error("Unknown direction: " + direction);
         }
 
-        this.player.setPosition(nextPosition.x, nextPosition.y)
+        // Clamp the player's position to the bounds of the map, considering the player's size
+        nextPosition.x = Math.max(0, Math.min(this.map.width - playerWidth, nextPosition.x));
+        nextPosition.y = Math.max(0, Math.min(this.map.height - playerHeight, nextPosition.y));
 
+        // Move the player sprite
+        this.player.setPosition(nextPosition.x, nextPosition.y);
+
+        // Update the camera to follow the player
+        this.moveCamera();
     }
 
 }
