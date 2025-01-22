@@ -26,7 +26,7 @@ function handleJoystickMovement(data) {
 
 // Lifecycle Events
 onMounted(async () => {
-  world = new World('map-container', '/assets/map/output.png', {x:0, y:0});
+  world = new World('map-container', '/assets/map/route_3.png', {x:0, y:0});
   await world.init();
 
   player = new Player('/assets/avatar/blue-hair.png')
