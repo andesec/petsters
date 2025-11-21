@@ -89,32 +89,39 @@ export default function BattlePage() {
     return (
         <div>
             <h2 className="text-2xl font-bold mb-4">Battle</h2>
-            {loading ? (
+
+            {/* Show loading overlay if initial load */}
+            {loading && !battle && (
                 <div className="text-[18px] text-[#555]">Loading...</div>
-            ) : (
-                <div>
-                    {cs === 'SELECT_PET' && battle && (
-                        <SelectPet
-                            m={battle.m}
-                            os={battle.os}
-                            onPokemonSelected={handlePokemonSelected}
-                        />
-                    )}
-                    {cs === 'SELECT_ACTION' && battle && (
-                        <BattleMain
-                            battle={battle}
-                            onActionSelected={handleActionSelected}
-                        />
-                    )}
-                    {cs === 'END_BATTLE' && battle && t && (
-                        <BattleEnd
-                            battle={battle}
-                            t={t}
-                        />
-                    )}
-                    {!cs && !loading && <div>Waiting for battle to start...</div>}
-                </div>
             )}
+
+            {/* Keep battle UI mounted but maybe show overlay or disable inputs when loading */}
+            <div>
+                {cs === 'SELECT_PET' && battle && (
+                    <SelectPet
+                        m={battle.m}
+                        os={battle.os}
+                        onPokemonSelected={handlePokemonSelected}
+                        // @ts-ignore - Adding loading prop
+                        loading={loading}
+                    />
+                )}
+                {cs === 'SELECT_ACTION' && battle && (
+                    <BattleMain
+                        battle={battle}
+                        onActionSelected={handleActionSelected}
+                        // @ts-ignore - Adding loading prop
+                        loading={loading}
+                    />
+                )}
+                {cs === 'END_BATTLE' && battle && t && (
+                    <BattleEnd
+                        battle={battle}
+                        t={t}
+                    />
+                )}
+                {!cs && !loading && <div>Waiting for battle to start...</div>}
+            </div>
         </div>
     );
 }

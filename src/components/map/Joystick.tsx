@@ -46,6 +46,7 @@ export default function Joystick() {
         }
         setKnobPosition({ x: 50, y: 50 });
         lastDirectionRef.current = '';
+        eventBus.emit('map-stop');
     }, []);
 
     const handleKeyPress = useCallback((event: KeyboardEvent) => {

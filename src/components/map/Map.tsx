@@ -37,7 +37,12 @@ export default function Map() {
                         service.move(direction);
                     };
 
+                    const handleStop = () => {
+                        service.stop();
+                    };
+
                     eventBus.on('map-move', handleMove);
+                    eventBus.on('map-stop', handleStop);
 
                     // Save location on navigation
                     const handleUnload = () => service.saveCurrentLocation();
@@ -47,6 +52,7 @@ export default function Map() {
 
                     return () => {
                         eventBus.off('map-move', handleMove);
+                        eventBus.off('map-stop', handleStop);
                         window.removeEventListener('beforeunload', handleUnload);
                         if (mounted) {
                             service.destroy();

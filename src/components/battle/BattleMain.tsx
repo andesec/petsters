@@ -6,14 +6,15 @@ import UXService from "@/services/UXService";
 interface BattleMainProps {
     battle: any;
     onActionSelected: (action: any) => void;
+    loading?: boolean;
 }
 
-export default function BattleMain({ battle, onActionSelected }: BattleMainProps) {
+export default function BattleMain({ battle, onActionSelected, loading = false }: BattleMainProps) {
     const [selectedAction, setSelectedAction] = useState<string | null>(null);
     const [selectedItem, setSelectedItem] = useState<any | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    const canContinue = selectedAction || selectedItem;
+    const canContinue = (selectedAction || selectedItem) && !loading && !isProcessing;
 
     const handleContinue = () => {
         setIsProcessing(true);
@@ -24,13 +25,15 @@ export default function BattleMain({ battle, onActionSelected }: BattleMainProps
 
         onActionSelected(action);
 
+        // Reset processing after a timeout if parent doesn't unmount/update fast enough
+        // But ideally parent handles loading state
         setTimeout(() => {
             setIsProcessing(false);
         }, 2000);
     };
 
     return (
-        <div className="p-[20px] font-sans">
+        <div className={`p-[20px] font-sans ${loading ? 'opacity-70 pointer-events-none' : ''}`}>
             <div className="flex justify-around mb-[20px]">
                 {/* Trainer's Pokemon */}
                 <div className="relative w-[45%] text-center">
@@ -89,10 +92,12 @@ export default function BattleMain({ battle, onActionSelected }: BattleMainProps
                                 onChange={() => { setSelectedAction(action.i); setSelectedItem(null); }}
                                 name="action"
                                 className="hidden peer"
+                                disabled={loading || isProcessing}
                             />
                             <label
                                 htmlFor={action.i}
-                                className="block text-white p-[10px_20px] rounded-[10px] shadow-md cursor-pointer text-center transition-all duration-200 border-[3px] border-transparent peer-checked:bg-opacity-95 peer-checked:border-opacity-50 peer-checked:shadow-lg"
+                                className={`block text-white p-[10px_20px] rounded-[10px] shadow-md cursor-pointer text-center transition-all duration-200 border-[3px] border-transparent 
+                                peer-checked:bg-opacity-95 peer-checked:border-white peer-checked:shadow-lg peer-checked:ring-4 peer-checked:ring-blue-400/50`}
                                 style={{ backgroundColor: TypeService.getTypeColor(action.t) }}
                             >
                                 <span>{action.n}</span>
@@ -113,13 +118,14 @@ export default function BattleMain({ battle, onActionSelected }: BattleMainProps
                                 value={item.i}
                                 checked={selectedItem?.i === item.i}
                                 onChange={() => { setSelectedItem(item); setSelectedAction(null); }}
-                                disabled={!!selectedAction}
+                                disabled={!!selectedAction || loading || isProcessing}
                                 name="item"
                                 className="hidden peer"
                             />
                             <label
                                 htmlFor={'item-input' + item.i}
-                                className="block bg-gray-500 text-white p-[10px_20px] rounded-[10px] shadow-md cursor-pointer text-center transition-all duration-200 border-[3px] border-transparent peer-checked:bg-gray-700 peer-checked:border-gray-900 peer-checked:shadow-lg"
+                                className={`block bg-gray-500 text-white p-[10px_20px] rounded-[10px] shadow-md cursor-pointer text-center transition-all duration-200 border-[3px] border-transparent 
+                                peer-checked:bg-gray-700 peer-checked:border-white peer-checked:shadow-lg peer-checked:ring-4 peer-checked:ring-blue-400/50`}
                             >
                                 {item.n}
                             </label>
@@ -130,11 +136,11 @@ export default function BattleMain({ battle, onActionSelected }: BattleMainProps
 
             {/* Continue Button */}
             <button
-                disabled={!canContinue || isProcessing}
+                disabled={!canContinue}
                 onClick={handleContinue}
                 className="bg-[#3f51b5] text-white border-none px-[20px] py-[10px] rounded-[10px] cursor-pointer hover:bg-[#303f9f] disabled:bg-gray-400 disabled:cursor-not-allowed block mx-auto"
             >
-                Continue
+                {loading || isProcessing ? 'Processing...' : 'Continue'}
             </button>
         </div>
     );
