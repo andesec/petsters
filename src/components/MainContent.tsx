@@ -4,9 +4,9 @@ interface MainContentProps {
     children: ReactNode;
 }
 
-export default function MainContent({ children }: MainContentProps) {
+export default function MainContent({ children, className }: { children: ReactNode; className?: string }) {
     return (
-        <div className="w-full md:w-[55%] bg-white border border-slate-400 shadow-md rounded-[10px] p-[15px] overflow-y-auto md:overflow-y-auto h-full">
+        <div className={`bg-card/95 backdrop-blur-sm border border-border shadow-lg rounded-xl p-5 overflow-y-auto h-full ${className || ''}`}>
             {children}
         </div>
     );

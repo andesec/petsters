@@ -1,156 +1,131 @@
 @import "tailwindcss";
 
-/* --- Legacy base.css --- */
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+}
+
+/* Custom Utilities */
+@utility sidebar-transition {
+  transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out, width 0.3s ease-in-out;
+}
+
+:root {
+  --background: #f8fafc;
+  /* slate-50 */
+  --foreground: #0f172a;
+  /* slate-900 */
+
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+
+  --primary: #6366f1;
+  /* indigo-500 */
+  --primary-foreground: #ffffff;
+
+  --secondary: #e0e7ff;
+  /* indigo-100 */
+  --secondary-foreground: #3730a3;
+  /* indigo-800 */
+
+  --muted: #f1f5f9;
+  /* slate-100 */
+  --muted-foreground: #64748b;
+  /* slate-500 */
+
+  --accent: #818cf8;
+  /* indigo-400 */
+  --accent-foreground: #ffffff;
+
+  --destructive: #ef4444;
+  /* red-500 */
+  --destructive-foreground: #ffffff;
+
+  --border: #e2e8f0;
+  /* slate-200 */
+  --input: #e2e8f0;
+  --ring: #6366f1;
+
+  --radius: 0.75rem;
+
+  /* Gradient variables */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.dark {
+  --background: #0f172a;
+  /* slate-900 */
+  --foreground: #f8fafc;
+  /* slate-50 */
+
+  --card: #1e293b;
+  /* slate-800 */
+  --card-foreground: #f8fafc;
+
+  --primary: #818cf8;
+  /* indigo-400 */
+  --primary-foreground: #0f172a;
+
+  --secondary: #312e81;
+  /* indigo-900 */
+  --secondary-foreground: #e0e7ff;
+
+  --muted: #1e293b;
+  /* slate-800 */
+  --muted-foreground: #94a3b8;
+  /* slate-400 */
+
+  --accent: #6366f1;
+  /* indigo-500 */
+  --accent-foreground: #f8fafc;
+
+  --destructive: #dc2626;
+  /* red-600 */
+  --destructive-foreground: #f8fafc;
+
+  --border: #334155;
+  /* slate-700 */
+  --input: #334155;
+  --ring: #818cf8;
+
+  /* Gradient variables for dark mode */
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Legacy Support (Mapped to new vars where possible) */
 :root {
   --vt-c-white: #ffffff;
-  --vt-c-white-soft: #f8f8f8;
-  --vt-c-white-mute: #f2f2f2;
-
   --vt-c-black: #181818;
-  --vt-c-black-soft: #222222;
-  --vt-c-black-mute: #282828;
-
   --vt-c-indigo: #2c3e50;
-
-  --vt-c-divider-light-1: rgba(60, 60, 60, 0.29);
-  --vt-c-divider-light-2: rgba(60, 60, 60, 0.12);
-  --vt-c-divider-dark-1: rgba(84, 84, 84, 0.65);
-  --vt-c-divider-dark-2: rgba(84, 84, 84, 0.48);
-
-  --vt-c-text-light-1: var(--vt-c-indigo);
-  --vt-c-text-light-2: rgba(60, 60, 60, 0.66);
-  --vt-c-text-dark-1: var(--vt-c-white);
-  --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
-
-  /* semantic color variables */
-  --color-background: var(--vt-c-white);
-  --color-background-soft: var(--vt-c-white-soft);
-  --color-background-mute: var(--vt-c-white-mute);
-
-  --color-border: var(--vt-c-divider-light-2);
-  --color-border-hover: var(--vt-c-divider-light-1);
-
-  --color-heading: var(--vt-c-text-light-1);
-  --color-text: var(--vt-c-text-light-1);
-
-  --section-gap: 160px;
-  
-  /* Next.js default vars (kept for compatibility) */
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-background: var(--vt-c-black);
-    --color-background-soft: var(--vt-c-black-soft);
-    --color-background-mute: var(--vt-c-black-mute);
-
-    --color-border: var(--vt-c-divider-dark-2);
-    --color-border-hover: var(--vt-c-divider-dark-1);
-
-    --color-heading: var(--vt-c-text-dark-1);
-    --color-text: var(--vt-c-text-dark-2);
-    
-    /* Next.js default vars */
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-/* --- Legacy styles.css --- */
-body {
-    font-family: 'Arial', sans-serif;
-    background-color: ghostwhite; /* Overrides base.css var temporarily to match styles.css */
-    color: #333;
-}
-
-button {
-    background-color: #3f51b5;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 15px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-}
-
-button:hover {
-    background-color: #303f9f;
-    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.3);
-}
-
-.button-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.clickable-text {
-    cursor: pointer;
-}
-
-.clickable-text:hover {
-    color: #3e3ee3;
-    text-decoration: underline;
-}
-
-.sidebar-backdrop {
-    padding: 10px;
-    background-color: #eaecec;
-    border: 1px solid #cbcdcd;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Type Styling */
-.type-squares {
-    display: flex;
-    gap: 5px;
-}
-
-.type-square {
-    color: white;
-    font-size: 13px;
-    width: 45px;
-    padding: 5px 9px;
-    border-radius: 8px;
-    display: inline-block;
-    text-align: center;
-}
-
-/* HP Indications */
-.hp-critical {
-    background-color: #da0707;
-}
-
-.hp-warn {
-    background-color: #dcdc00;
-}
-
-.hp-sufficient {
-    background-color: #00a800;
-}
-
-/* --- App.vue Layout Styles --- */
-.layout {
-  display: flex;
-  height: calc(100vh - 75px);
-  padding: 8px;
-  gap: 10px;
-}
-
-@media (max-width: 450px) {
-  .layout {
-    flex-direction: column;
-    height: 100vh;
-    padding: 0;
-    gap: 8px;
-    margin: 8px;
-  }
 }

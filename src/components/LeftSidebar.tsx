@@ -7,7 +7,13 @@ import PetInfoComponent from '@/components/info/PetInfoComponent';
 import PokemonInfoComponent from '@/components/info/PokemonInfoComponent';
 import eventBus from '@/eventBus';
 
-export default function LeftSidebar() {
+export default function LeftSidebar({
+    isFloating = false,
+    toggleFloating
+}: {
+    isFloating?: boolean;
+    toggleFloating?: () => void;
+}) {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [currentView, setCurrentView] = useState<string | undefined>(undefined);
     const [dataId, setDataId] = useState<any>(undefined);
@@ -67,25 +73,39 @@ export default function LeftSidebar() {
         }
     };
 
+    // Dynamic classes based on floating state
+    const containerClasses = isFloating
+        ? "fixed bottom-4 left-4 z-50 w-[380px] max-h-[calc(100vh-100px)] shadow-2xl"
+        : "w-full h-full";
+
     return (
         <>
-            <div className={`w-[20%] bg-white border border-slate-400 shadow-md rounded-[10px] p-[10px] overflow-y-auto h-full transition-transform duration-300 ease-in-out
-        ${isSidebarVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}
-        fixed top-[57px] left-0 m-[0_8px] w-[90.6%] z-[1000] max-h-[90vh] md:static md:translate-y-0 md:opacity-100 md:w-[20%] md:max-h-full md:z-auto md:m-0
-      `}>
-                <h2 className="text-xl font-bold mb-2">Information Center</h2>
-                <div className="flex flex-col gap-2 mb-2">
+            <div className={`bg-card/95 backdrop-blur-md border border-border rounded-xl p-4 overflow-y-auto transition-all duration-300 ease-in-out shadow-lg ${containerClasses}`}>
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-bold text-foreground">Search</h3>
+                    {toggleFloating && (
+                        <button
+                            onClick={toggleFloating}
+                            className="p-2 hover:bg-muted rounded-lg transition-colors"
+                            title={isFloating ? "Dock sidebar" : "Float sidebar"}
+                        >
+                            <i className={`fas ${isFloating ? 'fa-thumbtack' : 'fa-thumbtack'} rotate-45 text-muted-foreground`}></i>
+                        </button>
+                    )}
+                </div>
+
+                <div className="flex flex-col gap-3 mb-4">
                     <input
                         ref={searchBarRef}
                         type="text"
-                        placeholder="Search"
-                        className="border border-slate-400 text-base w-full h-[30px] rounded-[10px] px-2"
+                        placeholder="Search..."
+                        className="bg-background border border-input text-foreground text-sm w-full h-9 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-ring"
                         onKeyDown={handleKeyDown}
                     />
-                    <div className="flex justify-between gap-2">
+                    <div className="flex gap-2">
                         <select
                             ref={searchTypeDropdownRef}
-                            className="border border-slate-400 text-base w-full h-[40px] rounded-[10px]"
+                            className="bg-background border border-input text-foreground text-sm flex-1 h-9 rounded-md px-2 focus:outline-none focus:ring-2 focus:ring-ring"
                             value={selectedSearchType}
                             onChange={(e) => setSelectedSearchType(e.target.value)}
                         >
@@ -96,17 +116,17 @@ export default function LeftSidebar() {
                             <option value="n">NPC</option>
                             <option value="p">Pokémon</option>
                         </select>
-                        <button onClick={search} className="bg-[#3f51b5] text-white border-none px-5 py-2.5 rounded-[10px] cursor-pointer text-[15px] shadow-md hover:bg-[#303f9f]">
+                        <button onClick={search} className="bg-primary text-primary-foreground px-4 py-1.5 rounded-md text-sm font-medium shadow hover:bg-primary/90 transition-colors">
                             Search
                         </button>
                     </div>
                 </div>
 
                 {currentView && (
-                    <div className="p-[10px] bg-[#eaecec] border border-[#cbcdcd] rounded-[10px] flex flex-col gap-[10px]">
+                    <div className="p-3 bg-muted/50 border border-border rounded-lg flex flex-col gap-3">
                         <div className="flex justify-end">
                             <i
-                                className="fas fa-times text-red-600 cursor-pointer"
+                                className="fas fa-times text-destructive cursor-pointer hover:text-destructive/80"
                                 onClick={() => {
                                     setCurrentView(undefined);
                                     setDataId(undefined);
@@ -126,12 +146,21 @@ export default function LeftSidebar() {
                 )}
             </div>
 
+            {/* Mobile Toggle Button */}
             <button
-                className="md:hidden fixed top-[50px] right-[15px] z-[1300] bg-slate-500 text-white border-none rounded-[55%] cursor-pointer px-2 py-1 shadow-md hover:bg-slate-700"
+                className="md:hidden fixed bottom-6 right-6 z-[1300] bg-primary text-primary-foreground w-12 h-12 rounded-full shadow-lg flex items-center justify-center hover:bg-primary/90 transition-colors"
                 onClick={toggleSidebar}
             >
-                {isSidebarVisible ? '▲' : '▼'}
+                <i className={`fas ${isSidebarVisible ? 'fa-times' : 'fa-search'}`}></i>
             </button>
+
+            {/* Mobile Backdrop */}
+            {isSidebarVisible && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-[900] md:hidden backdrop-blur-sm"
+                    onClick={() => setIsSidebarVisible(false)}
+                ></div>
+            )}
         </>
     );
 }

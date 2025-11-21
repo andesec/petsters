@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="337fdefd-cb7b-46b4-9619-689af19109fe" name="Changes" comment="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that.">
+      <change beforePath="$PROJECT_DIR$/src/app/battle/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/battle/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/battle/BattleMain.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/battle/BattleMain.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/battle/SelectPet.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/battle/SelectPet.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/map/Joystick.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/map/Joystick.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/map/Map.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/map/Map.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/MapService.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/MapService.ts" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Vue Composition API Component" />
+        <option value="Vue Options API Component" />
+        <option value="HTML File" />
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;andesec&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;git@github.com:andesec/petsters.git&quot;,
+    &quot;accountId&quot;: &quot;729c548b-d852-4d51-9db9-2b3e41b79e57&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2qrUfb9OSQDuVHGltvP0koIHdqJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;migration/nextjs&quot;,
+    &quot;js.debugger.nextJs.config.created.client&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/nd/dev/andesec/petsters&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;npm.run.executor&quot;: &quot;Run&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/nd/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;vue.recent.templates&quot;: [
+      &quot;Vue Composition API Component&quot;,
+      &quot;Vue Options API Component&quot;
+    ]
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/services" />
+      <recent name="$PROJECT_DIR$/src/components/info" />
+      <recent name="$PROJECT_DIR$/public/assets" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/sprites" />
+      <recent name="$PROJECT_DIR$/src/components/info" />
+      <recent name="$PROJECT_DIR$/src/services" />
+      <recent name="$PROJECT_DIR$/public/assets/gym/leader" />
+      <recent name="$PROJECT_DIR$/src/components/map" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.run">
+    <configuration name="Next.js: debug client-side" type="JavascriptDebugType" uri="http://localhost:3000/">
+      <method v="2" />
+    </configuration>
+    <configuration name="run" type="js.build_tools.npm" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="dev" />
+      </scripts>
+      <node-interpreter value="node" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9c94529fcfe0-JavaScript-WS-252.26199.162" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="337fdefd-cb7b-46b4-9619-689af19109fe" name="Changes" comment="" />
+      <created>1735420292073</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1735420292073</updated>
+      <workItem from="1735420293262" duration="7038000" />
+      <workItem from="1735480264755" duration="16812000" />
+      <workItem from="1735551151388" duration="6137000" />
+      <workItem from="1735642489035" duration="27955000" />
+      <workItem from="1735749464302" duration="48000" />
+      <workItem from="1735758336156" duration="15255000" />
+      <workItem from="1735816237360" duration="12894000" />
+      <workItem from="1735989940653" duration="2391000" />
+      <workItem from="1736190053776" duration="215000" />
+      <workItem from="1736882801208" duration="1760000" />
+      <workItem from="1736941061367" duration="27046000" />
+      <workItem from="1737015782461" duration="8909000" />
+      <workItem from="1737045712258" duration="605000" />
+      <workItem from="1737063830268" duration="296000" />
+      <workItem from="1737067354265" duration="556000" />
+      <workItem from="1737120466388" duration="23211000" />
+      <workItem from="1737197643844" duration="12204000" />
+      <workItem from="1737238595345" duration="3097000" />
+      <workItem from="1737288504628" duration="7193000" />
+      <workItem from="1737296758727" duration="14459000" />
+      <workItem from="1737462155658" duration="19713000" />
+      <workItem from="1737547564853" duration="1951000" />
+      <workItem from="1737578196835" duration="3358000" />
+      <workItem from="1740147376350" duration="1021000" />
+      <workItem from="1740148408902" duration="1351000" />
+      <workItem from="1747502921078" duration="369000" />
+      <workItem from="1763671529507" duration="1294000" />
+      <workItem from="1763714031738" duration="90000" />
+      <workItem from="1763714135160" duration="929000" />
+    </task>
+    <task id="LOCAL-00001" summary="several improvements to the profile page">
+      <option name="closed" value="true" />
+      <created>1735424929852</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1735424929852</updated>
+    </task>
+    <task id="LOCAL-00002" summary="several improvements to the profile page">
+      <option name="closed" value="true" />
+      <created>1735425595865</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1735425595865</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Built the BattleComponent.vue, scripting still remaining for battle functionality.">
+      <option name="closed" value="true" />
+      <created>1735503819085</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1735503819085</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Built the BattleComponent.vue, scripting still remaining for battle functionality.">
+      <option name="closed" value="true" />
+      <created>1735511955361</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1735511955361</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Added links to pokemon images, some styling consistencies and improvements.">
+      <option name="closed" value="true" />
+      <created>1735656098095</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1735656098095</updated>
+    </task>
+    <task id="LOCAL-00006" summary="More styling consistencies and improvements.">
+      <option name="closed" value="true" />
+      <created>1735659307356</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1735659307356</updated>
+    </task>
+    <task id="LOCAL-00007" summary="More styling consistencies and improvements.">
+      <option name="closed" value="true" />
+      <created>1735660055151</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1735660055151</updated>
+    </task>
+    <task id="LOCAL-00008" summary="More styling consistencies and improvements.">
+      <option name="closed" value="true" />
+      <created>1735661243119</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1735661243119</updated>
+    </task>
+    <task id="LOCAL-00009" summary="More styling consistencies and improvements.">
+      <option name="closed" value="true" />
+      <created>1735661536154</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1735661536154</updated>
+    </task>
+    <task id="LOCAL-00010" summary="More styling consistencies and improvements.">
+      <option name="closed" value="true" />
+      <created>1735671461876</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1735671461876</updated>
+    </task>
+    <task id="LOCAL-00011" summary="More styling consistencies and improvements. And some fixes">
+      <option name="closed" value="true" />
+      <created>1735761371722</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1735761371722</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Some styling and improvements on gym page">
+      <option name="closed" value="true" />
+      <created>1735769724416</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1735769724416</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Some styling and improvements on battle page, also fixed the issue with ending battle.">
+      <option name="closed" value="true" />
+      <created>1735773019086</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1735773019086</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Made some styling changes for small screens.">
+      <option name="closed" value="true" />
+      <created>1735826357617</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1735826357617</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Made some styling changes for small screens.">
+      <option name="closed" value="true" />
+      <created>1735829115952</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1735829115952</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Made some styling changes for small screens.">
+      <option name="closed" value="true" />
+      <created>1735830312544</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1735830312544</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Made some styling changes for small screens.">
+      <option name="closed" value="true" />
+      <created>1735830442224</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1735830442224</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Added a graphical joystick, still working on functionality.">
+      <option name="closed" value="true" />
+      <created>1735832819510</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1735832819510</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Added a graphical joystick, still working on functionality.">
+      <option name="closed" value="true" />
+      <created>1735833217120</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1735833217120</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Added a graphical joystick, still working on functionality.">
+      <option name="closed" value="true" />
+      <created>1735833407021</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1735833407022</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Added a graphical joystick, still working on functionality.">
+      <option name="closed" value="true" />
+      <created>1735833783935</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1735833783935</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Added a graphical joystick, still working on functionality.">
+      <option name="closed" value="true" />
+      <created>1736190248441</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1736190248441</updated>
+    </task>
+    <task id="LOCAL-00023" summary="Added details and page for party">
+      <option name="closed" value="true" />
+      <created>1736943272774</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1736943272774</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Some styling">
+      <option name="closed" value="true" />
+      <created>1736957867526</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1736957867526</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Several styling and drag and drop working as well as saving the party order.">
+      <option name="closed" value="true" />
+      <created>1736977675482</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1736977675482</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Several styling and drag and drop working as well as saving the party order.">
+      <option name="closed" value="true" />
+      <created>1736979032771</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1736979032771</updated>
+    </task>
+    <task id="LOCAL-00027" summary="Validations fixed.">
+      <option name="closed" value="true" />
+      <created>1737027171892</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1737027171892</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Added links to show details of pet in the info center and managed the event emit for it.">
+      <option name="closed" value="true" />
+      <created>1737028946975</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1737028946975</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Used the /pokemon endpoint and fetched data">
+      <option name="closed" value="true" />
+      <created>1737123579156</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1737123579157</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Several improvements to the left sidebar">
+      <option name="closed" value="true" />
+      <created>1737152268318</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1737152268318</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Search is working perfectly now.">
+      <option name="closed" value="true" />
+      <created>1737160226124</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1737160226124</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Search is working perfectly now and shows abilities and moves as well!">
+      <option name="closed" value="true" />
+      <created>1737163491004</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1737163491004</updated>
+    </task>
+    <task id="LOCAL-00033" summary="Converted the pokemon search to keyword search.">
+      <option name="closed" value="true" />
+      <created>1737218221951</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1737218221951</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Small screen styling improvements on party page">
+      <option name="closed" value="true" />
+      <created>1737240500435</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1737240500435</updated>
+    </task>
+    <task id="LOCAL-00035" summary="Small screen styling improvements on party page">
+      <option name="closed" value="true" />
+      <created>1737241178586</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1737241178586</updated>
+    </task>
+    <task id="LOCAL-00036" summary="initial changes in maps for vue 3 api">
+      <option name="closed" value="true" />
+      <created>1737293541746</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1737293541746</updated>
+    </task>
+    <task id="LOCAL-00037" summary="initial changes in maps for vue 3 api">
+      <option name="closed" value="true" />
+      <created>1737293616126</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1737293616126</updated>
+    </task>
+    <task id="LOCAL-00038" summary="Initial test worked">
+      <option name="closed" value="true" />
+      <created>1737313637427</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1737313637427</updated>
+    </task>
+    <task id="LOCAL-00039" summary="Showing map and movement of sprite somewhat implemented.">
+      <option name="closed" value="true" />
+      <created>1737484688900</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1737484688900</updated>
+    </task>
+    <task id="LOCAL-00040" summary="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that.">
+      <option name="closed" value="true" />
+      <created>1737581300680</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1737581300680</updated>
+    </task>
+    <task id="LOCAL-00041" summary="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that.">
+      <option name="closed" value="true" />
+      <created>1737581546622</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1737581546622</updated>
+    </task>
+    <option name="localTasksCounter" value="42" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="javascript:npm:react" />
+    <option featureType="dependencySupport" implementationName="executable:docker" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:tailwindcss" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:vite" />
+    <option featureType="dependencySupport" implementationName="executable:podman" />
+    <option featureType="dependencySupport" implementationName="executable:kubectl" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:next" />
+    <option featureType="dependencySupport" implementationName="javascript:npm:vue" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="several improvements to the profile page" />
+    <MESSAGE value="Built the BattleComponent.vue, scripting still remaining for battle functionality." />
+    <MESSAGE value="Added links to pokemon images, some styling consistencies and improvements." />
+    <MESSAGE value="More styling consistencies and improvements." />
+    <MESSAGE value="More styling consistencies and improvements. And some fixes" />
+    <MESSAGE value="Some styling and improvements on gym page" />
+    <MESSAGE value="Some styling and improvements on battle page, also fixed the issue with ending battle." />
+    <MESSAGE value="Fixes and images finally committed." />
+    <MESSAGE value="Made some styling changes for small screens." />
+    <MESSAGE value="Added a graphical joystick, still working on functionality." />
+    <MESSAGE value="Added details and page for party" />
+    <MESSAGE value="Some styling" />
+    <MESSAGE value="Several styling and drag and drop working as well as saving the party order." />
+    <MESSAGE value="Validations fixed." />
+    <MESSAGE value="Added links to show details of pet in the info center and managed the event emit for it." />
+    <MESSAGE value="Used the /pokemon endpoint and fetched data" />
+    <MESSAGE value="Several improvements to the left sidebar" />
+    <MESSAGE value="Search is working perfectly now." />
+    <MESSAGE value="Search is working perfectly now and shows abilities and moves as well!" />
+    <MESSAGE value="Converted the pokemon search to keyword search." />
+    <MESSAGE value="Small screen styling improvements on party page" />
+    <MESSAGE value="initial changes in maps for vue 3 api" />
+    <MESSAGE value="Initial test worked" />
+    <MESSAGE value="Showing map and movement of sprite somewhat implemented." />
+    <MESSAGE value="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that." />
+    <option name="LAST_COMMIT_MESSAGE" value="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that." />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/views/Profile.vue</url>
+          <line>314</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
