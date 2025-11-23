@@ -115,20 +115,44 @@ This document outlines:
 - **Smooth Transitions:** Micro-animations on interactions
 - **Improved Typography:** Better hierarchy and readability
 
-### Mobile Mockup Observations
+### Mobile Design Specifications (User Defined)
 
-#### Mobile-Optimized Design
-- **Responsive Header:** Maintains branding while being compact
-- **Touch-Friendly Elements:** Larger tap targets
-- **Vertical Card Stack:** Cards stack efficiently
-- **Bottom Navigation/FAB:** Easy thumb access
-- **Optimized Spacing:** Better use of mobile real estate
+#### 1. Header Layout
+- **Left:** Hamburger menu button (opens overlay).
+- **Center:** "Petsters" logo text.
+- **Right:** User pill button (Avatar + Username).
+  - **Click Action:** Opens floating menu with:
+    - Light/Dark mode toggle
+    - Profile
+    - Inbox
+    - Settings
+    - Logout
 
-#### Mobile Interactions
-- **Swipe Gestures:** Potential for swipe-to-remove
-- **Floating Actions:** Search/menu floating action buttons
-- **Modal Overlays:** Clean, centered modals with proper backdrop
-- **Touch Feedback:** Visual feedback on touch interactions
+#### 2. Right Sidebar (Mobile Behavior)
+- **Position:** Settles below main panel at bottom of page (approx. 25% height).
+- **No Header:** Clean, content-focused.
+- **Contextual Content:**
+  - **Map Page:**
+    - Small translucent joystick control (Top Right of panel).
+    - Nearby Pokemon list.
+    - Nearby NPCs.
+    - Interactable buildings.
+    - Objectives list.
+  - **Party Page:** List of available Pokemon to add.
+  - **Profile/Gyms/Bag Pages:** Collapsed and disabled at footer.
+
+#### 3. Hamburger Menu (Left Slide-over)
+- **Search Bar (Top):**
+  - Dropdown categories: Pokemon, Abilities, Moves, Items, Places.
+  - **Behavior:** Hides menu items on search, populates results (table view with scroll).
+- **Navigation Items:**
+  - Gyms
+  - Map
+  - Party
+  - Bag
+  - Objectives
+  - Competitions
+  - Champions League
 
 ---
 
