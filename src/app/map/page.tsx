@@ -14,8 +14,7 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 
 export default function MapPage() {
     return (
-        <div>
-            <h2 className="text-2xl font-bold mb-4">Map</h2>
+        <div className="w-full h-full overflow-hidden">
             <Map />
         </div>
     );

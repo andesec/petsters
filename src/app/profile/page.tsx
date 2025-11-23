@@ -132,135 +132,135 @@ export default function ProfilePage() {
 
     return (
         <div>
-            <h2 className="text-xl md:text-2xl font-bold mb-3 md:mb-4 text-foreground">Profile</h2>
+            <h2 className="text-base md:text-xl font-bold mb-2 md:mb-3 text-foreground">Profile</h2>
             <form onSubmit={saveProfile}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-[30px_40px]">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
 
                     {/* First Name */}
-                    <div className="mb-2 md:mb-[15px]">
-                        <label htmlFor="first-name" className="block mb-1 md:mb-[5px] text-sm md:text-base font-bold text-foreground">First Name:</label>
+                    <div className="mb-2">
+                        <label htmlFor="first-name" className="block mb-1 text-xs md:text-sm font-bold text-foreground">First Name:</label>
                         <input
                             id="first-name"
                             value={profile.fn}
                             onChange={(e) => handleChange('fn', e.target.value)}
-                            className={`text-sm md:text-base border rounded-lg w-[95%] p-2 md:p-2.5 transition-colors duration-200 bg-background text-foreground ${errors.fn ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                            className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 bg-background text-foreground ${errors.fn ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                         />
-                        {errors.fn && <small className="text-red-500 text-xs md:text-[0.85rem] mt-1 md:mt-[4px] block">{errors.fn}</small>}
+                        {errors.fn && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.fn}</small>}
                     </div>
 
                     {/* Last Name */}
-                    <div className="mb-2 md:mb-[15px]">
-                        <label htmlFor="last-name" className="block mb-1 md:mb-[5px] text-sm md:text-base font-bold text-foreground">Last Name:</label>
+                    <div className="mb-2">
+                        <label htmlFor="last-name" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Last Name:</label>
                         <input
                             id="last-name"
                             value={profile.ln}
                             onChange={(e) => handleChange('ln', e.target.value)}
-                            className={`text-sm md:text-base border rounded-lg w-[95%] p-2 md:p-2.5 transition-colors duration-200 bg-background text-foreground ${errors.ln ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                            className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 bg-background text-foreground ${errors.ln ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                         />
-                        {errors.ln && <small className="text-red-500 text-xs md:text-[0.85rem] mt-1 md:mt-[4px] block">{errors.ln}</small>}
+                        {errors.ln && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.ln}</small>}
                     </div>
 
                     {/* Email */}
-                    <div className="mb-2 md:mb-[15px]">
-                        <label htmlFor="email" className="block mb-1 md:mb-[5px] text-sm md:text-base font-bold text-foreground">Email:</label>
+                    <div className="mb-2">
+                        <label htmlFor="email" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Email:</label>
                         <input
                             id="email"
                             type="email"
                             value={profile.e}
                             onChange={(e) => handleChange('e', e.target.value)}
-                            className={`text-sm md:text-base border rounded-lg w-[95%] p-2 md:p-2.5 transition-colors duration-200 bg-background text-foreground ${errors.e ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                            className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 bg-background text-foreground ${errors.e ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                         />
-                        {errors.e && <small className="text-red-500 text-xs md:text-[0.85rem] mt-1 md:mt-[4px] block">{errors.e}</small>}
+                        {errors.e && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.e}</small>}
                     </div>
 
                     {/* Username */}
-                    <div className="mb-[15px]">
-                        <label htmlFor="username" className="block mb-[5px] font-bold text-foreground">Username:</label>
+                    <div className="mb-2">
+                        <label htmlFor="username" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Username:</label>
                         <input
                             id="username"
                             value={profile.u}
                             disabled
                             readOnly
-                            className="text-base border border-input rounded-lg w-[95%] p-2.5 bg-muted text-muted-foreground cursor-not-allowed"
+                            className="text-xs md:text-sm border border-input rounded-lg w-full p-1.5 md:p-2 bg-muted text-muted-foreground cursor-not-allowed"
                         />
                     </div>
 
                     {/* Bio */}
-                    <div className="mb-[15px] md:col-span-2">
-                        <label htmlFor="bio" className="block mb-[5px] font-bold text-foreground">Bio:</label>
+                    <div className="mb-2 md:col-span-2">
+                        <label htmlFor="bio" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Bio:</label>
                         <textarea
                             id="bio"
                             value={profile.b || ''}
                             onChange={(e) => handleChange('b', e.target.value)}
-                            className={`text-base border rounded-lg w-[98%] p-2.5 transition-colors duration-200 resize-y bg-background text-foreground ${errors.b ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                            className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 resize-y bg-background text-foreground ${errors.b ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                         />
-                        {errors.b && <small className="text-red-500 text-[0.85rem] mt-[4px] block">{errors.b}</small>}
+                        {errors.b && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.b}</small>}
                     </div>
 
                     {/* Reddit Handle */}
-                    <div className="mb-[15px]">
-                        <label htmlFor="reddit" className="block mb-[5px] font-bold text-foreground">Reddit Handle:</label>
+                    <div className="mb-2">
+                        <label htmlFor="reddit" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Reddit Handle:</label>
                         <div className="flex items-center">
-                            <i className="fab fa-reddit text-[#ef2c0a] text-[20px] mr-[10px]"></i>
+                            <i className="fab fa-reddit text-[#ef2c0a] text-sm md:text-base mr-2"></i>
                             <input
                                 id="reddit"
                                 value={profile.rh || ''}
                                 onChange={(e) => handleChange('rh', e.target.value)}
-                                placeholder="u/************************"
-                                className={`text-base border rounded-lg w-[95%] p-2.5 transition-colors duration-200 bg-background text-foreground ${errors.rh ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                                placeholder="u/username"
+                                className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 bg-background text-foreground ${errors.rh ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                             />
                         </div>
-                        {errors.rh && <small className="text-red-500 text-[0.85rem] mt-[4px] block">{errors.rh}</small>}
+                        {errors.rh && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.rh}</small>}
                     </div>
 
                     {/* Discord Handle */}
-                    <div className="mb-[15px]">
-                        <label htmlFor="discord" className="block mb-[5px] font-bold text-foreground">Discord Handle:</label>
+                    <div className="mb-2">
+                        <label htmlFor="discord" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Discord Handle:</label>
                         <div className="flex items-center">
-                            <i className="fab fa-discord text-[#5865F2] text-[20px] mr-[10px]"></i>
+                            <i className="fab fa-discord text-[#5865F2] text-sm md:text-base mr-2"></i>
                             <input
                                 id="discord"
                                 value={profile.dh || ''}
                                 onChange={(e) => handleChange('dh', e.target.value)}
-                                placeholder="************************#0000"
-                                className={`text-base border rounded-lg w-[95%] p-2.5 transition-colors duration-200 bg-background text-foreground ${errors.dh ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                                placeholder="username#0000"
+                                className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 bg-background text-foreground ${errors.dh ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                             />
                         </div>
-                        {errors.dh && <small className="text-red-500 text-[0.85rem] mt-[4px] block">{errors.dh}</small>}
+                        {errors.dh && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.dh}</small>}
                     </div>
 
                     {/* X Handle */}
-                    <div className="mb-[15px]">
-                        <label htmlFor="twitter" className="block mb-[5px] font-bold text-foreground">X Handle:</label>
+                    <div className="mb-2">
+                        <label htmlFor="twitter" className="block mb-1 text-xs md:text-sm font-bold text-foreground">X Handle:</label>
                         <div className="flex items-center">
-                            <i className="fa-brands fa-x-twitter text-foreground text-[20px] mr-[10px]"></i>
+                            <i className="fa-brands fa-x-twitter text-foreground text-sm md:text-base mr-2"></i>
                             <input
                                 id="twitter"
                                 value={profile.th || ''}
                                 onChange={(e) => handleChange('th', e.target.value)}
-                                placeholder="@***************"
-                                className={`text-base border rounded-lg w-[95%] p-2.5 transition-colors duration-200 bg-background text-foreground ${errors.th ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
+                                placeholder="@username"
+                                className={`text-xs md:text-sm border rounded-lg w-full p-1.5 md:p-2 transition-colors duration-200 bg-background text-foreground ${errors.th ? 'border-destructive bg-destructive/10' : 'border-input focus:border-primary focus:ring-2 focus:ring-primary/20'}`}
                             />
                         </div>
-                        {errors.th && <small className="text-red-500 text-[0.85rem] mt-[4px] block">{errors.th}</small>}
+                        {errors.th && <small className="text-red-500 text-[10px] md:text-xs mt-0.5 block">{errors.th}</small>}
                     </div>
 
                     {/* Member Since */}
-                    <div className="mb-[15px]">
-                        <label htmlFor="since" className="block mb-[5px] font-bold text-foreground">Member Since:</label>
+                    <div className="mb-2">
+                        <label htmlFor="since" className="block mb-1 text-xs md:text-sm font-bold text-foreground">Member Since:</label>
                         <input
                             id="since"
                             type="text"
                             value={memberSinceHumanReadable}
                             disabled
-                            className="text-base border border-input rounded-lg w-[95%] p-2.5 bg-muted text-muted-foreground cursor-not-allowed"
+                            className="text-xs md:text-sm border border-input rounded-lg w-full p-1.5 md:p-2 bg-muted text-muted-foreground cursor-not-allowed"
                         />
                     </div>
                 </div>
 
                 <button
                     type="submit"
-                    className="mt-3 md:mt-[20px] bg-primary text-primary-foreground border-none px-5 md:px-6 py-2.5 md:py-3 text-sm md:text-base rounded-lg cursor-pointer hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                    className="mt-2 md:mt-3 bg-primary text-primary-foreground border-none px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm rounded-lg cursor-pointer hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
                 >
                     Save Profile
                 </button>
