@@ -5,11 +5,9 @@ import { usePathname } from 'next/navigation';
 import LeftSidebar from './LeftSidebar';
 import RightSidebar from './RightSidebar';
 import MainContent from './MainContent';
-import BottomPanel from './BottomPanel';
 
 export default function GameLayout({ children }: { children: React.ReactNode }) {
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
-    const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(false);
     const pathname = usePathname();
 
     // Make toggle function available globally via window object for Header to call
@@ -19,11 +17,11 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
         }
     }, []);
 
-    // Determine if bottom panel is visible (only on map page on mobile)
-    const hasBottomPanel = pathname === '/map';
+    // Determine if right sidebar has content for this page
+    const hasRightSidebar = pathname === '/battle' || pathname === '/map';
 
     return (
-        <div className={`flex h-[calc(100vh-60px)] gap-2 p-2 ${hasBottomPanel ? 'pb-40' : 'pb-2'} md:gap-3 md:p-3 md:pb-3 relative overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20`}>
+        <div className="flex flex-col md:flex-row h-[calc(100vh-60px)] gap-2 p-2 md:gap-3 md:p-3 relative overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
             {/* Mobile Left Sidebar Drawer (Only rendered on mobile when open) - NO BACKDROP */}
             {isLeftSidebarOpen && (
                 <div className="md:hidden">
@@ -62,38 +60,17 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
                 </div>
             )}
 
-            {/* Mobile Right Sidebar Drawer (Updates) - NO BACKDROP */}
-            {isRightSidebarOpen && (
-                <div className="md:hidden">
-                    {/* Right Drawer */}
-                    <div className="fixed top-0 right-0 bottom-0 z-[95] w-[280px] bg-card/95 backdrop-blur-xl border-l border-border shadow-2xl">
-                        <div className="h-full flex flex-col p-3 pt-14 overflow-hidden">
-                            <button
-                                onClick={() => setIsRightSidebarOpen(false)}
-                                className="absolute top-3 right-3 p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                                <i className="fas fa-times text-sm"></i>
-                            </button>
-                            <div className="flex-1 overflow-y-auto">
-                                <RightSidebar className="border-none shadow-none bg-transparent" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Main Content */}
-            <div className="flex-1 overflow-hidden">
+            {/* Main Content - Takes remaining space after accounting for sidebar */}
+            <div className={`
+                ${hasRightSidebar ? 'flex-[0_0_calc(65%-0.25rem)]' : 'flex-1'} 
+                md:flex-1 
+                overflow-hidden
+            `}>
                 <MainContent>{children}</MainContent>
             </div>
 
-            {/* Desktop Right Sidebar - Always visible */}
-            <div className="hidden md:block md:w-[280px] lg:w-[320px] flex-shrink-0">
-                <RightSidebar />
-            </div>
-
-            {/* Mobile Bottom Panel - Shows game updates/notifications */}
-            <BottomPanel />
+            {/* Right Sidebar - Takes 35% on mobile when present, normal width on desktop */}
+            <RightSidebar />
         </div>
     );
 }

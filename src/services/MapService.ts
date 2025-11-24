@@ -56,15 +56,16 @@ export default class MapService {
             return;
         }
 
-        // Get container dimensions
+        // Get container dimensions - use actual size to fill available space
         const containerWidth = container.clientWidth || 800;
         const containerHeight = container.clientHeight || 600;
 
         this.app = new PIXI.Application();
         await this.app.init({
-            width: Math.min(containerWidth, 800),
-            height: Math.min(containerHeight, 600),
-            backgroundAlpha: 0 // Make background transparent
+            width: containerWidth,
+            height: containerHeight,
+            backgroundAlpha: 0, // Make background transparent
+            resizeTo: container // Automatically resize to container
         });
 
         container.appendChild(this.app.canvas);
@@ -190,7 +191,7 @@ export default class MapService {
     move(direction: string) {
         if (!this.avatar || !this.app || !this.textures) return;
 
-        const speed = 3; // Adjust movement speed
+        const speed = 1.5; // Reduced from 3 to half speed
         const dir = direction.toLowerCase() as 'down' | 'left' | 'right' | 'up';
 
         // Update direction and textures if changed

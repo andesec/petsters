@@ -103,7 +103,7 @@ export default function Map() {
     }
 
     return (
-        <div className="relative">
+        <div className="relative w-full h-full">
             {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-[#8794e3] rounded-[10px] z-10">
                     <p className="text-white text-xl">Loading map...</p>
@@ -112,7 +112,7 @@ export default function Map() {
             <div
                 id="map-container"
                 ref={mapContainerRef}
-                className="flex items-center justify-center p-[5px] bg-[#8794e3] rounded-[10px] w-full min-h-[600px] max-h-[600px] overflow-hidden"
+                className="flex items-center justify-center p-[5px] bg-[#8794e3] rounded-[10px] w-full h-full overflow-hidden"
             >
                 {/* PixiJS will append canvas here */}
             </div>

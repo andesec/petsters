@@ -118,11 +118,21 @@ export default function PartyPage() {
                 </DndContext>
             </div>
 
+            {/* Desktop Save Button */}
             <button
-                className="mt-5 bg-primary text-primary-foreground border-none px-6 py-3 rounded-lg cursor-pointer hover:bg-primary/90 shadow-md hover:shadow-lg text-[15px] font-medium transition-all duration-200"
+                className="hidden md:block mt-5 bg-primary text-primary-foreground border-none px-6 py-3 rounded-lg cursor-pointer hover:bg-primary/90 shadow-md hover:shadow-lg text-[15px] font-medium transition-all duration-200"
                 onClick={saveParty}
             >
                 Save Party
+            </button>
+
+            {/* Mobile Floating Save Button */}
+            <button
+                className="md:hidden fixed bottom-4 right-4 z-[90] bg-primary text-primary-foreground border-none p-4 rounded-full cursor-pointer hover:bg-primary/90 active:scale-95 transition-all duration-200 shadow-2xl hover:shadow-xl font-medium"
+                onClick={saveParty}
+                aria-label="Save Party"
+            >
+                <i className="fas fa-save text-lg"></i>
             </button>
         </div>
     );

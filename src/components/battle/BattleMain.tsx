@@ -82,29 +82,31 @@ export default function BattleMain({ battle, onActionSelected, loading = false }
                 {/* Actions Section */}
                 <div className="flex-1 flex flex-col">
                     <p className="text-left font-bold mb-2 text-foreground">Use an action:</p>
-                    {battle.os?.map((action: any) => (
-                        <div key={action.i} className="relative m-[10px] mx-[15%]">
-                            <input
-                                type="radio"
-                                id={action.i}
-                                value={action.i}
-                                checked={selectedAction === action.i}
-                                onChange={() => { setSelectedAction(action.i); setSelectedItem(null); }}
-                                name="action"
-                                className="hidden peer"
-                                disabled={loading || isProcessing}
-                            />
-                            <label
-                                htmlFor={action.i}
-                                className={`block text-white p-[10px_20px] rounded-[10px] shadow-md cursor-pointer text-center transition-all duration-200 border-[3px] border-transparent 
-                                peer-checked:bg-opacity-95 peer-checked:border-white peer-checked:shadow-lg peer-checked:ring-4 peer-checked:ring-blue-400/50`}
-                                style={{ backgroundColor: TypeService.getTypeColor(action.t) }}
-                            >
-                                <span>{action.n}</span>
-                                <i className="fa fa-info-circle absolute right-[10px] top-[10px] text-[12px] text-[#dcdedf] hover:text-[#96989a]" onClick={(e) => { e.preventDefault(); UXService.showInfo('m', action.i); }}></i>
-                            </label>
-                        </div>
-                    ))}
+                    <div className="grid grid-cols-2 gap-3">
+                        {battle.os?.map((action: any) => (
+                            <div key={action.i} className="relative">
+                                <input
+                                    type="radio"
+                                    id={action.i}
+                                    value={action.i}
+                                    checked={selectedAction === action.i}
+                                    onChange={() => { setSelectedAction(action.i); setSelectedItem(null); }}
+                                    name="action"
+                                    className="hidden peer"
+                                    disabled={loading || isProcessing}
+                                />
+                                <label
+                                    htmlFor={action.i}
+                                    className={`block text-white p-[10px_15px] rounded-[10px] shadow-md cursor-pointer text-center transition-all duration-200 border-[3px] border-transparent 
+                                    peer-checked:bg-opacity-95 peer-checked:border-white peer-checked:shadow-lg peer-checked:ring-4 peer-checked:ring-blue-400/50`}
+                                    style={{ backgroundColor: TypeService.getTypeColor(action.t) }}
+                                >
+                                    <span className="text-sm">{action.n}</span>
+                                    <i className="fa fa-info-circle absolute right-[8px] top-[8px] text-[12px] text-[#dcdedf] hover:text-[#96989a]" onClick={(e) => { e.preventDefault(); UXService.showInfo('m', action.i); }}></i>
+                                </label>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
                 {/* Medicine Section */}

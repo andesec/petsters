@@ -14,7 +14,7 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 
 export default function MapPage() {
     return (
-        <div className="w-full h-full overflow-hidden">
+        <div className="w-full h-full max-h-[450px] md:max-h-full overflow-hidden">
             <Map />
         </div>
     );

@@ -258,13 +258,24 @@ export default function ProfilePage() {
                     </div>
                 </div>
 
+                {/* Desktop Save Button */}
                 <button
                     type="submit"
-                    className="mt-2 md:mt-3 bg-primary text-primary-foreground border-none px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm rounded-lg cursor-pointer hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
+                    className="hidden md:block mt-2 md:mt-3 bg-primary text-primary-foreground border-none px-4 md:px-5 py-2 md:py-2.5 text-xs md:text-sm rounded-lg cursor-pointer hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg font-medium"
                 >
                     Save Profile
                 </button>
             </form>
+
+            {/* Mobile Floating Save Button - Outside form for proper positioning */}
+            <button
+                type="button"
+                onClick={saveProfile}
+                className="md:hidden fixed bottom-4 right-4 z-[90] bg-primary text-primary-foreground border-none p-4 rounded-full cursor-pointer hover:bg-primary/90 active:scale-95 transition-all duration-200 shadow-2xl hover:shadow-xl font-medium"
+                aria-label="Save Profile"
+            >
+                <i className="fas fa-save text-lg"></i>
+            </button>
         </div>
     );
 }
