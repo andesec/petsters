@@ -1,29 +1,47 @@
 import config from '@/config';
-import { CognitoUserPool, AuthenticationDetails, CognitoUser, ICognitoUserPoolData } from 'amazon-cognito-identity-js';
 
-const poolData: ICognitoUserPoolData = {
-    UserPoolId: config.cognito.userPoolId,
-    ClientId: config.cognito.clientId,
+export type AuthProvider = 'cognito' | 'google' | 'discord';
+
+const getBffBaseUrl = () => config.bffBaseUrl ?? config.apiBaseUrl.replace(/\/api$/, '');
+
+const buildLoginUrl = (provider: AuthProvider, redirectUri: string) => {
+    const url = new URL('/auth/login', getBffBaseUrl());
+    url.searchParams.set('provider', provider);
+    url.searchParams.set('redirect_uri', redirectUri);
+    return url.toString();
 };
-const userPool = new CognitoUserPool(poolData);
 
 export default {
-    login(username: string, password: string): Promise<any> {
-        const authenticationDetails = new AuthenticationDetails({ Username: username, Password: password });
-        const user = new CognitoUser({ Username: username, Pool: userPool });
+    startLogin(provider: AuthProvider = 'cognito', redirectPath = '/battle') {
+        if (typeof window === 'undefined') return;
 
-        return new Promise((resolve, reject) => {
-            user.authenticateUser(authenticationDetails, {
-                onSuccess: (result) => {
-                    localStorage.setItem('token', result.getIdToken().getJwtToken());
-                    resolve(result);
-                },
-                onFailure: reject,
-            });
-        });
+        const redirectUri = `${window.location.origin}/auth/callback`;
+        sessionStorage.setItem('postLoginRedirect', redirectPath);
+        window.location.assign(buildLoginUrl(provider, redirectUri));
     },
 
-    logout() {
-        localStorage.removeItem('token');
+    async completeAuthorization(code: string, state?: string) {
+        const response = await fetch(`${getBffBaseUrl()}/auth/callback`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ code, state }),
+        });
+
+        if (!response.ok) {
+            const errorBody = await response.text();
+            throw new Error(errorBody || 'Failed to complete authorization.');
+        }
+    },
+
+    async logout() {
+        const response = await fetch(`${getBffBaseUrl()}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to log out.');
+        }
     },
 };
