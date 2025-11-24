@@ -6,6 +6,7 @@ import ApiService from '@/services/ApiService';
 import UXService from '@/services/UXService';
 import ImageService from '@/services/ImageService';
 import eventBus from '@/eventBus';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 const typeStyles: Record<string, string> = {
     Normal: "border-[#a8a878] bg-[#f8f8f0]",
@@ -28,7 +29,7 @@ const typeStyles: Record<string, string> = {
     Fairy: "border-[#ee99ac] bg-[#ffe3f3]",
 };
 
-export default function GymsPage() {
+function GymsContent() {
     const [gyms, setGyms] = useState<any[]>([]);
     const router = useRouter();
 
@@ -94,5 +95,13 @@ export default function GymsPage() {
                 ))}
             </div>
         </div>
+    );
+}
+
+export default function GymsPage() {
+    return (
+        <AuthGuard>
+            <GymsContent />
+        </AuthGuard>
     );
 }

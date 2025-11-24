@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import GameLayout from "@/components/GameLayout";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,8 +30,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <GameLayout>{children}</GameLayout>
+          <AuthProvider>
+            <Header />
+            <GameLayout>{children}</GameLayout>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

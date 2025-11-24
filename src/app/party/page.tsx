@@ -18,8 +18,9 @@ import {
 } from '@dnd-kit/sortable';
 import PetsterService from '@/services/PetsterService';
 import SortablePetCard from '@/components/party/SortablePetCard';
+import AuthGuard from '@/components/auth/AuthGuard';
 
-export default function PartyPage() {
+function PartyContent() {
     const [pets, setPets] = useState<any[]>([]);
     const [originalSequence, setOriginalSequence] = useState<any[]>([]);
 
@@ -135,5 +136,13 @@ export default function PartyPage() {
                 <i className="fas fa-save text-lg"></i>
             </button>
         </div>
+    );
+}
+
+export default function PartyPage() {
+    return (
+        <AuthGuard>
+            <PartyContent />
+        </AuthGuard>
     );
 }

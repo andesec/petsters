@@ -1,6 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 // Dynamically import Map component with no SSR to avoid Pixi.js issues
 const Map = dynamic(() => import('@/components/map/Map'), {
@@ -14,8 +15,10 @@ const Map = dynamic(() => import('@/components/map/Map'), {
 
 export default function MapPage() {
     return (
-        <div className="w-full h-full max-h-[450px] md:max-h-full overflow-hidden">
-            <Map />
-        </div>
+        <AuthGuard>
+            <div className="w-full h-full max-h-[450px] md:max-h-full overflow-hidden">
+                <Map />
+            </div>
+        </AuthGuard>
     );
 }
