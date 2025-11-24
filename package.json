@@ -13,7 +13,6 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@types/lodash": "^4.17.20",
-    "amazon-cognito-identity-js": "^6.3.16",
     "clsx": "^2.1.1",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
