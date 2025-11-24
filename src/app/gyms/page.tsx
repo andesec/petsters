@@ -73,7 +73,7 @@ export default function GymsPage() {
                                 <img
                                     src={ImageService.getImageURLForGymMedal(gym.m)}
                                     alt={gym.m}
-                                    className="w-12 h-12 md:w-16 md:h-16 object-cover rounded-full mb-2"
+                                    className="w-12 h-12 md:w-16 md:h-16 object-cover mb-2"
                                 />
                                 <div className="text-center">
                                     <h3 className="m-0 text-xs md:text-sm text-[#333] font-bold">{gym.m} Badge</h3>
@@ -86,7 +86,7 @@ export default function GymsPage() {
                                 <img
                                     src={ImageService.getImageURLForGymMaster(gym.g)}
                                     alt={gym.g}
-                                    className="w-auto h-24 md:h-32 lg:h-40 object-cover rounded-lg"
+                                    className="w-auto h-35 md:h-40 lg:h-40 object-cover rounded-lg"
                                 />
                             </div>
                         </div>

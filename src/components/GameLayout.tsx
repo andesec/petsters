@@ -22,39 +22,39 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
     const hasRightSidebar = pathname === '/battle' || pathname === '/map';
 
     return (
-        <div className="flex flex-col md:flex-row h-[calc(100vh-60px)] gap-2 p-2 md:gap-3 md:p-3 relative overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
-            {/* Left Sidebar - Floating overlay matching header theme */}
-            <div
-                className={`
-                    fixed top-0 bottom-0 left-0 z-[90] w-[280px] md:w-[320px]
-                    bg-gradient-to-b from-blue-500/95 via-indigo-500/95 to-purple-500/95 
-                    dark:from-slate-900/95 dark:via-purple-950/95 dark:to-slate-900/95
-                    backdrop-blur-xl 
-                    border-r border-white/10
-                    shadow-2xl
-                    rounded-r-2xl
-                    transition-transform duration-300 ease-in-out
-                    ${isLeftSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-                `}
-            >
-                <div className="h-full flex flex-col p-3 pt-[68px] overflow-hidden">
-                    <div className="flex-1 overflow-y-auto text-white">
-                        <LeftSidebar />
+        <div className="h-[calc(100vh-60px)] relative overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
+            <div className="flex flex-col md:flex-row h-full gap-2 p-2 md:gap-3 md:p-3 relative max-w-[1496px] mx-auto w-full">
+                {/* Left Sidebar - Floating overlay matching header theme */}
+                <div
+                    className={`
+                        absolute top-0 bottom-0 left-0 z-[90] w-[280px] md:w-[320px]
+                        bg-gradient-to-b from-blue-500/95 via-indigo-500/95 to-purple-500/95 
+                        dark:from-slate-900/95 dark:via-indigo-950/95 dark:to-purple-950/95
+                        backdrop-blur-xl 
+                        shadow-2xl
+                        rounded-r-2xl
+                        transition-all duration-300 ease-in-out
+                        ${isLeftSidebarOpen ? 'translate-x-0 opacity-100 visible' : '-translate-x-full opacity-0 invisible'}
+                    `}
+                >
+                    <div className="h-full flex flex-col p-3 overflow-hidden">
+                        <div className="flex-1 overflow-y-auto text-white">
+                            <LeftSidebar />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Main Content - Takes remaining space after accounting for sidebar */}
-            <div className={`
-                ${hasRightSidebar ? 'flex-[0_0_calc(65%-0.25rem)]' : 'flex-1'} 
-                md:flex-1 
-                overflow-hidden
-            `}>
-                <MainContent>{children}</MainContent>
-            </div>
+                {/* Main Content - Takes remaining space after accounting for sidebar */}
+                <div className={`
+                    ${hasRightSidebar ? 'flex-[0_0_calc(65%-0.5rem)]' : 'flex-1'} 
+                    overflow-hidden
+                `}>
+                    <MainContent>{children}</MainContent>
+                </div>
 
-            {/* Right Sidebar - Takes 35% on mobile when present, normal width on desktop */}
-            <RightSidebar />
+                {/* Right Sidebar - Takes 35% width */}
+                <RightSidebar className="flex-[0_0_35%]" />
+            </div>
         </div>
     );
 }

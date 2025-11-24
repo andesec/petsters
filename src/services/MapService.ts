@@ -98,7 +98,7 @@ export default class MapService {
         this.map = new PIXI.Container();
         const mapTexture = PIXI.Assets.get('map');
         const mapSprite = new PIXI.Sprite(mapTexture);
-        mapSprite.scale.set(1); // Scale only the map sprite by 2x
+        mapSprite.scale.set(2); // Scale only the map sprite by 2x
         mapSprite.roundPixels = true;
         this.map.addChild(mapSprite);
 
@@ -153,6 +153,7 @@ export default class MapService {
         this.avatar.roundPixels = true;
         this.avatar.loop = true;
         this.avatar.anchor.set(0.5);
+        this.avatar.scale.set(1.5); // Scale player by 1.5x
         this.avatar.position.set(400, 300);
 
         // Start idle (stop animation, show idle frame which is index 1 in our sequence? 
@@ -176,7 +177,7 @@ export default class MapService {
         this.app.stage.addChild(this.camera);
 
         // Center the camera initially
-        this.updateCamera();
+        this.centerCamera();
         if (this.camera) {
             this.camera.position.set(this.targetCameraPosition.x, this.targetCameraPosition.y);
             this.cameraPosition = { x: this.targetCameraPosition.x, y: this.targetCameraPosition.y };
@@ -191,7 +192,7 @@ export default class MapService {
     move(direction: string) {
         if (!this.avatar || !this.app || !this.textures) return;
 
-        const speed = 1.5; // Reduced from 3 to half speed
+        const speed = 3; // Increased for better responsiveness
         const dir = direction.toLowerCase() as 'down' | 'left' | 'right' | 'up';
 
         // Update direction and textures if changed
@@ -258,30 +259,66 @@ export default class MapService {
         this.avatar.gotoAndStop(1);
     }
 
+    centerCamera() {
+        if (!this.camera || !this.avatar || !this.app || !this.map) return;
+
+        const screenWidth = this.app.screen.width;
+        const screenHeight = this.app.screen.height;
+        const mapScale = this.map.scale.x;
+
+        // Calculate target camera position (centered on avatar)
+        let targetX = -this.avatar.x * mapScale + screenWidth / 2;
+        let targetY = -this.avatar.y * mapScale + screenHeight / 2;
+
+        this.clampAndSetCamera(targetX, targetY);
+    }
+
     updateCamera() {
         if (!this.camera || !this.avatar || !this.app || !this.map) return;
 
         const screenWidth = this.app.screen.width;
         const screenHeight = this.app.screen.height;
         const mapScale = this.map.scale.x;
-        const mapWidth = this.map.width; // Scaled width
-        const mapHeight = this.map.height; // Scaled height
 
-        // Calculate target camera position (centered on avatar)
-        // Camera position is negative because we move the world opposite to avatar
-        let targetX = -this.avatar.x * mapScale + screenWidth / 2;
-        let targetY = -this.avatar.y * mapScale + screenHeight / 2;
+        // Deadzone margin (30% of screen size)
+        const marginX = screenWidth * 0.3;
+        const marginY = screenHeight * 0.3;
 
-        // Clamp camera to map bounds
-        // Max X is 0 (left edge aligned)
-        // Min X is screenWidth - mapWidth (right edge aligned)
+        let targetX = this.targetCameraPosition.x;
+        let targetY = this.targetCameraPosition.y;
+
+        // Calculate player screen position with current target
+        const playerScreenX = this.avatar.x * mapScale + targetX;
+        const playerScreenY = this.avatar.y * mapScale + targetY;
+
+        if (playerScreenX < marginX) {
+            targetX = marginX - this.avatar.x * mapScale;
+        } else if (playerScreenX > screenWidth - marginX) {
+            targetX = screenWidth - marginX - this.avatar.x * mapScale;
+        }
+
+        if (playerScreenY < marginY) {
+            targetY = marginY - this.avatar.y * mapScale;
+        } else if (playerScreenY > screenHeight - marginY) {
+            targetY = screenHeight - marginY - this.avatar.y * mapScale;
+        }
+
+        this.clampAndSetCamera(targetX, targetY);
+    }
+
+    clampAndSetCamera(targetX: number, targetY: number) {
+        if (!this.app || !this.map) return;
+
+        const screenWidth = this.app.screen.width;
+        const screenHeight = this.app.screen.height;
+        const mapWidth = this.map.width;
+        const mapHeight = this.map.height;
 
         const minX = screenWidth - mapWidth;
         const maxX = 0;
         const minY = screenHeight - mapHeight;
         const maxY = 0;
 
-        // If map is smaller than screen, center it
         if (mapWidth < screenWidth) {
             targetX = (screenWidth - mapWidth) / 2;
         } else {

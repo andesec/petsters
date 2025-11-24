@@ -12,7 +12,7 @@ export default function MainContent({ children, className }: { children: ReactNo
     const shouldScroll = pathname !== '/map';
 
     return (
-        <div className={`bg-card/95 backdrop-blur-sm border border-border shadow-lg rounded-xl ${shouldScroll ? 'p-3 md:p-4 overflow-auto' : 'overflow-hidden'} h-full ${className || ''}`}>
+        <div className={`bg-card/95 backdrop-blur-sm shadow-lg rounded-xl ${shouldScroll ? 'p-3 md:p-4 overflow-auto' : 'overflow-hidden'} h-full ${className || ''}`}>
             {children}
         </div>
     );

@@ -23,8 +23,8 @@ export default function Header() {
   }, []);
 
   return (
-    <header className="relative bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900 px-3 py-1.5 md:py-2.5 z-[1200] shadow-lg border-b border-white/10">
-      <div className="flex items-center justify-between max-w-[2000px] mx-auto">
+    <header className="relative bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 px-3 py-1.5 md:py-2.5 z-[1200] shadow-lg">
+      <div className="flex items-center justify-between max-w-[1496px] mx-auto">
         {/* Left: Hamburger (Always visible) */}
         <div>
           <button

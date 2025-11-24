@@ -91,15 +91,10 @@ export default function SortablePetCard({ pet, index, onRemove }: SortablePetCar
                 </div>
             </div>
 
-
             {/* Remove button */}
-            <div className="flex w-[5%] justify-center items-center bg-destructive h-[120px] rounded-r-lg text-destructive-foreground cursor-pointer hover:bg-destructive/80 transition-colors">
-                <span
-                    onClick={() => onRemove(index)}
-                    className="text-[18px]"
-                >
-                    ✕
-                </span>
+            <div className="text-[18px] flex w-[5%] justify-center items-center bg-destructive h-[120px] rounded-r-lg text-destructive-foreground cursor-pointer hover:bg-destructive/80 transition-colors"
+                onClick={() => onRemove(index)}>
+                ✕
             </div>
         </div>
     );

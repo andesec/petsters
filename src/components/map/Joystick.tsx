@@ -134,8 +134,7 @@ export default function Joystick() {
 
     return (
         <div className="flex flex-col items-center gap-[5px] outline-none">
-            <h2 className="text-xl font-bold mb-2 hidden md:block">Map Controls</h2>
-            <p className="text-sm text-muted-foreground mb-3 hidden md:block text-center">Use the arrow keys, touch, or drag the joystick to move the map.</p>
+            <p className="text-sm text-muted-foreground mb-3 md:block text-center">Use the arrow keys, or drag the joystick on mobile devices to move on the map.</p>
             <div
                 className="relative w-[60px] h-[60px]"
                 onTouchStart={(e) => startDrag(e.touches[0].clientX, e.touches[0].clientY)}
@@ -154,7 +153,7 @@ export default function Joystick() {
                     <div
                         className="absolute w-[24px] h-[24px] rounded-full border-[2px] border-primary cursor-grab shadow-md"
                         style={{
-                            background: 'radial-gradient(circle, hsl(var(--primary)), hsl(var(--primary) / 0.7))',
+                            background: 'var(--color-primary)',
                             left: `${knobPosition.x}px`,
                             top: `${knobPosition.y}px`,
                             transform: 'translate(-50%, -50%)',
