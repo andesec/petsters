@@ -7,8 +7,9 @@ import eventBus from "@/eventBus";
 import SelectPet from "@/components/battle/SelectPet";
 import BattleMain from "@/components/battle/BattleMain";
 import BattleEnd from "@/components/battle/BattleEnd";
+import AuthGuard from "@/components/auth/AuthGuard";
 
-export default function BattlePage() {
+function BattleContent() {
     const [loading, setLoading] = useState(true);
     const [cs, setCs] = useState<string | null>(null); // 'SELECT_PET', 'SELECT_ACTION', 'END_BATTLE'
     const [battle, setBattle] = useState<any>(null);
@@ -123,5 +124,13 @@ export default function BattlePage() {
                 {!cs && !loading && <div>Waiting for battle to start...</div>}
             </div>
         </div>
+    );
+}
+
+export default function BattlePage() {
+    return (
+        <AuthGuard>
+            <BattleContent />
+        </AuthGuard>
     );
 }

@@ -3,6 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import ApiService from '@/services/ApiService';
 import UXService from '@/services/UXService';
+import AuthGuard from '@/components/auth/AuthGuard';
 
 interface ProfileData {
     fn: string;
@@ -16,7 +17,7 @@ interface ProfileData {
     ms: number;
 }
 
-export default function ProfilePage() {
+function ProfileContent() {
     const [profile, setProfile] = useState<ProfileData>({
         fn: "",
         ln: "",
@@ -277,5 +278,13 @@ export default function ProfilePage() {
                 <i className="fas fa-save text-lg"></i>
             </button>
         </div>
+    );
+}
+
+export default function ProfilePage() {
+    return (
+        <AuthGuard>
+            <ProfileContent />
+        </AuthGuard>
     );
 }

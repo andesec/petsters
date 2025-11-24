@@ -1,6 +1,10 @@
 import config from '@/config';
 
 export type AuthProvider = 'cognito' | 'google' | 'discord';
+export type AuthSession = {
+    authenticated: boolean;
+    user?: Record<string, unknown> | null;
+};
 
 const getBffBaseUrl = () => config.bffBaseUrl ?? config.apiBaseUrl.replace(/\/api$/, '');
 
@@ -93,6 +97,23 @@ const AuthService = {
         if (!response.ok) {
             const message = await parseErrorMessage(response);
             throw new Error(message || 'Unable to create account.');
+        }
+    },
+
+    async getSession(): Promise<AuthSession> {
+        const response = await fetch(`${getBffBaseUrl()}/auth/session`, {
+            credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Unable to fetch session.');
+        }
+
+        try {
+            return await response.json();
+        } catch (error) {
+            console.error('Failed to parse auth session response', error);
+            throw new Error('Unable to fetch session.');
         }
     },
 };
