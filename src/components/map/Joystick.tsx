@@ -17,13 +17,25 @@ export default function Joystick() {
     const emitDirection = useCallback((x: number, y: number) => {
         let direction = '';
 
-        if (y > 0) direction = 'down';
-        else if (y < 0) direction = 'up';
-        if (x > 0) direction = 'right';
-        else if (x < 0) direction = 'left';
+        // Calculate absolute values
+        const absX = Math.abs(x);
+        const absY = Math.abs(y);
+
+        // Require minimum movement threshold
+        const threshold = 5;
+        if (absX < threshold && absY < threshold) return;
+
+        // Only allow cardinal directions (no diagonals)
+        // Choose the axis with greater magnitude
+        if (absX > absY) {
+            // Horizontal movement only
+            direction = x > 0 ? 'right' : 'left';
+        } else {
+            // Vertical movement only
+            direction = y > 0 ? 'down' : 'up';
+        }
 
         if (direction) {
-            // Always emit if we are moving, MapService handles continuous movement
             eventBus.emit('map-move', direction);
         }
     }, []);
@@ -84,9 +96,6 @@ export default function Joystick() {
         if (joystickBaseRef.current) {
             const rect = joystickBaseRef.current.getBoundingClientRect();
             centerRef.current = { x: rect.width / 2, y: rect.height / 2 };
-            const x = clientX - rect.left - centerRef.current.x;
-            const y = clientY - rect.top - centerRef.current.y;
-            startContinuousEvents(x, y);
         }
     };
 
@@ -112,7 +121,10 @@ export default function Joystick() {
             y: centerRef.current.y + newY,
         });
 
-        emitDirectionThrottled(newX, newY);
+        // Start continuous movement based on joystick position
+        if (!fireEventIntervalRef.current) {
+            startContinuousEvents(newX, newY);
+        }
     };
 
     const endDrag = () => {

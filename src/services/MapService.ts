@@ -98,9 +98,9 @@ export default class MapService {
         this.map = new PIXI.Container();
         const mapTexture = PIXI.Assets.get('map');
         const mapSprite = new PIXI.Sprite(mapTexture);
-        this.map.addChild(mapSprite);
-        this.map.scale.set(1.5); // Zoom the map
+        mapSprite.scale.set(1); // Scale only the map sprite by 2x
         mapSprite.roundPixels = true;
+        this.map.addChild(mapSprite);
 
         // Create the avatar
         const avatarTexture = PIXI.Assets.get('avatar');

@@ -14,51 +14,35 @@ export default function GameLayout({ children }: { children: React.ReactNode }) 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             (window as any).toggleLeftSidebar = () => setIsLeftSidebarOpen(prev => !prev);
+            (window as any).isLeftSidebarOpen = () => isLeftSidebarOpen;
         }
-    }, []);
+    }, [isLeftSidebarOpen]);
 
     // Determine if right sidebar has content for this page
     const hasRightSidebar = pathname === '/battle' || pathname === '/map';
 
     return (
         <div className="flex flex-col md:flex-row h-[calc(100vh-60px)] gap-2 p-2 md:gap-3 md:p-3 relative overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
-            {/* Mobile Left Sidebar Drawer (Only rendered on mobile when open) - NO BACKDROP */}
-            {isLeftSidebarOpen && (
-                <div className="md:hidden">
-                    {/* Left Drawer */}
-                    <div className="fixed top-0 left-0 bottom-0 z-[95] w-[280px] bg-card/95 backdrop-blur-xl border-r border-border shadow-2xl">
-                        <div className="h-full flex flex-col p-3 pt-14 overflow-hidden">
-                            {/* Close Button */}
-                            <button
-                                onClick={() => setIsLeftSidebarOpen(false)}
-                                className="absolute top-3 right-3 p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-                            >
-                                <i className="fas fa-times text-sm"></i>
-                            </button>
-                            <div className="flex-1 overflow-y-auto">
-                                <LeftSidebar />
-                            </div>
-                        </div>
+            {/* Left Sidebar - Floating overlay matching header theme */}
+            <div
+                className={`
+                    fixed top-0 bottom-0 left-0 z-[90] w-[280px] md:w-[320px]
+                    bg-gradient-to-b from-blue-500/95 via-indigo-500/95 to-purple-500/95 
+                    dark:from-slate-900/95 dark:via-purple-950/95 dark:to-slate-900/95
+                    backdrop-blur-xl 
+                    border-r border-white/10
+                    shadow-2xl
+                    rounded-r-2xl
+                    transition-transform duration-300 ease-in-out
+                    ${isLeftSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+                `}
+            >
+                <div className="h-full flex flex-col p-3 pt-[68px] overflow-hidden">
+                    <div className="flex-1 overflow-y-auto text-white">
+                        <LeftSidebar />
                     </div>
                 </div>
-            )}
-
-            {/* Desktop Left Sidebar - Toggleable */}
-            {isLeftSidebarOpen && (
-                <div className="hidden md:block md:w-[280px] lg:w-[320px] flex-shrink-0">
-                    <div className="h-full bg-card/95 backdrop-blur-xl border border-border shadow-lg rounded-xl p-3 overflow-hidden relative">
-                        <button
-                            onClick={() => setIsLeftSidebarOpen(false)}
-                            className="absolute top-2 right-2 z-10 p-1.5 text-muted-foreground hover:text-foreground transition-colors"
-                        >
-                            <i className="fas fa-times text-sm"></i>
-                        </button>
-                        <div className="h-full overflow-y-auto">
-                            <LeftSidebar />
-                        </div>
-                    </div>
-                </div>
-            )}
+            </div>
 
             {/* Main Content - Takes remaining space after accounting for sidebar */}
             <div className={`
