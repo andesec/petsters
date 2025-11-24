@@ -1,12 +1,18 @@
 import { ReactNode } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface MainContentProps {
     children: ReactNode;
 }
 
-export default function MainContent({ children }: MainContentProps) {
+export default function MainContent({ children, className }: { children: ReactNode; className?: string }) {
+    const pathname = usePathname();
+
+    // Map page should not scroll, other pages should
+    const shouldScroll = pathname !== '/map';
+
     return (
-        <div className="w-full md:w-[55%] bg-white border border-slate-400 shadow-md rounded-[10px] p-[15px] overflow-y-auto md:overflow-y-auto h-full">
+        <div className={`bg-card/95 backdrop-blur-sm shadow-lg rounded-xl ${shouldScroll ? 'p-3 md:p-4 overflow-auto' : 'overflow-hidden'} h-full ${className || ''}`}>
             {children}
         </div>
     );

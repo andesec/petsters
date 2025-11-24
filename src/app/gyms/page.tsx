@@ -60,33 +60,33 @@ export default function GymsPage() {
 
     return (
         <div>
-            <h2 className="text-2xl font-bold mb-4">Gyms</h2>
-            <div className="flex flex-wrap gap-4 mt-[15px] flex-col md:flex-row">
+            <h2 className="text-base md:text-xl font-bold mb-2 md:mb-3">Gyms</h2>
+            <div className="flex flex-wrap gap-2 md:gap-3 mt-2 md:mt-3 flex-col md:flex-row">
                 {gyms.map((gym) => (
                     <div
                         key={gym.i}
-                        className={`flex-1 min-w-[300px] border-2 rounded-[8px] overflow-hidden shadow-md cursor-pointer ${getGymClass(gym.t)}`}
+                        className={`flex-1 min-w-[250px] md:min-w-[300px] border-2 rounded-lg overflow-hidden shadow-md cursor-pointer ${getGymClass(gym.t)}`}
                         onClick={() => startGymBattle(gym.gi)}
                     >
-                        <div className="flex items-center justify-between p-[10px]">
-                            <div className="flex flex-col items-center text-center flex-1 p-[10px]">
+                        <div className="flex items-center justify-between p-2 md:p-3">
+                            <div className="flex flex-col items-center text-center flex-1 p-2">
                                 <img
                                     src={ImageService.getImageURLForGymMedal(gym.m)}
                                     alt={gym.m}
-                                    className="w-[70px] h-[70px] object-cover rounded-full mb-[10px]"
+                                    className="w-12 h-12 md:w-16 md:h-16 object-cover mb-2"
                                 />
                                 <div className="text-center">
-                                    <h3 className="m-0 text-[16px] text-[#333] font-bold">{gym.m} Badge</h3>
+                                    <h3 className="m-0 text-xs md:text-sm text-[#333] font-bold">{gym.m} Badge</h3>
                                     <br />
-                                    <h4 className="m-[8px_0_0] text-[#666] text-[14px]">{gym.l}</h4>
-                                    <h5 className="m-[8px_0_0] text-[#666] text-[14px]">{gym.g}</h5>
+                                    <h4 className="m-1 md:m-2 text-[#666] text-xs">{gym.l}</h4>
+                                    <h5 className="m-1 md:m-2 text-[#666] text-xs">{gym.g}</h5>
                                 </div>
                             </div>
-                            <div className="flex-1 flex items-center justify-center p-[10px]">
+                            <div className="flex-1 flex items-center justify-center p-2">
                                 <img
                                     src={ImageService.getImageURLForGymMaster(gym.g)}
                                     alt={gym.g}
-                                    className="w-auto h-[180px] object-cover rounded-[8px]"
+                                    className="w-auto h-35 md:h-40 lg:h-40 object-cover rounded-lg"
                                 />
                             </div>
                         </div>

@@ -1,65 +1,58 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { ThemeToggle } from './ThemeToggle';
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  // Check sidebar state periodically
+  useEffect(() => {
+    const checkSidebarState = () => {
+      if (typeof window !== 'undefined' && (window as any).isLeftSidebarOpen) {
+        setIsSidebarOpen((window as any).isLeftSidebarOpen());
+      }
+    };
+
+    // Check immediately and set up interval
+    checkSidebarState();
+    const interval = setInterval(checkSidebarState, 100);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <header className="flex items-center justify-between bg-[#3f51b5] px-5 py-2.5 relative z-[1200]">
-      <h1 className="text-white text-2xl font-bold">Petsters</h1>
+    <header className="relative bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 px-3 py-1.5 md:py-2.5 z-[1200] shadow-lg">
+      <div className="flex items-center justify-between max-w-[1496px] mx-auto">
+        {/* Left: Hamburger (Always visible) */}
+        <div>
+          <button
+            className={`text-white text-lg md:text-xl transition-all duration-300 p-2 hover:scale-110 hover:brightness-150 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] ${isSidebarOpen
+              ? 'bg-white/20 scale-110 rounded-lg'
+              : ''
+              }`}
+            onClick={() => {
+              if (typeof window !== 'undefined' && (window as any).toggleLeftSidebar) {
+                (window as any).toggleLeftSidebar();
+              }
+            }}
+            aria-label="Toggle menu"
+          >
+            <i className="fas fa-bars"></i>
+          </button>
+        </div>
 
-      {/* Desktop Navigation */}
-      <nav className="hidden md:flex gap-[15px]">
-        <Link href="/map" className="text-white no-underline text-base hover:underline">Map</Link>
-        <Link href="/profile" className="text-white no-underline text-base hover:underline">Profile</Link>
-        <Link href="/gyms" className="text-white no-underline text-base hover:underline">Gyms</Link>
-        <Link href="/party" className="text-white no-underline text-base hover:underline">Party</Link>
-      </nav>
+        {/* Center: Title (Always centered) */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <h1 className="text-white text-base md:text-xl font-bold tracking-tight">Petsters</h1>
+        </div>
 
-      {/* Mobile Hamburger Button */}
-      <button
-        className="md:hidden text-white text-2xl"
-        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-        aria-label="Toggle menu"
-      >
-        <i className={mobileMenuOpen ? "fas fa-times" : "fas fa-bars"}></i>
-      </button>
-
-      {/* Mobile Navigation Menu */}
-      {mobileMenuOpen && (
-        <nav className="absolute top-full left-0 right-0 bg-[#3f51b5] flex flex-col md:hidden shadow-lg">
-          <Link
-            href="/map"
-            className="text-white no-underline text-base px-5 py-3 hover:bg-[#303f9f] border-b border-[#303f9f]"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Map
-          </Link>
-          <Link
-            href="/profile"
-            className="text-white no-underline text-base px-5 py-3 hover:bg-[#303f9f] border-b border-[#303f9f]"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Profile
-          </Link>
-          <Link
-            href="/gyms"
-            className="text-white no-underline text-base px-5 py-3 hover:bg-[#303f9f] border-b border-[#303f9f]"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Gyms
-          </Link>
-          <Link
-            href="/party"
-            className="text-white no-underline text-base px-5 py-3 hover:bg-[#303f9f]"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Party
-          </Link>
-        </nav>
-      )}
+        {/* Right: Theme Toggle */}
+        <div>
+          <ThemeToggle />
+        </div>
+      </div>
     </header>
   );
 }

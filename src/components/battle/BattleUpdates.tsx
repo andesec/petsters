@@ -57,15 +57,15 @@ export default function BattleUpdates() {
     if (turnSummary.length === 0) {
         return (
             <div>
-                <h2 className="text-xl font-bold mb-4">Battle Updates</h2>
-                <p className="text-sm text-gray-500">No battle updates yet...</p>
+                <h2 className="text-xl font-bold mb-4 text-foreground">Battle Updates</h2>
+                <p className="text-sm text-muted-foreground">No battle updates yet...</p>
             </div>
         );
     }
 
     return (
         <div>
-            <h2 className="text-xl font-bold mb-4">Battle Updates</h2>
+            <h2 className="text-xl font-bold mb-4 text-foreground">Battle Updates</h2>
             <ul className="list-none p-0 m-0">
                 {turnSummary.map((summary, index) => (
                     <li
@@ -90,16 +90,17 @@ export default function BattleUpdates() {
                 .turn-divider {
                     text-align: center;
                     font-weight: bold;
-                    border-top: 1px solid #ccc;
-                    color: #333;
+                    border-top: 1px solid hsl(var(--border));
+                    color: hsl(var(--foreground));
                 }
 
                 .update-item {
                     margin-bottom: 10px;
                     padding: 10px;
-                    border-radius: 5px;
+                    border-radius: 8px;
                     font-size: 14px;
                     transition: transform 0.2s, background-color 0.2s;
+                    color: hsl(var(--foreground));
                 }
 
                 .update-item:hover {
@@ -107,53 +108,53 @@ export default function BattleUpdates() {
                 }
 
                 .update-fainted {
-                    background-color: #ffcccc;
-                    border: 1px solid #ff0000;
+                    background-color: hsl(var(--destructive) / 0.15);
+                    border: 1px solid hsl(var(--destructive));
                 }
 
                 .update-sent-out {
-                    background-color: #ccffcc;
-                    border: 1px solid #00b000;
+                    background-color: rgba(34, 197, 94, 0.15);
+                    border: 1px solid rgb(34, 197, 94);
                 }
 
                 .update-used {
-                    background-color: #cce5ff;
-                    border: 1px solid #007bff;
+                    background-color: hsl(var(--primary) / 0.15);
+                    border: 1px solid hsl(var(--primary));
                 }
 
                 .update-burned {
-                    background-color: #ffe0cc;
-                    border: 1px solid #ff6600;
+                    background-color: rgba(249, 115, 22, 0.15);
+                    border: 1px solid rgb(249, 115, 22);
                 }
 
                 .update-poisoned {
-                    background-color: #e0ccff;
-                    border: 1px solid #800080;
+                    background-color: rgba(168, 85, 247, 0.15);
+                    border: 1px solid rgb(168, 85, 247);
                 }
 
                 .update-frozen {
-                    background-color: #ccf2ff;
-                    border: 1px solid #00cccc;
+                    background-color: rgba(6, 182, 212, 0.15);
+                    border: 1px solid rgb(6, 182, 212);
                 }
 
                 .update-asleep {
-                    background-color: #f5f5dc;
-                    border: 1px solid #c2b280;
+                    background-color: hsl(var(--muted));
+                    border: 1px solid hsl(var(--muted-foreground));
                 }
 
                 .update-paralyzed {
-                    background-color: #fffacd;
-                    border: 1px solid #ffd700;
+                    background-color: rgba(234, 179, 8, 0.15);
+                    border: 1px solid rgb(234, 179, 8);
                 }
 
                 .update-dodged {
-                    background-color: #d8d8d8;
-                    border: 1px solid #636363;
+                    background-color: hsl(var(--secondary));
+                    border: 1px solid hsl(var(--secondary-foreground));
                 }
 
                 .update-default {
-                    background-color: #e3f2fd;
-                    border: 1px solid #90caf9;
+                    background-color: hsl(var(--accent));
+                    border: 1px solid hsl(var(--accent-foreground) / 0.3);
                 }
 
                 .new-update {
@@ -162,7 +163,7 @@ export default function BattleUpdates() {
 
                 @keyframes highlight {
                     from {
-                        background-color: yellow;
+                        background-color: hsl(var(--primary) / 0.5);
                     }
                     to {
                         background-color: inherit;

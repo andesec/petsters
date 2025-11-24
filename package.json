@@ -14,12 +14,15 @@
     "@dnd-kit/utilities": "^3.2.2",
     "@types/lodash": "^4.17.20",
     "amazon-cognito-identity-js": "^6.3.16",
+    "clsx": "^2.1.1",
     "lodash": "^4.17.21",
     "mitt": "^3.0.1",
     "next": "16.0.3",
+    "next-themes": "^0.4.6",
     "pixi.js": "^8.14.3",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

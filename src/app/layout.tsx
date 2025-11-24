@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import LeftSidebar from "@/components/LeftSidebar";
-import RightSidebar from "@/components/RightSidebar";
-import MainContent from "@/components/MainContent";
+import GameLayout from "@/components/GameLayout";
+import { ThemeProvider } from "@/components/theme-provider";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Petsters",
@@ -16,19 +18,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet" />
       </head>
-      <body>
-        <div id="app">
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
           <Header />
-          <div className="layout">
-            <LeftSidebar />
-            <MainContent>{children}</MainContent>
-            <RightSidebar />
-          </div>
-        </div>
+          <GameLayout>{children}</GameLayout>
+        </ThemeProvider>
       </body>
     </html>
   );

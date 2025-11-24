@@ -5,24 +5,37 @@ import { throttle } from 'lodash';
 import eventBus from '@/eventBus';
 
 export default function Joystick() {
-    const [knobPosition, setKnobPosition] = useState({ x: 50, y: 50 });
+    const knobPos = { x: 28, y: 28 };
+    const [knobPosition, setKnobPosition] = useState(knobPos);
     const [dragging, setDragging] = useState(false);
     const joystickBaseRef = useRef<HTMLDivElement>(null);
-    const centerRef = useRef({ x: 50, y: 50 });
-    const radius = 50;
+    const centerRef = useRef(knobPos);
+    const radius = knobPos.x;
     const fireEventIntervalRef = useRef<NodeJS.Timeout | null>(null);
     const lastDirectionRef = useRef('');
 
     const emitDirection = useCallback((x: number, y: number) => {
         let direction = '';
 
-        if (y > 0) direction = 'down';
-        else if (y < 0) direction = 'up';
-        if (x > 0) direction = 'right';
-        else if (x < 0) direction = 'left';
+        // Calculate absolute values
+        const absX = Math.abs(x);
+        const absY = Math.abs(y);
+
+        // Require minimum movement threshold
+        const threshold = 5;
+        if (absX < threshold && absY < threshold) return;
+
+        // Only allow cardinal directions (no diagonals)
+        // Choose the axis with greater magnitude
+        if (absX > absY) {
+            // Horizontal movement only
+            direction = x > 0 ? 'right' : 'left';
+        } else {
+            // Vertical movement only
+            direction = y > 0 ? 'down' : 'up';
+        }
 
         if (direction) {
-            // Always emit if we are moving, MapService handles continuous movement
             eventBus.emit('map-move', direction);
         }
     }, []);
@@ -44,23 +57,23 @@ export default function Joystick() {
             clearInterval(fireEventIntervalRef.current);
             fireEventIntervalRef.current = null;
         }
-        setKnobPosition({ x: 50, y: 50 });
+        setKnobPosition({ x: knobPos.x, y: knobPos.y });
         lastDirectionRef.current = '';
         eventBus.emit('map-stop');
     }, []);
 
     const handleKeyPress = useCallback((event: KeyboardEvent) => {
         const directions: Record<string, { x: number; y: number }> = {
-            ArrowUp: { x: 50, y: 0 },
-            ArrowDown: { x: 50, y: 100 },
-            ArrowLeft: { x: 0, y: 50 },
-            ArrowRight: { x: 100, y: 50 },
+            ArrowUp: { x: knobPos.x, y: 0 },
+            ArrowDown: { x: knobPos.x, y: knobPos.y * 2 },
+            ArrowLeft: { x: 0, y: knobPos.y },
+            ArrowRight: { x: knobPos.x * 2, y: knobPos.y },
         };
 
         if (event.key in directions && !fireEventIntervalRef.current) {
             const { x, y } = directions[event.key];
             setKnobPosition({ x, y });
-            startContinuousEvents(x - 50, y - 50);
+            startContinuousEvents(x - knobPos.x, y - knobPos.y);
         }
     }, [startContinuousEvents]);
 
@@ -83,9 +96,6 @@ export default function Joystick() {
         if (joystickBaseRef.current) {
             const rect = joystickBaseRef.current.getBoundingClientRect();
             centerRef.current = { x: rect.width / 2, y: rect.height / 2 };
-            const x = clientX - rect.left - centerRef.current.x;
-            const y = clientY - rect.top - centerRef.current.y;
-            startContinuousEvents(x, y);
         }
     };
 
@@ -111,7 +121,10 @@ export default function Joystick() {
             y: centerRef.current.y + newY,
         });
 
-        emitDirectionThrottled(newX, newY);
+        // Start continuous movement based on joystick position
+        if (!fireEventIntervalRef.current) {
+            startContinuousEvents(newX, newY);
+        }
     };
 
     const endDrag = () => {
@@ -120,12 +133,10 @@ export default function Joystick() {
     };
 
     return (
-        <div className="flex flex-col items-center gap-[10px] outline-none">
-            <h2 className="text-xl font-bold">Map Controls</h2>
-            <p className="text-[14px] text-[#666]">Use the arrow keys, touch, or drag the joystick to move the map.</p>
-            <br />
+        <div className="flex flex-col items-center gap-[5px] outline-none">
+            <p className="text-sm text-muted-foreground mb-3 md:block text-center">Use the arrow keys, or drag the joystick on mobile devices to move on the map.</p>
             <div
-                className="relative w-[100px] h-[100px]"
+                className="relative w-[60px] h-[60px]"
                 onTouchStart={(e) => startDrag(e.touches[0].clientX, e.touches[0].clientY)}
                 onTouchMove={(e) => drag(e.touches[0].clientX, e.touches[0].clientY)}
                 onTouchEnd={endDrag}
@@ -136,13 +147,13 @@ export default function Joystick() {
             >
                 <div
                     ref={joystickBaseRef}
-                    className="absolute top-0 left-0 w-full h-full rounded-full border-[3px] border-[#666] shadow-[0_5px_15px_rgba(0,0,0,0.2)]"
-                    style={{ background: 'radial-gradient(circle, #cccccc, #999999)' }}
+                    className="absolute top-0 left-0 w-full h-full rounded-full border-[2px] border-border shadow-md"
+                    style={{ background: 'radial-gradient(circle, hsl(var(--muted)), hsl(var(--muted-foreground) / 0.3))' }}
                 >
                     <div
-                        className="absolute w-[40px] h-[40px] rounded-full border-[2px] border-[#111] cursor-grab shadow-[0_3px_10px_rgba(0,0,0,0.2)]"
+                        className="absolute w-[24px] h-[24px] rounded-full border-[2px] border-primary cursor-grab shadow-md"
                         style={{
-                            background: 'radial-gradient(circle, #555, #333)',
+                            background: 'var(--color-primary)',
                             left: `${knobPosition.x}px`,
                             top: `${knobPosition.y}px`,
                             transform: 'translate(-50%, -50%)',

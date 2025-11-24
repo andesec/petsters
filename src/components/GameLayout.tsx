@@ -1,0 +1,60 @@
+"use client"
+
+import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
+import LeftSidebar from './LeftSidebar';
+import RightSidebar from './RightSidebar';
+import MainContent from './MainContent';
+
+export default function GameLayout({ children }: { children: React.ReactNode }) {
+    const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
+    const pathname = usePathname();
+
+    // Make toggle function available globally via window object for Header to call
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            (window as any).toggleLeftSidebar = () => setIsLeftSidebarOpen(prev => !prev);
+            (window as any).isLeftSidebarOpen = () => isLeftSidebarOpen;
+        }
+    }, [isLeftSidebarOpen]);
+
+    // Determine if right sidebar has content for this page
+    const hasRightSidebar = pathname === '/battle' || pathname === '/map';
+
+    return (
+        <div className="h-[calc(100vh-60px)] relative overflow-hidden bg-gradient-to-br from-background via-background to-secondary/20">
+            <div className="flex flex-col md:flex-row h-full gap-2 p-2 md:gap-3 md:p-3 relative max-w-[1496px] mx-auto w-full">
+                {/* Left Sidebar - Floating overlay matching header theme */}
+                <div
+                    className={`
+                        absolute top-0 bottom-0 left-0 z-[90] w-[280px] md:w-[320px]
+                        bg-gradient-to-b from-blue-500/95 via-indigo-500/95 to-purple-500/95 
+                        dark:from-slate-900/95 dark:via-indigo-950/95 dark:to-purple-950/95
+                        backdrop-blur-xl 
+                        shadow-2xl
+                        rounded-r-2xl
+                        transition-all duration-300 ease-in-out
+                        ${isLeftSidebarOpen ? 'translate-x-0 opacity-100 visible' : '-translate-x-full opacity-0 invisible'}
+                    `}
+                >
+                    <div className="h-full flex flex-col p-3 overflow-hidden">
+                        <div className="flex-1 overflow-y-auto text-white">
+                            <LeftSidebar />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Main Content - Takes remaining space after accounting for sidebar */}
+                <div className={`
+                    ${hasRightSidebar ? 'flex-[0_0_calc(65%-0.5rem)]' : 'flex-1'} 
+                    overflow-hidden
+                `}>
+                    <MainContent>{children}</MainContent>
+                </div>
+
+                {/* Right Sidebar - Takes 35% width */}
+                <RightSidebar className="flex-[0_0_35%]" />
+            </div>
+        </div>
+    );
+}
