@@ -11,7 +11,25 @@ const buildLoginUrl = (provider: AuthProvider, redirectUri: string) => {
     return url.toString();
 };
 
-export default {
+const parseErrorMessage = async (response: Response) => {
+    try {
+        const errorBody = await response.json();
+        if (typeof errorBody?.message === 'string') {
+            return errorBody.message;
+        }
+
+        if (typeof errorBody?.error === 'string') {
+            return errorBody.error;
+        }
+    } catch {
+        // ignore JSON parse errors and fall back to text
+    }
+
+    const fallback = await response.text();
+    return fallback || 'Request failed.';
+};
+
+const AuthService = {
     startLogin(provider: AuthProvider = 'cognito', redirectPath = '/battle') {
         if (typeof window === 'undefined') return;
 
@@ -21,16 +39,21 @@ export default {
     },
 
     async completeAuthorization(code: string, state?: string) {
-        const response = await fetch(`${getBffBaseUrl()}/auth/callback`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify({ code, state }),
-        });
+        try {
+            const response = await fetch(`${getBffBaseUrl()}/auth/callback`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({ code, state }),
+            });
 
-        if (!response.ok) {
-            const errorBody = await response.text();
-            throw new Error(errorBody || 'Failed to complete authorization.');
+            if (!response.ok) {
+                const message = await parseErrorMessage(response);
+                throw new Error(message || 'Failed to complete authorization.');
+            }
+        } catch (error) {
+            const message = error instanceof Error ? error.message : 'Failed to complete authorization.';
+            throw new Error(message);
         }
     },
 
@@ -44,4 +67,34 @@ export default {
             throw new Error('Failed to log out.');
         }
     },
+
+    async nativeLogin(email: string, password: string) {
+        const response = await fetch(`${getBffBaseUrl()}/auth/native/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+            const message = await parseErrorMessage(response);
+            throw new Error(message || 'Unable to complete login.');
+        }
+    },
+
+    async nativeSignup(email: string, password: string) {
+        const response = await fetch(`${getBffBaseUrl()}/auth/native/signup`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ email, password }),
+        });
+
+        if (!response.ok) {
+            const message = await parseErrorMessage(response);
+            throw new Error(message || 'Unable to create account.');
+        }
+    },
 };
+
+export default AuthService;

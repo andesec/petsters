@@ -3,39 +3,21 @@
 import Link from 'next/link';
 import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
-import AuthService, { AuthProvider } from '@/services/AuthService';
+import AuthService from '@/services/AuthService';
 import config from '@/config';
 
-const providers: { key: AuthProvider; label: string }[] = [
-    { key: 'cognito', label: 'Login with Cognito' },
-    { key: 'google', label: 'Continue with Google' },
-    { key: 'discord', label: 'Continue with Discord' },
-];
-
-export default function LoginPage() {
+export default function SignupPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
     const [loading, setLoading] = useState(false);
     const router = useRouter();
 
-    const startLogin = (provider: AuthProvider) => {
-        if (config.disableLogin) {
-            router.push('/battle');
-            return;
-        }
-
-        try {
-            AuthService.startLogin(provider, '/battle');
-        } catch (e: unknown) {
-            const message = e instanceof Error ? e.message : 'Unable to start login.';
-            setError(message);
-        }
-    };
-
-    const handleNativeLogin = async (event: FormEvent<HTMLFormElement>) => {
+    const handleSignup = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setError('');
+        setSuccess('');
         setLoading(true);
 
         if (config.disableLogin) {
@@ -45,12 +27,13 @@ export default function LoginPage() {
         }
 
         try {
-            await AuthService.nativeLogin(email.trim(), password);
+            await AuthService.nativeSignup(email.trim(), password);
+            setSuccess('Account created successfully. Redirecting to your adventure...');
             const redirectPath = sessionStorage.getItem('postLoginRedirect') || '/battle';
             sessionStorage.removeItem('postLoginRedirect');
             router.replace(redirectPath);
         } catch (e: unknown) {
-            const message = e instanceof Error ? e.message : 'Unable to sign in.';
+            const message = e instanceof Error ? e.message : 'Unable to create your account.';
             setError(message);
         } finally {
             setLoading(false);
@@ -59,9 +42,9 @@ export default function LoginPage() {
 
     return (
         <div className="flex flex-col items-center justify-center h-full gap-6">
-            <h1 className="text-2xl font-bold">Sign in to Petsters</h1>
+            <h1 className="text-2xl font-bold">Create your Petsters account</h1>
 
-            <form onSubmit={handleNativeLogin} className="flex flex-col gap-3 w-[320px]">
+            <form onSubmit={handleSignup} className="flex flex-col gap-3 w-[320px]">
                 <label className="flex flex-col gap-1">
                     <span className="text-sm font-medium text-gray-700">Email</span>
                     <input
@@ -82,7 +65,7 @@ export default function LoginPage() {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                         className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="••••••••"
+                        placeholder="At least 8 characters"
                     />
                 </label>
 
@@ -91,32 +74,19 @@ export default function LoginPage() {
                     disabled={loading}
                     className="bg-[#3f51b5] text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-[#303f9f] disabled:opacity-60"
                 >
-                    {loading ? 'Signing in...' : 'Sign in'}
+                    {loading ? 'Creating account...' : 'Create account'}
                 </button>
 
                 <p className="text-sm text-gray-700 text-center">
-                    Don&apos;t have an account?{' '}
-                    <Link href="/signup" className="text-blue-600 hover:underline">
-                        Create one
+                    Already have an account?{' '}
+                    <Link href="/login" className="text-blue-600 hover:underline">
+                        Sign in
                     </Link>
                 </p>
             </form>
 
-            <div className="flex flex-col gap-3 w-[320px]">
-                <p className="text-sm font-medium text-gray-700 text-center">Or continue with</p>
-                {providers.map((provider) => (
-                    <button
-                        key={provider.key}
-                        type="button"
-                        onClick={() => startLogin(provider.key)}
-                        className="bg-[#3f51b5] text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-[#303f9f]"
-                    >
-                        {provider.label}
-                    </button>
-                ))}
-            </div>
-
             {error && <p className="text-red-500 mt-2 text-center max-w-[320px]">{error}</p>}
+            {success && <p className="text-green-600 mt-2 text-center max-w-[320px]">{success}</p>}
         </div>
     );
 }

@@ -11,11 +11,12 @@ export default function AuthCallbackPage() {
 
     useEffect(() => {
         const errorParam = searchParams.get('error');
+        const errorDescription = searchParams.get('error_description');
         const code = searchParams.get('code');
         const state = searchParams.get('state') ?? undefined;
 
         if (errorParam) {
-            setError(errorParam);
+            setError(errorDescription || errorParam);
             return;
         }
 
@@ -51,7 +52,9 @@ export default function AuthCallbackPage() {
     return (
         <div className="flex flex-col items-center justify-center h-full">
             <h1 className="text-xl font-semibold">Signing you in...</h1>
-            <p className="text-gray-600">Completing authorization flow. Please wait.</p>
+            <p className="text-gray-600 text-center">
+                Completing the secure PKCE authorization with our BFF. Please wait.
+            </p>
         </div>
     );
 }
