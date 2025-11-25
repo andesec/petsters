@@ -8,6 +8,7 @@ interface AuthContextValue {
     isAuthenticated: boolean;
     loading: boolean;
     refreshSession: () => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -29,6 +30,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     }, []);
 
+    const logout = useCallback(async () => {
+        setStatus('loading');
+        try {
+            await AuthService.logout();
+        } catch (error) {
+            console.error('Failed to log out', error);
+        } finally {
+            setUser(null);
+            setStatus('unauthenticated');
+        }
+    }, []);
+
     useEffect(() => {
         refreshSession();
     }, [refreshSession]);
@@ -39,8 +52,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             isAuthenticated: status === 'authenticated',
             loading: status === 'loading',
             refreshSession,
+            logout,
         }),
-        [status, user, refreshSession]
+        [status, user, refreshSession, logout]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
