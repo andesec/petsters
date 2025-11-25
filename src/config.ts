@@ -8,7 +8,7 @@ const config = {
         userPoolId: 'us-east-1_XXXXXXX',
         clientId: 'XXXXXXXXXXXXX',
     },
-    disableLogin: true,
+    disableLogin: false,
 };
 
 export default config;
