@@ -5,6 +5,7 @@ import { useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import AuthService, { AuthProvider } from '@/services/AuthService';
 import config from '@/config';
+import { authButton, authContainer, authForm, authHelperText, authInput, authLink } from '@/components/auth/styles';
 
 const providers: { key: AuthProvider; label: string }[] = [
     { key: 'cognito', label: 'Login with Cognito' },
@@ -58,10 +59,10 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex flex-col items-center justify-center h-full gap-6">
+        <div className={authContainer}>
             <h1 className="text-2xl font-bold">Sign in to Petsters</h1>
 
-            <form onSubmit={handleNativeLogin} className="flex flex-col gap-3 w-[320px]">
+            <form onSubmit={handleNativeLogin} className={authForm}>
                 <label className="flex flex-col gap-1">
                     <span className="text-sm font-medium text-gray-700">Email</span>
                     <input
@@ -69,7 +70,7 @@ export default function LoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={authInput}
                         placeholder="you@example.com"
                     />
                 </label>
@@ -81,22 +82,18 @@ export default function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={authInput}
                         placeholder="••••••••"
                     />
                 </label>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="bg-[#3f51b5] text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-[#303f9f] disabled:opacity-60"
-                >
+                <button type="submit" disabled={loading} className={authButton}>
                     {loading ? 'Signing in...' : 'Sign in'}
                 </button>
 
-                <p className="text-sm text-gray-700 text-center">
+                <p className={authHelperText}>
                     Don&apos;t have an account?{' '}
-                    <Link href="/signup" className="text-blue-600 hover:underline">
+                    <Link href="/signup" className={authLink}>
                         Create one
                     </Link>
                 </p>
@@ -109,7 +106,7 @@ export default function LoginPage() {
                         key={provider.key}
                         type="button"
                         onClick={() => startLogin(provider.key)}
-                        className="bg-[#3f51b5] text-white border-none px-4 py-2 rounded cursor-pointer hover:bg-[#303f9f]"
+                        className={authButton}
                     >
                         {provider.label}
                     </button>

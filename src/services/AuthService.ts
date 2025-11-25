@@ -86,8 +86,8 @@ const AuthService = {
         }
     },
 
-    async nativeSignup(email: string, password: string) {
-        const response = await fetch(`${getBffBaseUrl()}/auth/native/signup`, {
+    async createCognitoNativeUser(email: string, password: string) {
+        const response = await fetch(`${getBffBaseUrl()}/auth/native/users`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
@@ -98,6 +98,10 @@ const AuthService = {
             const message = await parseErrorMessage(response);
             throw new Error(message || 'Unable to create account.');
         }
+    },
+
+    async nativeSignup(email: string, password: string) {
+        return this.createCognitoNativeUser(email, password);
     },
 
     async getSession(): Promise<AuthSession> {
