@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="337fdefd-cb7b-46b4-9619-689af19109fe" name="Changes" comment="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="337fdefd-cb7b-46b4-9619-689af19109fe" name="Changes" comment="Camera movement is fixed and the cropped character sprite is appearing but it's enlarged, so need to fix that." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

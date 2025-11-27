@@ -2,12 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
     output: "export",
-    distDir: "out",
+    distDir: "docs",
     images: {
         unoptimized: true,
     },
-    basePath: "/petsters/out",
-    assetPrefix: "/petsters/out",
+    basePath: "/petsters",
+    assetPrefix: "/petsters",
 };
 
 export default nextConfig;
