@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
         unoptimized: true,
     },
     basePath: "/petsters",
-    assetPrefix: "/petsters",
+    assetPrefix: "/petsters/",
 };
 
 export default nextConfig;
